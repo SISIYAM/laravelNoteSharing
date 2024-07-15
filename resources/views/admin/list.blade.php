@@ -27,6 +27,17 @@
                             @enderror
                         </div>
                         <div
+                            class="form-group @error('semester')
+                        has-error
+                        @enderror  has-feedback">
+                            <label for="email">Total Semesters</label>
+                            <input type="text" name="semester" id="errorInput" value="{{ old('semester') }}"
+                                class="form-control" />
+                            @error('semester')
+                                <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div
                             class="form-group @error('image')
                         has-error
                         @enderror  has-feedback">
@@ -46,24 +57,32 @@
             </div>
         </div>
     </div>
-    <tr>
-        <td>Tiger Nixon</td>
-        <td>System Architect</td>
-        <td>Edinburgh</td>
-        <td>Edinburgh</td>
-        <td>
-            <div class="form-button-action">
-                <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg"
-                    data-original-title="Edit Task">
-                    <i class="fa fa-edit"></i>
-                </button>
-                <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
-                    data-original-title="Remove">
-                    <i class="fa fa-times"></i>
-                </button>
-            </div>
-        </td>
-    </tr>
+    @php
+        $count = 1;
+    @endphp
+    @foreach ($tableRow as $row)
+        <tr>
+            <td>{{ $count }}</td>
+            <td>{{ $row->name }}</td>
+            <td>{{ $row->author }}</td>
+            <td>{{ $row->status }}</td>
+            <td>
+                <div class="form-button-action">
+                    <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg"
+                        data-original-title="Edit Task">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                        data-original-title="Remove">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+        @php
+            $count++;
+        @endphp
+    @endforeach
 @endsection
 
 @if (Session::has('success'))
