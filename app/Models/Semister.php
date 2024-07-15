@@ -2,24 +2,23 @@
 
 namespace App\Models;
 
-use App\Models\Semister;
+use App\Models\Universitie;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Universitie extends Model
+class Semister extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'name',
-        'semester',
+        'university_id',
+        'semister_name',
         'status',
-        'image',
         'author',
     ];
 
-    public function semisters()
+    public function university()
     {
-        return $this->hasMany(Semister::class, 'university_id', 'id');
+        return $this->belongsTo(Universitie::class, 'university_id', 'id');
     }
-
 }

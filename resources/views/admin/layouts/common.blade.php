@@ -92,7 +92,7 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="components/buttons.html">
+                                        <a href="{{ route('admin.manage.universities.semesters') }}">
                                             <span class="sub-item">Semisters</span>
                                         </a>
                                     </li>
@@ -109,14 +109,15 @@
                                 <ul class="nav nav-collapse">
                                     <li>
                                         <a href="forms/forms.html">
-                                            <span class="sub-item">Add Materials</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="forms/forms.html">
                                             <span class="sub-item">Materials</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.form.materials') }}">
+                                            <span class="sub-item">Add Materials</span>
+                                        </a>
+                                    </li>
+
                                 </ul>
                             </div>
                         </li>

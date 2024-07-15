@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
-                    <h4 class="card-title">All Universities</h4>
+                    <h4 class="card-title">All</h4>
                     <button class="btn btn-primary btn-round ms-auto" id="modalShowBtn" data-bs-toggle="modal"
                         data-bs-target="#addFormModal">
                         <i class="fa fa-plus"></i>
