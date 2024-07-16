@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('university_id')->references('id')->on('universities')->onDelete('cascade');
-            $table->foreignId('semester_id')->references('id')->on('semisters')->onDelete('cascade');
+            $table->integer('university_id')->nullable();
+            $table->integer('semester_id')->nullable();
             $table->string('title')->nullable();
             $table->text('description')->nullable();
-            $table->text('pdf')->nullable();
+            $table->longText('pdf')->nullable();
             $table->integer('status')->default(0);
             $table->string('author')->nullable();
             $table->timestamps();
+
         });
     }
 

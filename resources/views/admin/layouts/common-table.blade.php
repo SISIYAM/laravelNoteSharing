@@ -5,11 +5,18 @@
             <div class="card-header">
                 <div class="d-flex align-items-center">
                     <h4 class="card-title">All</h4>
-                    <button class="btn btn-primary btn-round ms-auto" id="modalShowBtn" data-bs-toggle="modal"
-                        data-bs-target="#addFormModal">
-                        <i class="fa fa-plus"></i>
-                        Add
-                    </button>
+                    @if ($key == 'university')
+                        <button class="btn btn-primary btn-round ms-auto" id="modalShowBtn" data-bs-toggle="modal"
+                            data-bs-target="#addFormModal">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </button>
+                    @elseif ($key == 'materials')
+                        <a href="{{ route('admin.form.materials') }}" class="btn btn-primary btn-round ms-auto">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </a>
+                    @endif
                 </div>
             </div>
             <div class="card-body">

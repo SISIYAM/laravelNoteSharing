@@ -108,7 +108,7 @@
                             <div class="collapse" id="forms">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="forms/forms.html">
+                                        <a href="{{ route('admin.manage.universities.semesters.materials') }}">
                                             <span class="sub-item">Materials</span>
                                         </a>
                                     </li>
@@ -553,7 +553,10 @@
         <!-- End Custom template -->
     </div>
     <!--   Core JS Files   -->
-    <script src="{{ asset('admin-assets/js/core/jquery-3.7.1.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="{{ asset('admin-assets/js/core/jquery-3.7.1.min.js') }}"></script> --}}
     <script src="{{ asset('admin-assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('admin-assets/js/core/bootstrap.min.js') }}"></script>
 
@@ -587,6 +590,8 @@
 
     <!-- Kaiadmin DEMO methods, don't include it in your project! -->
     <script src="{{ asset('admin-assets/js/setting-demo.js') }}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/super-build/ckeditor.js"></script>
+    <script src="{{ asset('admin-assets/js/ckeEditor.js') }}"></script>
 
     <script>
         $(document).ready(function() {
@@ -614,8 +619,12 @@
         });
     </script>
 
+    @stack('sweet-alert')
+
     <script src="{{ asset('admin-assets/js/script.js') }}"></script>
-    @stack('script')
+
+    @stack('ajax')
+
 </body>
 
 </html>
