@@ -21,4 +21,10 @@ class Semister extends Model
     {
         return $this->belongsTo(Universitie::class, 'university_id', 'id');
     }
+
+    public function materials()
+    {
+        return $this->hasMany(Material::class, 'semester_id', 'id');
+    }
+
 }

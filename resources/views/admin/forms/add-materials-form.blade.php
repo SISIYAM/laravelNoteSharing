@@ -47,16 +47,6 @@
                             <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div
-                        class="form-group @error('description')
-                            has-error
-                    @enderror">
-                        <label for="errorInput">Description</label>
-                        <textarea name="description" id="editor">{{ old('description') }}</textarea>
-                        @error('description')
-                            <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
-                        @enderror
-                    </div>
                     <div class="form-group" style="margin-bottom: -20px">
                         <label for="" class="text-dark">Pdfs</label>
                         <span class="addInputPdf badge bg-success mx-2" style="cursor: pointer">Add more</span>

@@ -41,7 +41,7 @@ class AdminDashboardController extends Controller
     // load materials form
     public function loadMaterialsForm(){
         // get university name
-        $university = Universitie::where('status',0)->get();
+        $university = Universitie::where('status',1)->get();
         return view('admin.forms.add-materials-form',['universities' => $university]);
 
     }
@@ -117,7 +117,6 @@ class AdminDashboardController extends Controller
             'university_id' => 'required|integer',
             'semester_id' => 'required|integer',
             'title' => 'required|string|max:255',
-            'description' => 'required|string',
             'pdfs' => 'required|array', // Validate that 'pdfs' is an array
             'pdfs.*' => 'file|mimes:pdf', // Validate each file in the 'pdfs' array
             // Add more validation rules for pdfs array if necessary
@@ -136,7 +135,6 @@ class AdminDashboardController extends Controller
             'university_id' => $req->university_id,
             'semester_id' => $req->semester_id,
             'title' => $req->title,
-            'description' => $req->description,
             'pdf' => json_encode($paths), // Save paths as JSON
             'author' => $admin,
         ]);
@@ -148,7 +146,6 @@ class AdminDashboardController extends Controller
         // $material->university_id = $req->university_id;
         // $material->semester_id = $req->semester_id;
         // $material->title = $req->title;
-        // $material->description = $req->description;
         // $material->author = $admin;
         // $material->pdf = json_encode($paths);
 

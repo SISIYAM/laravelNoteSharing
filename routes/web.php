@@ -2,12 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\pageController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\AdminDashboardController;
 
-Route::get('/',function(){
-    return view('welcome');
-})->name('home');
+
+// routes for front end
+Route::controller(pageController::class)->group(function () {
+    Route::get('/','index')->name('home');
+    Route::get('/university/details/{id?}', 'showDetails')->name('details');
+});
+
+
 
 Route::get('/error/403', function () {
     return view('admin.layouts.forbitten');
