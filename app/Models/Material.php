@@ -11,14 +11,6 @@ class Material extends Model
 {
     use HasFactory;
 
-    // public function getUniversity(){
-    //     return $this->hasMany(Universitie::class,'id','university_id');
-    // }
-
-    // public function getSemester(){
-    //     return $this->hasMany(Semister::class,'id','semester_id');
-    // }
-
     public function getUniversity()
     {
         return $this->belongsTo(Universitie::class, 'university_id', 'id');
