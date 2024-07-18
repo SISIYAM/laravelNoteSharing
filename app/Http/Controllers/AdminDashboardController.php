@@ -112,7 +112,7 @@ class AdminDashboardController extends Controller
 
     // add materials
     public function addMaterials(Request $req){
-        $admin = Auth::user()->id;
+        $admin = Auth::user()->name;
         $req->validate([
             'university_id' => 'required|integer',
             'semester_id' => 'required|integer',

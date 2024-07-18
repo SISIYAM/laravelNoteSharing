@@ -10,10 +10,9 @@ use App\Http\Controllers\AdminDashboardController;
 // routes for front end
 Route::controller(pageController::class)->group(function () {
     Route::get('/','index')->name('home');
-    Route::get('/university/details/{id?}', 'showDetails')->name('details');
+    Route::get('/university/details/{slug?}', 'showDetails')->name('details');
+    Route::get('/university/details/semester/materials/{slug?}', 'showMaterials')->name('material.details');
 });
-
-
 
 Route::get('/error/403', function () {
     return view('admin.layouts.forbitten');

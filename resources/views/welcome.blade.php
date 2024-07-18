@@ -178,7 +178,7 @@
                                 <div class="card-img-overlay d-flex">
                                     <!-- Info -->
                                     <div class="mt-auto card-text">
-                                        <a href="{{ route('details', $university->id) }}"
+                                        <a href="{{ route('details', $university->slug) }}"
                                             class="text-white mt-auto h5 stretched-link">{{ $university->name }}</a>
                                         <div class="text-white">{{ count($university->semisters) }} Semisters and
                                             {{ count($university->material) }} Materials</div>
@@ -195,8 +195,8 @@
     <!-- =======================
 
 
-                                                                                                                        <!-- =======================
-                                                                                                                    Action box START -->
+                                                                                                                            <!-- =======================
+                                                                                                                        Action box START -->
     <section class="py-0">
         <div class="container">
             <div class="row g-4">
@@ -241,9 +241,9 @@
         </div>
     </section>
     <!-- =======================
-                                                                                                                    Action box END -->
+                                                                                                                        Action box END -->
     <!-- =======================
-                                                                                                                    Action box START -->
+                                                                                                                        Action box START -->
     <section class="py-5">
         <div class="container position-relative">
             <div class="row">
@@ -309,5 +309,5 @@
         </div>
     </section>
     <!-- =======================
-                                                                                                                    Action box END -->
+                                                                                                                        Action box END -->
 @endsection

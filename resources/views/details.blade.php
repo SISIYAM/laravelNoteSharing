@@ -77,7 +77,15 @@
                                     aria-labelledby="course-pills-tab-1">
 
                                     <!-- Details -->
-
+                                    Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a
+                                    piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard
+                                    McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of
+                                    the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through
+                                    the cites of the word in classical literature, discovered the undoubtable source. Lorem
+                                    Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The
+                                    Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the
+                                    theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum,
+                                    "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
                                 </div>
                                 <!-- Content END -->
 
@@ -100,12 +108,12 @@
                                                         {{ $semesterRow->semister_name }}
                                                         <span class="small ms-0 ms-sm-2">
                                                             @if (count($semesterRow->materials) > 0)
-                                                                <sub class="text-danger"><b>(
+                                                                <sub class="text-success"><b>(
                                                                         {{ count($semesterRow->materials) }}
-                                                                        Materials)</b></sub>
+                                                                        Materials )</b></sub>
                                                             @else
                                                                 <sub class="text-danger"><b>( No Materials added
-                                                                        yet)</b></sub>
+                                                                        yet )</b></sub>
                                                             @endif
                                                         </span>
                                                     </button>
@@ -122,7 +130,7 @@
                                                                     class="d-flex justify-content-between align-items-center">
                                                                     <div
                                                                         class="position-relative d-flex align-items-center">
-                                                                        <a href="#"
+                                                                        <a href="{{ route('material.details', $materialRow->slug) }}"
                                                                             class="btn btn-danger-soft btn-round btn-sm mb-0 stretched-link position-static">
                                                                             <i class="fas fa-play me-0"></i>
                                                                         </a>
@@ -604,7 +612,7 @@
                                 <!-- Video START -->
                                 <div class="card shadow p-2 mb-4 z-index-9">
                                     <div class="overflow-hidden rounded-3">
-                                        <img src="{{ asset('assets/images/courses/4by3/01.jpg') }}" class="card-img"
+                                        <img src="{{ asset('storage/' . $data->image) }}" class="card-img"
                                             alt="course image">
                                     </div>
                                 </div>
@@ -613,37 +621,29 @@
                                 <!-- Course info START -->
                                 <div class="card card-body shadow p-4 mb-4">
                                     <!-- Title -->
-                                    <h4 class="mb-3">This course includes</h4>
+
                                     <ul class="list-group list-group-borderless">
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-book-open text-primary"></i>Lectures</span>
-                                            <span>30</span>
+                                            <span class="h6 fw-light mb-0"><i class="fas fa-fw fa-clock text-primary"></i>
+                                                Semesters</span>
+                                            <span>{{ count($data->semisters) }}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-clock text-primary"></i>Duration</span>
-                                            <span>4h 50m</span>
+                                                    class="fas fa-fw fa-book-open text-primary"></i>
+                                                Materials</span>
+                                            <span>{{ count($data->material) }}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
                                             <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-signal text-primary"></i>Skills</span>
-                                            <span>Beginner</span>
+                                                    class="fas fa-fw fa-user-clock text-primary"></i>
+                                                Added at</span>
+                                            <span>{{ $data->created_at->format('d M Y h:i A') }}</span>
                                         </li>
                                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-globe text-primary"></i>Language</span>
-                                            <span>English</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-user-clock text-primary"></i>Deadline</span>
-                                            <span>Nov 30 2021</span>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <span class="h6 fw-light mb-0"><i
-                                                    class="fas fa-fw fa-medal text-primary"></i>Certificate</span>
-                                            <span>Yes</span>
+                                            <span class="h6 fw-light mb-0"><i class="fas fa-fw fa-medal text-primary"></i>
+                                                Uploaded by</span>
+                                            <span>{{ $data->author }}</span>
                                         </li>
                                     </ul>
                                 </div>
