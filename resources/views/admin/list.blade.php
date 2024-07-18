@@ -141,7 +141,6 @@
                 <td>{{ $row->getUniversity->name }}</td>
                 <td>{{ $row->getSemester->semister_name }}</td>
                 <td>{{ $row->title }}</td>
-                <td>{{ count(json_decode($row->pdf)) }}</td>
                 <td>{{ $row->author }}</td>
                 <td>
                     @if ($row->status == 0)

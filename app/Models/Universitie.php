@@ -16,6 +16,7 @@ class Universitie extends Model
     protected $fillable = [
         'name',
         'semester',
+        'description',
         'status',
         'image',
         'author',

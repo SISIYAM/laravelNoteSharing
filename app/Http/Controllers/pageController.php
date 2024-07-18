@@ -33,7 +33,7 @@ class pageController extends Controller
     // method for show materials
     public function showMaterials(string $slug = null){
 
-        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester')->first();
+        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester','getPdf')->first();
 
         return view('materials-details',['data' => $material]);
         // return $material;

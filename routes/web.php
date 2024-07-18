@@ -32,6 +32,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
     Route::controller(AdminDashboardController::class)->group(function(){
         Route::get('/admin/dashboard', 'loadDashboard')->name('admin.dashboard');
         Route::get('/admin/manage/contents/universities/','loadUniversities')->name('admin.manage.universities');
+        Route::get('/admin/manage/contents/universities/form/add','loadUniversityForm')->name('admin.add.universities');
         Route::post('/admin/manage/contents/university/add','addUniversity')->name('admin.add.university');
         Route::get('/admin/manage/contents/universities/semesters','loadSemester')->name('admin.manage.universities.semesters');
         Route::post('/admin/manage/contents/universities/semesters/materials/add','addMaterials')->name('admin.add.materials');

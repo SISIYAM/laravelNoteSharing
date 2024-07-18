@@ -45,7 +45,7 @@
                                     <!-- Card body START -->
                                     <div class="card-body">
                                         @if ($data->description)
-                                            {{ $data->description }}
+                                            {!! $data->description !!}
                                         @else
                                             <p class="alert alert-danger">No description added yet!</p>
                                         @endif
@@ -69,7 +69,7 @@
                                         <div class="row g-5">
                                             <!-- Lecture item START -->
                                             <div class="col-12">
-                                                @foreach (json_decode($data->pdf) as $pdfIndex => $pdf)
+                                                @foreach ($data->getPdf as $pdfIndex => $pdf)
                                                     <div class="d-sm-flex justify-content-sm-between align-items-center">
                                                         <div class="d-flex">
                                                             <a href="#" class="btn btn-danger-soft btn-round mb-0"><i
@@ -80,7 +80,7 @@
                                                             </div>
                                                         </div>
                                                         <!-- Button -->
-                                                        <a href="{{ asset('storage/' . $pdf) }}"
+                                                        <a href="{{ asset('storage/' . $pdf->pdf) }}"
                                                             class="btn btn-sm btn-success mb-0">Download</a>
                                                     </div>
                                                     <hr>

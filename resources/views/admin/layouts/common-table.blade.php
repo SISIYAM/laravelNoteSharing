@@ -6,11 +6,10 @@
                 <div class="d-flex align-items-center">
                     <h4 class="card-title">All</h4>
                     @if ($key == 'university')
-                        <button class="btn btn-primary btn-round ms-auto" id="modalShowBtn" data-bs-toggle="modal"
-                            data-bs-target="#addFormModal">
+                        <a href="{{ route('admin.add.universities') }}"class="btn btn-primary btn-round ms-auto">
                             <i class="fa fa-plus"></i>
                             Add
-                        </button>
+                        </a>
                     @elseif ($key == 'materials')
                         <a href="{{ route('admin.form.materials') }}" class="btn btn-primary btn-round ms-auto">
                             <i class="fa fa-plus"></i>

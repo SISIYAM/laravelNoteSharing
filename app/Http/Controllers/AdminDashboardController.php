@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pdf;
 use App\Models\Material;
 use App\Models\Semister;
 use App\Models\Universitie;
@@ -56,10 +57,16 @@ class AdminDashboardController extends Controller
 
     // load materials
     public function loadMaterials(){
-        $data = ['No','University','Semester','Title','Count Pdf','Author','Status',''];
+        $data = ['No','University','Semester','Title','Author','Status',''];
 
         $materials = Material::with('getUniversity','getSemester')->get();
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
+    }
+
+    // load university form
+
+    public function loadUniversityForm(){
+        return view('admin.forms.add-university-form');
     }
 
     // methods for query
@@ -69,6 +76,7 @@ class AdminDashboardController extends Controller
         $req->validate([
             'name' => 'string|required|min:2',
             'semester' => 'integer|required|min:1|max_digits:2',
+            'description' => 'required|string',
             'image' => 'mimes:png,jpg,jpeg,webp|max:3000',
         ]);
 
@@ -84,6 +92,7 @@ class AdminDashboardController extends Controller
         $insert = Universitie::create([
             'name' => $req->name,
             'semester' => $req->semester,
+            'description' => $req->description,
             'image' => $path,
             'author' => $admin,
         ]);
@@ -104,7 +113,7 @@ class AdminDashboardController extends Controller
             }
         }
 
-        return redirect()->route('admin.manage.universities')->with(['success' => 'University added successfully!']);
+        return redirect()->route('admin.add.universities')->with(['success' => 'University added successfully!']);
         // return $output;
         // return response()->json(['success' => true, 'data' => $insert]);
 
@@ -117,27 +126,32 @@ class AdminDashboardController extends Controller
             'university_id' => 'required|integer',
             'semester_id' => 'required|integer',
             'title' => 'required|string|max:255',
+            'description' => 'required | string',
             'pdfs' => 'required|array', // Validate that 'pdfs' is an array
             'pdfs.*' => 'file|mimes:pdf', // Validate each file in the 'pdfs' array
             // Add more validation rules for pdfs array if necessary
         ]);
 
-        $paths = [];
-        // Handle the file uploads
-        if ($req->hasFile('pdfs')) {
-            foreach ($req->file('pdfs') as $file) {
-                $path = $file->store('pdfs', 'public');
-                $paths[] = $path; // Add each file path to the $paths array
-            }
-        }
-
         $insert = Material::create([
             'university_id' => $req->university_id,
             'semester_id' => $req->semester_id,
             'title' => $req->title,
-            'pdf' => json_encode($paths), // Save paths as JSON
+            'description' => $req->description,
             'author' => $admin,
         ]);
+
+
+        // Handle the file uploads
+        if ($req->hasFile('pdfs')) {
+            foreach ($req->file('pdfs') as $file) {
+                $path = $file->store('pdfs', 'public');
+
+                $insertPdf = Pdf::create([
+                    'material_id' => $insert->id,
+                    'pdf' => $path,
+                ]);
+            }
+        }
 
         // return $insert;
 

@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Pdf;
 use App\Models\Semister;
 use App\Models\Universitie;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Material extends Model
 {
@@ -35,6 +36,10 @@ class Material extends Model
     public function getSemester()
     {
         return $this->belongsTo(Semister::class, 'semester_id', 'id');
+    }
+
+    public function getPdf(){
+        return $this->hasMany(Pdf::class,'material_id','id');
     }
 
     // method for generate slug
