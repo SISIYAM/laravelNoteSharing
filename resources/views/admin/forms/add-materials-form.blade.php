@@ -57,23 +57,55 @@
                             <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div class="form-group" style="margin-bottom: -20px">
-                        <label for="" class="text-dark">Pdfs</label>
-                        <span class="addInputPdf badge bg-success mx-2" style="cursor: pointer">Add more</span>
+                    <div class="form-group">
+                        <label for="">Select File type</label>
+                        <select name="" class="form-select" id="fileType">
+                            <option value="drive">Drive Link</option>
+                            <option value="pdf" selected>PDF File</option>
+                        </select>
                     </div>
-                    <hr>
-                    @error('pdfs')
-                        <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
-                    @enderror
-                    @error('pdfs.*')
-                        <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
-                    @enderror
-                    <div class="dynamicPdf">
-                        <div class="d-flex">
-                            <div class="form-group">
+                    <div style="" id="pdfFile">
+                        <div class="form-group" style="margin-bottom: -20px">
+                            <label for="" class="text-dark">Pdfs</label>
+                            <span class="addInputPdf badge bg-success mx-2" style="cursor: pointer">Add more</span>
+                        </div>
+                        <hr>
+                        @error('pdfs')
+                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                        @enderror
+                        @error('pdfs.*')
+                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                        @enderror
+                        <div class="dynamicPdf">
+                            <div class="d-flex">
+                                <div class="form-group">
 
-                                <input type="file" name="pdfs[]" class="form-control-file"
-                                    id="exampleFormControlFile1" />
+                                    <input type="file" name="pdfs[]" class="form-control-file"
+                                        id="exampleFormControlFile1" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Drive link --}}
+                    <div style="display: none" id="driveFile">
+                        <div class="form-group" style="margin-bottom: -20px">
+                            <label for="" class="text-dark">Google Drive </label>
+                            <span class="addInputDrive badge bg-success mx-2" style="cursor: pointer">Add more</span>
+                        </div>
+                        <hr>
+                        @error('links')
+                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                        @enderror
+                        @error('links.*')
+                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                        @enderror
+                        <div class="dynamicDrive">
+                            <div class="">
+                                <div class="form-group">
+
+                                    <input type="text" name="links[]" class="form-control"
+                                        placeholder="Paste Google Drive link" id="" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,18 +153,3 @@
         });
     </script>
 @endpush
-
-@if (Session::has('success'))
-    @push('sweet-alert')
-        <script>
-            swal("Success!", "{{ Session::get('success') }}", {
-                icon: "success",
-                buttons: {
-                    confirm: {
-                        className: "btn btn-success",
-                    },
-                },
-            });
-        </script>
-    @endpush
-@endif

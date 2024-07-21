@@ -12,6 +12,8 @@ Route::controller(pageController::class)->group(function () {
     Route::get('/','index')->name('home');
     Route::get('/university/details/{slug?}', 'showDetails')->name('details');
     Route::get('/university/details/semester/materials/{slug?}', 'showMaterials')->name('material.details');
+    Route::get('/university/bsmraau/faculties','showFacultiesList')->name('faculties');
+    Route::get('/university/details/semester/materials/pdf/details/{slug?}','loadPdf')->name('material.pdf');
 });
 
 Route::get('/error/403', function () {
@@ -39,5 +41,10 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/contents/universities/semesters/materials/form/add','loadMaterialsForm')->name('admin.form.materials');
         Route::post('/admin/jquery/ajax/universities/semesters', 'universitySemester')->name('admin.semester.ajax');
         Route::get('/admin/manage/contents/universities/semesters/materials','loadMaterials')->name('admin.manage.universities.semesters.materials');
+        Route::get('/admin/manage/contents/universities/semesters/materials/form/update/{slug?}','loadMaterialsUpdateForm')->name('admin.update.materials.form');
+        Route::get('/admin/manage/faculties', 'loadFaculties')->name('admin.faculties');
+        Route::get('/admin/manage/faculties/form/add','loadFacultiesForm')->name('admin.form.faculties');
+        Route::post('/admin/manage/faculties/add','addFaculties')->name('admin.add.faculties');
+        Route::get('/admin/manage/faculties/form/update/{slug?}','loadFacultiesUpdateForm')->name('admin.form.update.faculties');
     });
 });

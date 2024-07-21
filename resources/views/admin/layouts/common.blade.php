@@ -130,12 +130,12 @@
                             <div class="collapse" id="tables">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="tables/tables.html">
+                                        <a href="{{ route('admin.form.faculties') }}">
                                             <span class="sub-item">Add Faculty</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="tables/datatables.html">
+                                        <a href="{{ route('admin.faculties') }}">
                                             <span class="sub-item">Faculties List</span>
                                         </a>
                                     </li>
@@ -553,10 +553,10 @@
         <!-- End Custom template -->
     </div>
     <!--   Core JS Files   -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
         integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {{-- <script src="{{ asset('admin-assets/js/core/jquery-3.7.1.min.js') }}"></script> --}}
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="{{ asset('admin-assets/js/core/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('admin-assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('admin-assets/js/core/bootstrap.min.js') }}"></script>
 
@@ -624,6 +624,8 @@
     <script src="{{ asset('admin-assets/js/script.js') }}"></script>
 
     @stack('ajax')
+
+    @stack('script')
 
 </body>
 

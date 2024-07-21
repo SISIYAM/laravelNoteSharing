@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
 use App\Models\Universitie;
@@ -59,14 +60,58 @@ class AdminDashboardController extends Controller
     public function loadMaterials(){
         $data = ['No','University','Semester','Title','Author','Status',''];
 
-        $materials = Material::with('getUniversity','getSemester')->get();
+        $materials = Material::with('getUniversity','getSemester','getAuthor')->get();
+        // return $materials;
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
     }
 
     // load university form
-
     public function loadUniversityForm(){
         return view('admin.forms.add-university-form');
+    }
+
+    // load update materials form
+    public function loadMaterialsUpdateForm(string $slug = null){
+
+        // fetch materials data
+        $data = Material::where('slug',$slug)->with('getUniversity','getSemester','getPdf')->first();
+
+        // fetch universities
+        $universities = Universitie::all();
+
+        if($data){
+            $university_id = $data->university_id;
+        }else{
+            $university_id = null;
+        }
+        // fetch semesters
+        $semesters = Semister::where('university_id',$university_id)->get();
+
+        // return $data;
+
+        return view('admin.forms.update-materials-form',['data' => $data,'universities' => $universities,'semesters' => $semesters]);
+    }
+
+    // load faculties list
+    public function loadFaculties(){
+        $thead = ['No','Name','Post','Author','Status',''];
+
+        $data = Facultie::all();
+
+        return view('admin.list',['key' => 'faculties', 'thead' => $thead,'tableRow' => $data]);
+        // return $data;
+    }
+
+    // load add faculties form
+    public function loadFacultiesForm(){
+        return view('admin.forms.add-faculties-form');
+    }
+
+    // load faculties update form
+    public function loadFacultiesUpdateForm(string $slug = null){
+        $data = Facultie::where('slug',$slug)->first();
+        // return $data;
+        return view('admin.forms.update-faculty-from',['data' => $data]);
     }
 
     // methods for query
@@ -121,13 +166,13 @@ class AdminDashboardController extends Controller
 
     // add materials
     public function addMaterials(Request $req){
-        $admin = Auth::user()->name;
+        $admin = Auth::user()->id;
         $req->validate([
             'university_id' => 'required|integer',
             'semester_id' => 'required|integer',
             'title' => 'required|string|max:255',
             'description' => 'required | string',
-            'pdfs' => 'required|array', // Validate that 'pdfs' is an array
+            'pdfs' => 'array', // Validate that 'pdfs' is an array
             'pdfs.*' => 'file|mimes:pdf', // Validate each file in the 'pdfs' array
             // Add more validation rules for pdfs array if necessary
         ]);
@@ -138,6 +183,7 @@ class AdminDashboardController extends Controller
             'title' => $req->title,
             'description' => $req->description,
             'author' => $admin,
+            'role' => 2,
         ]);
 
 
@@ -149,12 +195,26 @@ class AdminDashboardController extends Controller
                 $insertPdf = Pdf::create([
                     'material_id' => $insert->id,
                     'pdf' => $path,
+                    'author' => $admin,
+                    'role' => 2,
                 ]);
             }
         }
 
-        // return $insert;
+        // if google drive link upload
+            foreach($req->links as $link){
+                if($link != NULL){
+                    $insertDrive = Pdf::create([
+                        'material_id' => $insert->id,
+                        'pdf' => $link,
+                        'author' => $admin,
+                        'role' => 2,
+                    ]);
+                }
+            }
 
+
+        // return $insert;
 
         // $material = new Material();
         // $material->university_id = $req->university_id;
@@ -170,5 +230,39 @@ class AdminDashboardController extends Controller
         // return $req->all();
     }
 
+    // function for add faculties
+    public function addFaculties(Request $req){
+
+        // validation
+        $req->validate([
+            'name' => 'required|string|max:255',
+            'resignation' => 'required|string|max:255',
+            'degree' => 'string',
+            'email' => 'email',
+            'mobile' => 'max:11',
+            'image' => 'mimes:jpg,png,jpeg,webp',
+        ]);
+
+        if($req->hasFile('image')){
+            $path = $req->file('image')->store('images/faculty','public');
+        }else{
+            $path = "images/faculty/defaultFaculty.png";
+        }
+
+        $insert = Facultie::create([
+            'name' => $req->name,
+            'email' => $req->email,
+            'mobile' => $req->mobile,
+            'description' => $req->description,
+            'image' => $path,
+            'degree' => $req->degree,
+            'post' => $req->resignation,
+            'author' => Auth::user()->name,
+        ]);
+
+        return redirect()->route('admin.form.faculties')->with('success','Added successfully!');
+        // return ['filePath' => $path, 'request' => $req->all(),'Author' => Auth::user()];
+        // return $insert;
+    }
 
 }

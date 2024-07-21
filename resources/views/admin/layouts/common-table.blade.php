@@ -4,14 +4,21 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex align-items-center">
-                    <h4 class="card-title">All</h4>
                     @if ($key == 'university')
+                        <h4 class="card-title">Universities</h4>
                         <a href="{{ route('admin.add.universities') }}"class="btn btn-primary btn-round ms-auto">
                             <i class="fa fa-plus"></i>
                             Add
                         </a>
                     @elseif ($key == 'materials')
+                        <h4 class="card-title">Materials</h4>
                         <a href="{{ route('admin.form.materials') }}" class="btn btn-primary btn-round ms-auto">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </a>
+                    @elseif($key == 'faculties')
+                        <h4 class="card-title">Faculties</h4>
+                        <a href="{{ route('admin.form.faculties') }}" class="btn btn-primary btn-round ms-auto">
                             <i class="fa fa-plus"></i>
                             Add
                         </a>

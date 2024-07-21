@@ -5,7 +5,7 @@
 @section('form-content')
     <form action="{{ route('admin.add.university') }}" method="POST" enctype="multipart/form-data">
         @csrf
-        <div class="card-body">
+        <div class="card-body" id="dynamicForm">
             <div class="row shadow-lg p-3 mb-5 bg-ligth rounded m-1">
                 <div class="col-md-6 col-lg-10">
 
@@ -51,6 +51,7 @@
                 </div>
             </div>
 
+
         </div>
         <div class="card-action">
             <button type="submit" class="btn btn-success">Submit</button>
@@ -58,18 +59,3 @@
         </div>
     </form>
 @endsection
-
-@if (Session::has('success'))
-    @push('sweet-alert')
-        <script>
-            swal("Success!", "{{ Session::get('success') }}", {
-                icon: "success",
-                buttons: {
-                    confirm: {
-                        className: "btn btn-success",
-                    },
-                },
-            });
-        </script>
-    @endpush
-@endif

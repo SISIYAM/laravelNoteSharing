@@ -6,11 +6,11 @@
             <!-- Widget 1 START -->
             <div class="col-lg-3">
                 <!-- logo -->
-                <a class="me-0" href="index.html">
-                    <img class="h-40px" src="assets/images/logo-light.svg" alt="logo">
+                <a class="me-0" href="{{ route('home') }}">
+                    <b class="text-light h3">SEI Innovations</b>
                 </a>
-                <p class="my-3 text-muted">Eduport education theme, built specifically for the education centers
-                    which is dedicated to teaching and involving learners. </p>
+                <p class="my-3 text-muted">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Soluta totam debitis
+                    asperiores voluptates earum facere cumque maiores iste placeat! </p>
                 <!-- Social media icon -->
                 <ul class="list-inline mb-0 mt-3">
                     <li class="list-inline-item"> <a class="btn btn-white btn-sm shadow px-2 text-facebook"
@@ -74,19 +74,9 @@
                     <span class="d-block small">(9:AM to 8:PM IST)</span>
                 </p>
 
-                <p class="mb-0 text-muted">Email:<span class="h6 fw-light text-white ms-2">example@gmail.com</span></p>
-
-                <div class="row g-2 mt-2">
-                    <!-- Google play store button -->
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-6">
-                        <a href="#"> <img src="assets/images/client/google-play.svg" alt="">
-                        </a>
-                    </div>
-                    <!-- App store button -->
-                    <div class="col-6 col-sm-4 col-md-3 col-lg-6">
-                        <a href="#"> <img src="assets/images/client/app-store.svg" alt="app-store"> </a>
-                    </div>
-                </div> <!-- Row END -->
+                <p class="mb-0 text-muted">Email:<span class="h6 fw-light text-white ms-2">si31siyam@gmail.com</span>
+                </p>
+                <!-- Row END -->
             </div>
             <!-- Widget 3 END -->
         </div><!-- Row END -->
@@ -99,31 +89,14 @@
             <div class="container px-0">
                 <div class="d-md-flex justify-content-between align-items-center py-3 text-center text-md-left">
                     <!-- copyright text -->
-                    <div class="text-muted text-primary-hover"> Copyrights <a href="#" class="text-reset">©2021
-                            Eduport</a>. All rights reserved. </div>
+                    <div class="text-muted text-primary-hover">
+                        <b><a href="https://siyam70.netlify.app/">Developed By- MD Saymum Islam Siyam</a></b><br>
+                        Copyrights <a href="#" class="text-reset">©2024
+                            SEI Innovations</a>
+                    </div>
                     <!-- copyright links-->
                     <div class=" mt-3 mt-md-0">
                         <ul class="list-inline mb-0">
-                            <li class="list-inline-item text-primary-hover">
-                                <!-- Language selector -->
-                                <div class="dropup mt-0 text-center text-sm-end">
-                                    <a class="dropdown-toggle nav-link" href="#" role="button"
-                                        id="languageSwitcher" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-globe me-2"></i>Language
-                                    </a>
-                                    <ul class="dropdown-menu min-w-auto" aria-labelledby="languageSwitcher">
-                                        <li><a class="dropdown-item me-4 text-body" href="#"><img
-                                                    class="fa-fw me-2" src="assets/images/flags/uk.svg"
-                                                    alt="">English</a></li>
-                                        <li><a class="dropdown-item me-4 text-body" href="#"><img
-                                                    class="fa-fw me-2" src="assets/images/flags/gr.svg"
-                                                    alt="">German </a></li>
-                                        <li><a class="dropdown-item me-4 text-body" href="#"><img
-                                                    class="fa-fw me-2" src="assets/images/flags/sp.svg"
-                                                    alt="">French</a></li>
-                                    </ul>
-                                </div>
-                            </li>
                             <li class="list-inline-item text-primary-hover"><a class="nav-link" href="#">Terms
                                     of use</a></li>
                             <li class="list-inline-item text-primary-hover"><a class="nav-link pe-0"

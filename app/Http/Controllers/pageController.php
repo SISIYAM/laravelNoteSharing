@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pdf;
+use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
@@ -37,5 +39,19 @@ class pageController extends Controller
 
         return view('materials-details',['data' => $material]);
         // return $material;
+    }
+
+    // method for show faculty list
+    public function showFacultiesList(){
+        $faculties = Facultie::all();
+        // return $faculties;
+        return view('instructors',['data' => $faculties]);
+    }
+
+    // method for show pdf
+    public function loadPdf(string $slug = null){
+        $data = Pdf::where('slug',$slug)->first();
+        return view('pdf-details',['data'=> $data]);
+        // return $data;
     }
 }

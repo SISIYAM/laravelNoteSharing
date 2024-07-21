@@ -11,3 +11,17 @@
         </div>
     </div>
 @endsection
+@if (Session::has('success'))
+    @push('sweet-alert')
+        <script>
+            swal("Success!", "{{ Session::get('success') }}", {
+                icon: "success",
+                buttons: {
+                    confirm: {
+                        className: "btn btn-success",
+                    },
+                },
+            });
+        </script>
+    @endpush
+@endif

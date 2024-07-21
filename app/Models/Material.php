@@ -25,6 +25,7 @@ class Material extends Model
         'pdf',
         'status',
         'author',
+        'role',
     ];
 
 
@@ -40,6 +41,10 @@ class Material extends Model
 
     public function getPdf(){
         return $this->hasMany(Pdf::class,'material_id','id');
+    }
+
+    public function getAuthor(){
+        return $this->belongsTo(User::class,'author','id');
     }
 
     // method for generate slug
