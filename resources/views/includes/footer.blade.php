@@ -125,7 +125,6 @@
 <script src="{{ asset('assets/vendor/glightbox/js/glightbox.js') }}"></script>
 <script src="{{ asset('assets/vendor/purecounterjs/dist/purecounter_vanilla.js') }}"></script>
 
-<!-- Template Functions -->
 <script src="{{ asset('assets/js/functions.js') }}"></script>
 
 @stack('script')

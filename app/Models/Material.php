@@ -25,7 +25,6 @@ class Material extends Model
         'pdf',
         'status',
         'author',
-        'role',
     ];
 
 

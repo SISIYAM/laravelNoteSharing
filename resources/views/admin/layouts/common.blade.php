@@ -144,26 +144,27 @@
                         </li>
 
                         <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#tables">
+                            <a data-bs-toggle="collapse" href="#studens">
                                 <i class="fas fa-table"></i>
                                 <p>Students</p>
                                 <span class="caret"></span>
                             </a>
-                            <div class="collapse" id="tables">
+                            <div class="collapse" id="studens">
                                 <ul class="nav nav-collapse">
                                     <li>
-                                        <a href="tables/tables.html">
+                                        <a href="">
                                             <span class="sub-item">Add Student</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="tables/datatables.html">
+                                        <a href="">
                                             <span class="sub-item">Student List</span>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
+
                     </ul>
                 </div>
             </div>

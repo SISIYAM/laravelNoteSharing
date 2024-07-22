@@ -35,7 +35,7 @@ class pageController extends Controller
     // method for show materials
     public function showMaterials(string $slug = null){
 
-        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester','getPdf')->first();
+        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester','getPdf','getAuthor')->first();
 
         return view('materials-details',['data' => $material]);
         // return $material;
@@ -50,7 +50,9 @@ class pageController extends Controller
 
     // method for show pdf
     public function loadPdf(string $slug = null){
-        $data = Pdf::where('slug',$slug)->first();
+        $data = Pdf::where('slug',$slug)->with(['getMaterial' => function($query){
+            $query->with('getUniversity','getSemester');
+        },'getAuthor'])->first();
         return view('pdf-details',['data'=> $data]);
         // return $data;
     }

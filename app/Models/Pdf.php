@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\Material;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pdf extends Model
 {
@@ -17,8 +18,17 @@ class Pdf extends Model
         'title',
         'pdf',
         'author',
-        'role',
     ];
+
+    // relation with materials table
+    public function getMaterial(){
+        return $this->belongsTo(Material::class,'material_id','id');
+    }
+
+    // relation with users table
+    public function getAuthor(){
+        return $this->belongsTo(User::class,'author','id');
+    }
 
     // method for generate slug
     public function sluggable(): array

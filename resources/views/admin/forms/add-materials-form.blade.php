@@ -79,7 +79,8 @@
                         <div class="dynamicPdf">
                             <div class="d-flex">
                                 <div class="form-group">
-
+                                    <input type="text" placeholder="Enter title" name="titlesPdf[]"
+                                        class="form-control my-2">
                                     <input type="file" name="pdfs[]" class="form-control-file"
                                         id="exampleFormControlFile1" />
                                 </div>
@@ -102,7 +103,8 @@
                         <div class="dynamicDrive">
                             <div class="">
                                 <div class="form-group">
-
+                                    <input type="text" placeholder="Enter title" name="titlesDrive[]"
+                                        class="form-control my-2">
                                     <input type="text" name="links[]" class="form-control"
                                         placeholder="Paste Google Drive link" id="" />
                                 </div>

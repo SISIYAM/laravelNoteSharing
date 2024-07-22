@@ -41,7 +41,7 @@
                     <div class="form-group @error('image')
         has-error
         @enderror  has-feedback">
-                        <label for="exampleFormControlFile1">University Logo</label><br>
+                        <label for="exampleFormControlFile1">University Logo (Dimensiond: 600x450 px)</label><br>
                         <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1" />
 
                     </div>

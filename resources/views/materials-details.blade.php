@@ -23,7 +23,7 @@
                                             class="bi bi-patch-exclamation-fill me-2"></i>
                                         Last updated: {{ $data->updated_at->format('d M Y h:i A') }}</li>
                                     <li class="list-inline-item fw-light h6"><i class="fas fa-globe me-2"></i>Uploaded By-
-                                        {{ $data->author }}</li>
+                                        {{ $data->getAuthor->name }}</li>
                                 </ul>
                             </div>
                             <!-- Title END -->

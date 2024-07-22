@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\Approval;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
@@ -114,6 +115,7 @@ class AdminDashboardController extends Controller
         return view('admin.forms.update-faculty-from',['data' => $data]);
     }
 
+
     // methods for query
 
     // add university
@@ -183,51 +185,36 @@ class AdminDashboardController extends Controller
             'title' => $req->title,
             'description' => $req->description,
             'author' => $admin,
-            'role' => 2,
         ]);
 
 
         // Handle the file uploads
         if ($req->hasFile('pdfs')) {
-            foreach ($req->file('pdfs') as $file) {
+            foreach ($req->file('pdfs') as $i => $file) {
                 $path = $file->store('pdfs', 'public');
 
                 $insertPdf = Pdf::create([
                     'material_id' => $insert->id,
+                    'title' => 'Pdf '.$i+1,
                     'pdf' => $path,
                     'author' => $admin,
-                    'role' => 2,
                 ]);
             }
         }
 
         // if google drive link upload
-            foreach($req->links as $link){
+            foreach($req->links as $j=> $link){
                 if($link != NULL){
                     $insertDrive = Pdf::create([
                         'material_id' => $insert->id,
+                        'title' => 'Pdf '.$j+1,
                         'pdf' => $link,
                         'author' => $admin,
-                        'role' => 2,
                     ]);
                 }
             }
 
-
-        // return $insert;
-
-        // $material = new Material();
-        // $material->university_id = $req->university_id;
-        // $material->semester_id = $req->semester_id;
-        // $material->title = $req->title;
-        // $material->author = $admin;
-        // $material->pdf = json_encode($paths);
-
-        // $material->save();
-
         return redirect()->route('admin.form.materials')->with('success','Materials Added Successfully!');
-        // return response()->json($material);
-        // return $req->all();
     }
 
     // function for add faculties

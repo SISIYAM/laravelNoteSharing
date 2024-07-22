@@ -14,16 +14,13 @@
                         <!-- Content -->
                         <ul class="list-inline mb-0">
                             <li class="list-inline-item h6 me-3 mb-1 mb-sm-0"><i
-                                    class="fas fa-star text-warning me-2"></i>4.5/5.0
+                                    class="fas fa-signal text-success me-2"></i>{{ $data->getMaterial->getUniversity->name . ' ' . $data->getMaterial->getSemester->semister_name }}
                             </li>
                             <li class="list-inline-item h6 me-3 mb-1 mb-sm-0"><i
-                                    class="fas fa-user-graduate text-orange me-2"></i>12k Enrolled</li>
-                            <li class="list-inline-item h6 me-3 mb-1 mb-sm-0"><i
-                                    class="fas fa-signal text-success me-2"></i>All
-                                levels</li>
-                            <li class="list-inline-item h6 me-3 mb-1 mb-sm-0"><i
-                                    class="bi bi-patch-exclamation-fill text-danger me-2"></i>Last updated 09/2021</li>
-                            <li class="list-inline-item h6 mb-0"><i class="fas fa-globe text-info me-2"></i>English</li>
+                                    class="bi bi-patch-exclamation-fill text-danger me-2"></i>Last updated
+                                {{ $data->updated_at->format('d M Y h:i A') }}</li>
+                            <li class="list-inline-item h6 mb-0"><i class="fas fa-globe text-info me-2"></i>Uploaded By
+                                {{ $data->getAuthor->name }}</li>
                         </ul>
                     </div>
                 </div>
@@ -42,12 +39,6 @@
                                     <button class="nav-link mb-2 mb-md-0 active" id="course-pills-tab-1"
                                         data-bs-toggle="pill" data-bs-target="#course-pills-1" type="button" role="tab"
                                         aria-controls="course-pills-1" aria-selected="true">Overview</button>
-                                </li>
-                                <!-- Tab item -->
-                                <li class="nav-item me-2 me-sm-4" role="presentation">
-                                    <button class="nav-link mb-2 mb-md-0" id="course-pills-tab-3" data-bs-toggle="pill"
-                                        data-bs-target="#course-pills-3" type="button" role="tab"
-                                        aria-controls="course-pills-3" aria-selected="false">Instructor</button>
                                 </li>
                                 <!-- Tab item -->
                                 <li class="nav-item me-2 me-sm-4" role="presentation">
@@ -71,121 +62,7 @@
                                     <!-- Course detail END -->
                                     <!-- Content END -->
                                 </div>
-                                <!-- Content START -->
-                                <div class="tab-pane fade" id="course-pills-3" role="tabpanel"
-                                    aria-labelledby="course-pills-tab-3">
-                                    <!-- Card START -->
-                                    <div class="card mb-0 mb-md-4">
-                                        <div class="row g-0 align-items-center">
-                                            <div class="col-md-5">
-                                                <!-- Image -->
-                                                <img src="assets/images/instructor/01.jpg" class="img-fluid rounded-3"
-                                                    alt="instructor-image">
-                                            </div>
-                                            <div class="col-md-7">
-                                                <!-- Card body -->
-                                                <div class="card-body">
-                                                    <!-- Title -->
-                                                    <h3 class="card-title mb-0">Louis Ferguson</h3>
-                                                    <p class="mb-2">Instructor of Marketing</p>
-                                                    <!-- Social button -->
-                                                    <ul class="list-inline mb-3">
-                                                        <li class="list-inline-item me-3">
-                                                            <a href="#" class="fs-5 text-twitter"><i
-                                                                    class="fab fa-twitter-square"></i></a>
-                                                        </li>
-                                                        <li class="list-inline-item me-3">
-                                                            <a href="#" class="fs-5 text-instagram"><i
-                                                                    class="fab fa-instagram-square"></i></a>
-                                                        </li>
-                                                        <li class="list-inline-item me-3">
-                                                            <a href="#" class="fs-5 text-facebook"><i
-                                                                    class="fab fa-facebook-square"></i></a>
-                                                        </li>
-                                                        <li class="list-inline-item me-3">
-                                                            <a href="#" class="fs-5 text-linkedin"><i
-                                                                    class="fab fa-linkedin"></i></a>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <a href="#" class="fs-5 text-youtube"><i
-                                                                    class="fab fa-youtube-square"></i></a>
-                                                        </li>
-                                                    </ul>
 
-                                                    <!-- Info -->
-                                                    <ul class="list-inline">
-                                                        <li class="list-inline-item">
-                                                            <div class="d-flex align-items-center me-3 mb-2">
-                                                                <span
-                                                                    class="icon-md bg-orange bg-opacity-10 text-orange rounded-circle"><i
-                                                                        class="fas fa-user-graduate"></i></span>
-                                                                <span class="h6 fw-light mb-0 ms-2">9.1k</span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <div class="d-flex align-items-center me-3 mb-2">
-                                                                <span
-                                                                    class="icon-md bg-warning bg-opacity-15 text-warning rounded-circle"><i
-                                                                        class="fas fa-star"></i></span>
-                                                                <span class="h6 fw-light mb-0 ms-2">4.5</span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <div class="d-flex align-items-center me-3 mb-2">
-                                                                <span
-                                                                    class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle"><i
-                                                                        class="fas fa-play"></i></span>
-                                                                <span class="h6 fw-light mb-0 ms-2">29 Courses</span>
-                                                            </div>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <div class="d-flex align-items-center me-3 mb-2">
-                                                                <span
-                                                                    class="icon-md bg-info bg-opacity-10 text-info rounded-circle"><i
-                                                                        class="fas fa-comment-dots"></i></span>
-                                                                <span class="h6 fw-light mb-0 ms-2">205</span>
-                                                            </div>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Card END -->
-
-                                    <!-- Instructor info -->
-                                    <h5 class="mb-3">About Instructor</h5>
-                                    <p class="mb-3">Fulfilled direction use continual set him propriety continued.
-                                        Saw
-                                        met
-                                        applauded favorite deficient engrossed concealed and her. Concluded boy
-                                        perpetual
-                                        old
-                                        supposing. Farther related bed and passage comfort civilly. Dashboards see
-                                        frankness
-                                        objection abilities. As hastened oh produced prospect formerly up am. Placing
-                                        forming
-                                        nay looking old married few has. Margaret disposed of add screened rendered six
-                                        say
-                                        his
-                                        striking confined. </p>
-                                    <p class="mb-3">As it so contrasted oh estimating instrument. Size like body
-                                        someone
-                                        had.
-                                        Are conduct viewing boy minutes warrant the expense? Tolerably behavior may
-                                        admit
-                                        daughters offending her ask own. Praise effect wishes change way and any wanted.
-                                    </p>
-                                    <!-- Email address -->
-                                    <div class="col-12">
-                                        <ul class="list-group list-group-borderless mb-0">
-                                            <li class="list-group-item pb-0">Mail ID:<a href="#"
-                                                    class="ms-2">hello@email.com</a></li>
-                                            <li class="list-group-item pb-0">Web:<a href="#"
-                                                    class="ms-2">https://eduport.com</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
                                 <!-- Content END -->
 
                                 <!-- Content START -->

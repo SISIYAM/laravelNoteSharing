@@ -100,7 +100,8 @@
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/22.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/22.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
                                                 class="h6 ms-2">Chemistry</span></a>
                                     </div>
@@ -108,7 +109,8 @@
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/23.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/23.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
                                                 class="h6 ms-2">Physics</span></a>
                                     </div>
@@ -116,7 +118,8 @@
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/21.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/21.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
                                                 class="h6 ms-2">Technology</span></a>
                                     </div>
@@ -124,7 +127,8 @@
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/24.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/24.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
                                                 class="h6 ms-2">Health</span></a>
                                     </div>
@@ -132,15 +136,17 @@
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/25.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/25.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
-                                                class="h6 ms-2">Business</span></a>
+                                                class="h6 ms-2">HUM</span></a>
                                     </div>
                                 </div>
                                 <!-- Item -->
                                 <div>
                                     <div class="bg-body text-center rounded-2 border py-2 px-1 position-relative">
-                                        <img src="assets/images/element/26.svg" class="h-40px" alt="">
+                                        <img src="{{ asset('assets/images/element/26.svg') }}" class="h-40px"
+                                            alt="">
                                         <a href="#" class="text-primary-hover stretched-link"><span
                                                 class="h6 ms-2">Engineer</span></a>
                                     </div>
@@ -192,11 +198,6 @@
                 @endif
             </div>
     </section>
-    <!-- =======================
-
-
-                                                                                                                            <!-- =======================
-                                                                                                                        Action box START -->
     <section class="py-0">
         <div class="container">
             <div class="row g-4">
@@ -240,10 +241,6 @@
             </div>
         </div>
     </section>
-    <!-- =======================
-                                                                                                                        Action box END -->
-    <!-- =======================
-                                                                                                                        Action box START -->
     <section class="py-5">
         <div class="container position-relative">
             <div class="row">
@@ -308,6 +305,4 @@
             </div> <!-- Row END -->
         </div>
     </section>
-    <!-- =======================
-                                                                                                                        Action box END -->
 @endsection
