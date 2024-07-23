@@ -115,6 +115,12 @@ class AdminDashboardController extends Controller
         return view('admin.forms.update-faculty-from',['data' => $data]);
     }
 
+    // load pdf info for modal using ajax
+    public function loadPdfInfo(Request $req){
+        $data = Pdf::where('id',$req->id)->first();
+        return $data;
+    }
+
 
     // methods for query
 

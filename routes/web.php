@@ -14,6 +14,7 @@ Route::controller(pageController::class)->group(function () {
     Route::get('/university/details/semester/materials/{slug?}', 'showMaterials')->name('material.details');
     Route::get('/university/bsmraau/faculties','showFacultiesList')->name('faculties');
     Route::get('/university/details/semester/materials/pdf/details/{slug?}','loadPdf')->name('material.pdf');
+    Route::post('ajax/search','loadSearchResult')->name('admin.ajax.search');
 });
 
 Route::get('/error/403', function () {
@@ -46,5 +47,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/faculties/form/add','loadFacultiesForm')->name('admin.form.faculties');
         Route::post('/admin/manage/faculties/add','addFaculties')->name('admin.add.faculties');
         Route::get('/admin/manage/faculties/form/update/{slug?}','loadFacultiesUpdateForm')->name('admin.form.update.faculties');
+        Route::post('/admin/ajax/pdf','loadPdfInfo')->name('admin.ajax.pdf');
     });
 });

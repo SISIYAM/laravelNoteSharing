@@ -56,4 +56,12 @@ class pageController extends Controller
         return view('pdf-details',['data'=> $data]);
         // return $data;
     }
+
+    // method for show search result
+    public function loadSearchResult(Request $req){
+        $search = Material::where('author',$req->input)->with('getUniversity','getSemester')->get();
+
+        return $search;
+
+    }
 }

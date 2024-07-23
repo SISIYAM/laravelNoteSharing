@@ -1,10 +1,48 @@
 @extends('admin.layouts.common-form')
 @section('form-title')
+    <!-- Modal -->
+    <div class="modal fade" id="addFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Material</h5>
+                    <button type="button" id="" class="close hideAddFormModal" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="email">Current pdf</label>
+                            <b class="badge bg-danger" id="currentPdf"></b>
+                        </div>
+                        <div class="form-group @error('pdf')
+           has-error
+           @enderror  has-feedback">
+                            <label for="exampleFormControlFile1">File</label><br>
+                            <input type="file" name="pdf" class="form-control-file" id="exampleFormControlFile1" />
+
+                        </div>
+                        @error('pdf')
+                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
+                        @enderror
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger hideAddFormModal" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="card-title">Update Materials</div>
 @endsection
 @section('form-content')
     @if ($data)
-        <form action="{{ route('admin.add.materials') }}" method="POST" enctype="multipart/form-data">
+        <form action="" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="row shadow-lg p-3 mb-5 bg-ligth rounded m-1">
@@ -77,13 +115,10 @@
                                 <label for="successInput">PDF {{ $i + 1 }} - </label>
                                 <b class="badge bg-danger">{{ $pdf->pdf }}</b>
 
-                                <input style="display: none" type="file" name="pdfs[]"
-                                    class="form-control-file hiddenPdfField">
+                                <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
+                                    value="{{ $pdf->id }}">Change</button>
                             </div>
                         @endforeach
-                        <div class="form-group">
-                            <button type="button" class="badge bg-primary showPdfField">Change</button>
-                        </div>
                         <div class="form-group" style="margin-bottom: -20px">
                             <label for="" class="text-dark">Pdfs</label>
                             <span class="addInputPdf badge bg-success mx-2" style="cursor: pointer">Add more</span>
@@ -152,8 +187,26 @@
 
 @push('script')
     <script>
-        $('.showPdfField').on('click', function() {
-            $('.hiddenPdfField').toggle();
+        $('.showUpdatePdfModal').on('click', function(e) {
+            e.preventDefault();
+            const id = $(this).val();
+
+            // fetch pdf data by using ajax
+            $.ajax({
+                type: "post",
+                url: "{{ route('admin.ajax.pdf') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id: id,
+                },
+
+                success: function(response) {
+                    $('#currentPdf').html(response.pdf);
+                }
+            });
+
+            $('#addFormModal').modal('show');
+
         });
     </script>
 @endpush

@@ -50,18 +50,26 @@
                     <div class="col-md-8 text-center mx-auto pb-5">
                         <form class="bg-body shadow rounded p-2">
                             <div class="input-group">
-                                <input class="form-control border-0 me-1" type="search" placeholder="Find your course">
+                                <input class="form-control border-0 me-1" id="inputSearch" type="search"
+                                    placeholder="Find your course">
                                 <button type="button" class="btn btn-primary mb-0 rounded z-index-1"><i
                                         class="fas fa-search"></i></button>
                             </div>
                         </form>
+                        <div class="bg-light" id="showSearch" style="display: none;">
+                            <hr>
+                            <div class="text-dark searchResult" id="searchOutput" style="">
+
+
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
             <!-- Title and SVG END -->
         </div>
     </section>
-
     <section class="pb-0 py-sm-0 mt-n8">
         <div class="container">
             <div class="row">
@@ -70,16 +78,6 @@
                         <div class="position-relative">
                             <!-- Image -->
                             <img src="{{ asset('assets/images/about/12.jpg') }}" class="card-img rounded-2" alt="...">
-                            <div class="card-img-overlay">
-                                <!-- Video link -->
-                                <div class="position-absolute top-50 start-50 translate-middle">
-                                    <a href="https://www.youtube.com/embed/tXHviS-4ygo"
-                                        class="btn btn-lg text-danger btn-round btn-white-shadow mb-0" data-glightbox=""
-                                        data-gallery="video-tour">
-                                        <i class="fas fa-play"></i>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -306,3 +304,40 @@
         </div>
     </section>
 @endsection
+@push('script')
+    <script>
+        $('#inputSearch').keyup(function(e) {
+            let value = $(this).val();
+            if (value != "") {
+                $('#showSearch').show();
+            } else {
+                $("#showSearch").hide();
+            }
+
+            // fetch pdf data by using ajax
+            $.ajax({
+                type: "post",
+                url: "{{ route('admin.ajax.search') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    input: value,
+                },
+
+                success: function(response) {
+                    let a = "";
+                    $.each(response, function(i, valueOfElement) {
+                        a +=
+                            "<a href='/university/details/semester/materials/" + valueOfElement
+                            .slug + "' target='_blank'>" +
+                            valueOfElement
+                            .title + "<sub> " + valueOfElement.get_university
+                            .name +
+                            " " + valueOfElement.get_semester.semister_name + "</sub></a>";
+                    });
+
+                    $('#searchOutput').html(a);
+                }
+            });
+        });
+    </script>
+@endpush
