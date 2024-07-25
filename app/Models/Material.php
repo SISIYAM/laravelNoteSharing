@@ -14,15 +14,11 @@ class Material extends Model
     use HasFactory;
     use Sluggable;
 
-    protected $casts = [
-        'pdf' => 'json',
-    ];
     protected $fillable = [
         'university_id',
         'semester_id',
         'title',
         'description',
-        'pdf',
         'status',
         'author',
     ];

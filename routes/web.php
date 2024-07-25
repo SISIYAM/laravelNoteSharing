@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\pageController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\AdminDeleteController;
+use App\Http\Controllers\AdminUpdateController;
 use App\Http\Controllers\AdminDashboardController;
 
 
@@ -48,5 +50,24 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/manage/faculties/add','addFaculties')->name('admin.add.faculties');
         Route::get('/admin/manage/faculties/form/update/{slug?}','loadFacultiesUpdateForm')->name('admin.form.update.faculties');
         Route::post('/admin/ajax/pdf','loadPdfInfo')->name('admin.ajax.pdf');
+        Route::get('/admin/manage/contents/university/form/update/{slug?}','loadUpdateUniversityForm')->name('admin.form.update.university');
+    });
+
+    // controller for update queries
+    Route::controller(AdminUpdateController::class)->group(function () {
+        Route::put('/admin/ajax/update/pdf','updatePdfAjax')->name('admin.ajax.update.pdf');
+        Route::put('/admin/manage/update/materials/{slug}','updateMaterials')->name('admin.update.materials');
+        Route::post('/admin/manage/update/semesters','updateSemesters')->name('admin.update.semester');
+        Route::post('/admin/manage/update/semesters/add','addNewSemester')->name('admin.ajax.new.semester');
+        Route::put('/admin/manage/contents/university/update/{slug}','updateUniversity')->name('admin.update.university');
+    });
+
+    // controller for delete queries
+    Route::controller(AdminDeleteController::class)->group(function () {
+        Route::get('/admin/delete/faculties/{slug}','deleteFaculties')->name('admin.delete.faculties');
+        Route::post('/admin/delete/pdf','deletePdf')->name('admin.delete.pdf');
+        Route::post('/admin/delete/materials','deleteMaterials')->name('admin.delete.materials');
+        Route::post('/admin/delete/university','deleteUniversity')->name('admin.delete.university');
+        Route::post('/admin/delete/semester/selected','selectedSemesterDelete')->name('admin.delete.semester.selected');
     });
 });

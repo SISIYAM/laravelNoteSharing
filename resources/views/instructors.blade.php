@@ -5,7 +5,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="bg-dark p-4 text-center rounded-3">
-                        <h1 class="text-white m-0">Instructors list</h1>
+                        <h1 class="text-white m-0">Faculties list</h1>
                         <!-- Breadcrumb -->
                         <div class="d-flex justify-content-center">
                             <nav aria-label="breadcrumb">

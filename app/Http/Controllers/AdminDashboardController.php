@@ -121,16 +121,22 @@ class AdminDashboardController extends Controller
         return $data;
     }
 
+    // method for load university update form
+    public function loadUpdateUniversityForm(String $slug){
+        $university = Universitie::where(compact('slug'))->with('semisters')->first();
+        return view('admin.forms.update-university-form',['data' => $university]);
+    }
+
 
     // methods for query
 
     // add university
     public function addUniversity(Request $req){
         $req->validate([
-            'name' => 'string|required|min:2',
-            'semester' => 'integer|required|min:1|max_digits:2',
+            'name' => 'alpha|required|min:2',
+            'semester' => 'required|numeric|min:1|max_digits:2',
             'description' => 'required|string',
-            'image' => 'mimes:png,jpg,jpeg,webp|max:3000',
+            'image' => 'required|mimes:png,jpg,jpeg,webp|max:3000',
         ]);
 
         // Handle the image upload
@@ -160,6 +166,7 @@ class AdminDashboardController extends Controller
                 $semesterInsert = Semister::create([
                     'university_id' => $universityId,
                     'semister_name' => 'Semester '.$i+1,
+                    'status' => 1,
                     'author' => $admin,
                 ]);
                 // $output[] = $semesterInsert;
@@ -176,13 +183,19 @@ class AdminDashboardController extends Controller
     public function addMaterials(Request $req){
         $admin = Auth::user()->id;
         $req->validate([
-            'university_id' => 'required|integer',
-            'semester_id' => 'required|integer',
+            'university_id' => 'required|numeric',
+            'semester_id' => 'required|numeric',
             'title' => 'required|string|max:255',
-            'description' => 'required | string',
+            'description' => 'nullable|string',
             'pdfs' => 'array', // Validate that 'pdfs' is an array
             'pdfs.*' => 'file|mimes:pdf', // Validate each file in the 'pdfs' array
-            // Add more validation rules for pdfs array if necessary
+            'titlesPdf' => 'array',
+            'titlesPdf.*' => 'nullable|string',
+            'titlesDrive' => 'array',
+            'titlesDrive.*' => 'nullable|string',
+            'links' => 'array',
+            'links.*' => 'nullable|url',
+
         ]);
 
         $insert = Material::create([
@@ -198,10 +211,14 @@ class AdminDashboardController extends Controller
         if ($req->hasFile('pdfs')) {
             foreach ($req->file('pdfs') as $i => $file) {
                 $path = $file->store('pdfs', 'public');
-
+                if($req->titlesPdf[$i] != NULL){
+                    $title = $req->titlesPdf[$i];
+                }else{
+                    $title = 'Pdf '.$i+1;
+                }
                 $insertPdf = Pdf::create([
                     'material_id' => $insert->id,
-                    'title' => 'Pdf '.$i+1,
+                    'title' => $title,
                     'pdf' => $path,
                     'author' => $admin,
                 ]);
@@ -211,9 +228,14 @@ class AdminDashboardController extends Controller
         // if google drive link upload
             foreach($req->links as $j=> $link){
                 if($link != NULL){
+                    if($req->titlesDrive[$j] != NULL){
+                        $title = $req->titlesDrive[$j];
+                    }else{
+                        $title = 'Pdf '.$j+1;
+                    }
                     $insertDrive = Pdf::create([
                         'material_id' => $insert->id,
-                        'title' => 'Pdf '.$j+1,
+                        'title' => $title,
                         'pdf' => $link,
                         'author' => $admin,
                     ]);
@@ -230,10 +252,10 @@ class AdminDashboardController extends Controller
         $req->validate([
             'name' => 'required|string|max:255',
             'resignation' => 'required|string|max:255',
-            'degree' => 'string',
-            'email' => 'email',
-            'mobile' => 'max:11',
-            'image' => 'mimes:jpg,png,jpeg,webp',
+            'degree' => 'string|nullable',
+            'email' => 'email|nullable',
+            'mobile' => 'nullable|numeric',
+            'image' => 'nullable|mimes:jpg,png,jpeg,webp',
         ]);
 
         if($req->hasFile('image')){
@@ -257,5 +279,8 @@ class AdminDashboardController extends Controller
         // return ['filePath' => $path, 'request' => $req->all(),'Author' => Auth::user()];
         // return $insert;
     }
+
+
+
 
 }
