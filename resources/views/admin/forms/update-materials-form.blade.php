@@ -17,6 +17,7 @@
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="pdf_id" id="pdf_id">
+                        <input type="hidden" name="material_id" id="material_id">
                         <div class="form-group">
                             <label for="email">Current Title</label>
                             <b class="badge bg-success" id="currentTitle"></b>
@@ -82,6 +83,7 @@
         <form action="{{ route('admin.update.materials', $data->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" id="materialID" value="{{ $data->id }}">
             <div class="card-body">
                 <div class="row shadow-lg p-3 mb-5 bg-ligth rounded m-1">
                     <div class="col-md-6 col-lg-10">
@@ -148,18 +150,25 @@
                                 <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-                        @foreach ($data->getPdf as $i => $pdf)
-                            <div class="form-group ">
-                                <label for="successInput">{{ $pdf->title }} - </label>
-                                <b class="badge bg-danger">{{ $pdf->pdf }}</b>
-                                <a href="{{ asset('storage/' . $pdf->pdf) }}" target="_blank"><button
-                                        class="badge bg-dark" type="button">view</button></a>
-                                <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
-                                    value="{{ $pdf->id }}">Change</button>
-                                <button type="button" class="badge bg-danger border-0 deletPdfBtn"
-                                    value="{{ $pdf->id }}">Delete</button>
-                            </div>
-                        @endforeach
+                        <div id="addedPdf">
+                            @foreach ($data->getPdf as $i => $pdf)
+                                <div class="form-group ">
+                                    <label for="successInput">{{ $pdf->title }} - </label>
+                                    <b class="badge bg-danger">{{ $pdf->pdf }}</b>
+                                    @if ($pdf->type == 1)
+                                        <a href="{{ asset('storage/' . $pdf->pdf) }}" target="_blank"><button
+                                                class="badge bg-dark" type="button">view</button></a>
+                                    @else
+                                        <a href="{{ $pdf->pdf }}" target="_blank"><button class="badge bg-dark"
+                                                type="button">view</button></a>
+                                    @endif
+                                    <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
+                                        value="{{ $pdf->id }}">Change</button>
+                                    <button type="button" class="badge bg-danger border-0 deletPdfBtn"
+                                        value="{{ $pdf->id }}">Delete</button>
+                                </div>
+                            @endforeach
+                        </div>
                         <div class="form-group">
                             <label for="">Select File type</label>
                             <select name="" class="form-select" id="fileType">
@@ -229,7 +238,7 @@
 @push('ajax')
     <script>
         // search semester according to university name
-        $("#selectUniversity").on("change", function(e) {
+        $(document).on("change", "#selectUniversity", function(e) {
             e.preventDefault();
 
             const universityId = $(this).val();
@@ -262,9 +271,10 @@
 
 @push('script')
     <script>
-        $('.showUpdatePdfModal').on('click', function(e) {
+        $(document).on('click', '.showUpdatePdfModal', function(e) {
             e.preventDefault();
             const id = $(this).val();
+            const materialId = $("#materialID").val();
 
             // fetch pdf data by using ajax
             $.ajax({
@@ -280,6 +290,7 @@
                     $('#currentTitle').html(response.title);
                     $('#pdfTitle').val(response.title);
                     $('#pdf_id').val(response.id);
+                    $('#material_id').val(materialId);
                 }
             });
 
@@ -288,7 +299,7 @@
         });
 
         // Handle PDF update form submission
-        $('#updatePdfForm').on('submit', function(e) {
+        $(document).on('submit', '#updatePdfForm', function(e) {
             e.preventDefault();
 
             const formData = new FormData(this);
@@ -300,9 +311,31 @@
                 processData: false,
                 contentType: false,
                 success: function(response) {
+                    let newData = "";
                     if (response.success) {
                         $('#currentTitle').html(response.pdf.title);
                         $('#currentPdf').html(response.pdf.pdf);
+                        let view = "";
+                        let url = "{{ asset('storage') }}/";
+                        $.each(response.materialPdf, function(index, value) {
+                            if (value.type == 1) {
+                                view = `<a href="` + url + value.pdf + `" target="_blank"><button
+                                                class="badge bg-dark" type="button">view</button></a>`;
+                            } else {
+                                view = `<a href="` + value.pdf + `" target="_blank"><button
+                                                class="badge bg-dark" type="button">view</button></a>`;
+                            }
+                            newData += ` <div class="form-group ">
+                                    <label for="successInput">` + value.title + ` - </label>
+                                    <b class="badge bg-danger">` + value.pdf + `</b>
+                                    ` + view + `
+                                    <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
+                                        value="` + value.id + `">Change</button>
+                                    <button type="button" class="badge bg-danger border-0 deletPdfBtn"
+                                        value="` + value.id + `">Delete</button>
+                                </div>`;
+                        });
+                        $('#addedPdf').html(newData);
                         swal("Success!", response.success, {
                             icon: "success",
                             buttons: {
@@ -310,10 +343,10 @@
                                     className: "btn btn-success",
                                 },
                             },
-                        }).then(() => {
-                            location.reload();
                         });
+
                     }
+
                 },
                 error: function(xhr) {
                     // Handle error
@@ -323,7 +356,7 @@
         });
 
         // delete pdf
-        $('.deletPdfBtn').on('click', function() {
+        $(document).on('click', '.deletPdfBtn', function() {
             const id = $(this).val();
 
             swal({

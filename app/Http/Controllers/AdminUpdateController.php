@@ -40,6 +40,7 @@ class AdminUpdateController extends Controller
 
         $pdf->update([
             'pdf' => $path,
+            'type' => 1,     // if type 1 then pdf
             'title' => $req->title,
         ]);
     } else {
@@ -50,6 +51,7 @@ class AdminUpdateController extends Controller
             $pdf->update([
                 'title' => $req->title,
                 'pdf' => $req->drive,
+                'type' => 2,     // if type 2 then google drive
             ]);
         }else{
             // Update title if no new file is uploaded
@@ -61,8 +63,9 @@ class AdminUpdateController extends Controller
     }
 
     $pdfAfter = Pdf::where('id',$req->pdf_id)->first();
+    $MaterialPdf = Pdf::where('material_id',$req->material_id)->get();
 
-    return ['success' => 'Update successfully!','pdf'=>$pdfAfter];
+    return ['success' => 'Update successfully!','pdf'=>$pdfAfter,'materialPdf' => $MaterialPdf];
     }
 
     // method for update material
@@ -104,6 +107,7 @@ class AdminUpdateController extends Controller
                     'material_id' => $material->id,
                     'title' => $title,
                     'pdf' => $path,
+                    'type' => 1,   // if type 1 then pdf
                     'author' => $admin,
                 ]);
             }
@@ -121,6 +125,7 @@ class AdminUpdateController extends Controller
                         'material_id' => $material->id,
                         'title' => $title,
                         'pdf' => $link,
+                        'type' => 2,    // if type 2 then google drive
                         'author' => $admin,
                     ]);
                 }

@@ -39,7 +39,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/contents/universities/','loadUniversities')->name('admin.manage.universities');
         Route::get('/admin/manage/contents/universities/form/add','loadUniversityForm')->name('admin.add.universities');
         Route::post('/admin/manage/contents/university/add','addUniversity')->name('admin.add.university');
-        Route::get('/admin/manage/contents/universities/semesters','loadSemester')->name('admin.manage.universities.semesters');
         Route::post('/admin/manage/contents/universities/semesters/materials/add','addMaterials')->name('admin.add.materials');
         Route::get('/admin/manage/contents/universities/semesters/materials/form/add','loadMaterialsForm')->name('admin.form.materials');
         Route::post('/admin/jquery/ajax/universities/semesters', 'universitySemester')->name('admin.semester.ajax');

@@ -31,15 +31,6 @@ class AdminDashboardController extends Controller
         return view('admin.list',['key' => 'university','thead' => $data,'tableRow' => $universities]);
     }
 
-    // load semesters page
-    public function loadSemester(){
-        $data = ['No','University','Semester','Author','Status',''];
-
-        $semester = Semister::with('university')->get();
-
-        // return $semester;
-        return view('admin.list',['key' => 'semester', 'thead' => $data, 'tableRow' => $semester]);
-    }
 
     // load materials form
     public function loadMaterialsForm(){
@@ -220,6 +211,7 @@ class AdminDashboardController extends Controller
                     'material_id' => $insert->id,
                     'title' => $title,
                     'pdf' => $path,
+                    'type' => 1,            // if type 1 then pdf
                     'author' => $admin,
                 ]);
             }
@@ -237,6 +229,7 @@ class AdminDashboardController extends Controller
                         'material_id' => $insert->id,
                         'title' => $title,
                         'pdf' => $link,
+                        'type' => 2,      // if type 2 then google drive
                         'author' => $admin,
                     ]);
                 }

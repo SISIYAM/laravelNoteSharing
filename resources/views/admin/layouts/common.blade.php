@@ -91,11 +91,6 @@
                                             <span class="sub-item">Universities</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="{{ route('admin.manage.universities.semesters') }}">
-                                            <span class="sub-item">Semisters</span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </div>
                         </li>

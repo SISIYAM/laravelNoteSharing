@@ -17,6 +17,7 @@ class Pdf extends Model
         'material_id',
         'title',
         'pdf',
+        'type',
         'author',
     ];
 
