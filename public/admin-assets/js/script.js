@@ -84,26 +84,36 @@ $(document).ready(function () {
         $(this).parent().remove();
     });
 
+    // select all checkbox
     $(document).on("click", "#selectAll", function () {
         if ($("#selectAll").is(":checked")) {
             $(".isCheck").prop("checked", true).triggerHandler("click");
         } else {
             $(".isCheck").prop("checked", false).triggerHandler("click");
         }
+        checkBoxCount();
     });
 
+    // checkbox
     $(document).on("click", ".isCheck", function () {
-        let checked = [];
-        $(".isCheck:checked").each(function () {
-            checked.push($(this).val());
-        });
-
-        if (jQuery.isEmptyObject(checked)) {
-            $("#selectedDeleteBtn").hide();
-            $("#checkedCount").html("");
-        } else {
-            $("#checkedCount").html("Selected item " + checked.length);
-            $("#selectedDeleteBtn").show();
-        }
+        checkBoxCount();
     });
 });
+
+// functions
+
+// this function count checked checkbox and hide and show delete btn
+const checkBoxCount = () => {
+    let checked = [];
+    $(".isCheck:checked").each(function () {
+        checked.push($(this).val());
+    });
+
+    if (jQuery.isEmptyObject(checked)) {
+        $("#selectedDeleteBtn").hide();
+        $("#checkedCount").html("");
+    } else {
+        $("#checkedCount").html(`Selected item ${checked.length}`);
+        $("#selectedDeleteBtn").show();
+    }
+};

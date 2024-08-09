@@ -58,11 +58,11 @@
                                         <div class="d-flex">
                                             <input type="checkbox" value="{{ $semester->id }}" class="isCheck m-3"
                                                 id="">
-                                            <input type="text" name="semesters[]" class="form-control" readonly
-                                                value="{{ $semester->semister_name }}">
+                                            <input type="text" name="semesters[]" class="form-control semisterField"
+                                                readonly value="{{ $semester->semister_name }}">
                                             <button type="button"
                                                 class="badge bg-success m-3 editSemesterBtn">Edit</button>
-                                            <button type="button" class="badge bg-danger m-3">Delete</button>
+
                                             <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
                                                 style="display:none" value="{{ $semester->id }}">Save</button>
                                         </div><br>
@@ -107,7 +107,7 @@
             </div>
             <div class="card-action">
                 <button type="submit" class="btn btn-success">Submit</button>
-                <button class="btn btn-danger">Cancel</button>
+                <button type="button" class="btn btn-danger">Cancel</button>
             </div>
         </form>
     @endif
@@ -115,11 +115,12 @@
 
 @push('ajax')
     <script>
+        // save semister edit
         $(document).on("click", ".cancelEditSemesterBtn", function(e) {
             e.preventDefault();
             const button = $(this);
             const id = button.val();
-            const semester = button.siblings('input').val();
+            const semester = button.siblings('.semisterField').val();
             $.ajax({
                 type: "POST",
                 url: "{{ route('admin.update.semester') }}",
@@ -168,11 +169,11 @@
                         const newData = `<div class="d-flex">
                                             <input type="checkbox" value="` + valueOfElement.id + `" class="isCheck m-3"
                                                 id="">
-                                            <input type="text" name="semesters[]" class="form-control" readonly
+                                            <input type="text" name="semesters[]" class="form-control semisterField" readonly
                                                 value="` + valueOfElement.semister_name + `">
                                             <button type="button"
                                                 class="badge bg-success m-3 editSemesterBtn">Edit</button>
-                                            <button type="button" class="badge bg-danger m-3">Delete</button>
+                                            
                                             <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
                                                 style="display:none" value="` + valueOfElement.id + `">Save</button>
                                         </div><br>`;
@@ -215,11 +216,11 @@
                             newOutput += `<div class="d-flex">
                                             <input type="checkbox" value="` + value.id + `" class="isCheck m-3"
                                                 id="">
-                                            <input type="text" name="semesters[]" class="form-control" readonly
+                                            <input type="text" name="semesters[]" class="form-control semisterField" readonly
                                                 value="` + value.semister_name + `">
                                             <button type="button"
                                                 class="badge bg-success m-3 editSemesterBtn">Edit</button>
-                                            <button type="button" class="badge bg-danger m-3">Delete</button>
+                                            
                                             <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
                                                 style="display:none" value="` + value.id + `">Save</button>
                                         </div><br>`;

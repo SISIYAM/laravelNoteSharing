@@ -13,12 +13,13 @@ class pageController extends Controller
     // methods for load pages
 
     public function index(){
-        $universities = Universitie::where('status',1)->with(['semisters' => function($query) {
-            $query->where('status', 1);
-        }, 'material'])->get();
+        // $universities = Universitie::where('status',1)->with(['semisters' => function($query) {
+        //     $query->where('status', 1);
+        // }, 'material'])->get();
 
-        return view('welcome',['universities' => $universities]);
+        // return view('welcome',['universities' => $universities]);
         // return $universities;
+        return view('admin.forms.login');
     }
 
     // method for show details page
@@ -63,5 +64,11 @@ class pageController extends Controller
 
         return $search;
 
+    }
+
+    public function showApi(){
+        return response()->json([
+            'name' => 'siyam',
+        ],200);
     }
 }

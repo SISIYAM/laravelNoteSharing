@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
-use App\Models\Approval;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;

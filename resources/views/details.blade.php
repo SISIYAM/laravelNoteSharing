@@ -32,9 +32,10 @@
                 <div class="row">
                     <!-- Main content START -->
                     <div class="col-lg-8">
-                        <div class="bg-body shadow rounded-2 p-4">
+                        <div class="card shadow rounded-2 p-4">
+                            <div class="card-header border-bottom px-4 py-3">
                             <!-- Tabs START -->
-                            <ul class="nav nav-pills nav-tabs-line pt-0" id="course-pills-tab" role="tablist">
+                            <ul class="nav nav-pills nav-tabs-line py-0" id="course-pills-tab" role="tablist">
                                 <!-- Tab item -->
                                 <li class="nav-item me-2 me-sm-4" role="presentation">
                                     <button class="nav-link mb-2 mb-md-0 active" id="course-pills-tab-1"
@@ -67,9 +68,10 @@
                             </button>
                         </li> --}}
                             </ul>
-                            <hr>
-                            <!-- Tabs END -->
+                        </div>
 
+                            <!-- Tabs END -->
+                            <div class="card-body p-4">
                             <!-- Tab contents START -->
                             <div class="tab-content pt-2" id="course-pills-tabContent">
                                 <!-- Content START -->
@@ -595,6 +597,7 @@
                                 <!-- Content END -->
                             </div>
                             <!-- Tab contents END -->
+                        </div>
                         </div>
                     </div>
                     <!-- Main content END -->
