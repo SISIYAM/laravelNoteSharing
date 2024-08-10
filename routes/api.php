@@ -19,4 +19,6 @@ Route::controller(apiController::class)->group(function () {
     Route::get('/request/fetch/university/semesters/materials/pdf/{slug?}','fetchPdfDetails');
     Route::get('/request/fetch/search/{input?}', 'fetchSearch');
     Route::get('/request/fetch/faculties','fetchFaculties');
+    Route::post('/request/material','requestMaterial');
+    Route::post('/request/material/pdf/review' , 'submitReview');
 });

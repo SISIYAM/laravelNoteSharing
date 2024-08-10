@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
+use App\Models\MaterialRequest;
+use Illuminate\Support\Facades\Validator;
+
 
 class apiController extends Controller
 {
@@ -175,5 +179,71 @@ class apiController extends Controller
                 'message' => 'No result found!',
             ],404);
         }
+    }
+
+    // method for request for material api
+    public function requestMaterial(Request $req) {
+        
+        $validator = Validator::make($req->all(), [
+            "name" => "required|string|regex:/^[a-zA-Z\s]+$/",
+            "department" => "required|string",
+            "batch" => "required|alpha_num",
+            "roll" => "required|numeric",
+            "note" => "required"
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                "status" => 422,
+                "errors" => $validator->messages()
+            ],422);
+        }
+
+        $reqForMaterial = MaterialRequest::create([
+            "studentName" => $req->name,
+            "department" => $req->department,
+            "batch" => $req->batch,
+            "roll" => $req->roll,
+            "note" => $req->note
+        ]);
+
+        return response()->json([
+            "status" => 200,
+            "message" => "Thanks for your request."
+        ],200);
+ 
+    }
+
+    // method for submit submitReview
+    public function submitReview(Request $req) {
+        $validator = Validator::make($req->all(), [
+            'rating' => 'required|numeric',
+            'pdf_id' => 'required|numeric',
+            'name' => 'required|regex:/^[a-zA-Z\s]+$/',
+            'department' => 'required|string',
+            'batch' => 'required|alpha_num',
+            'review' => 'required|string'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                "status" => 422,
+                "errors" => $validator->messages()
+            ],422);
+        }
+
+        $review = Review::create([
+            'pdf_id' => $req->pdf_id,
+            'rating' => $req->rating,
+            'name' => $req->name,
+            'department' => $req->department,
+            'batch' => $req->batch,
+            'review' => $req->review
+        ]);
+
+        return response()->json([
+            "status" => 200,
+            "message" => $req->name." Thanks for your review!"
+        ],200);
     }
 }
