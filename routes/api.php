@@ -21,4 +21,5 @@ Route::controller(apiController::class)->group(function () {
     Route::get('/request/fetch/faculties','fetchFaculties');
     Route::post('/request/material','requestMaterial');
     Route::post('/request/material/pdf/review' , 'submitReview');
+    Route::post('/request/material/pdf/review/all', 'fetchReviews');
 });

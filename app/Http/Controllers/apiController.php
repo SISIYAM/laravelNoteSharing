@@ -246,4 +246,21 @@ class apiController extends Controller
             "message" => $req->name." Thanks for your review!"
         ],200);
     }
+
+    // method for fetch reviews 
+    public function fetchReviews(Request $req) {
+        $review = Review::where('pdf_id',$req->pdf_id)->get();
+
+        if(count($review)){
+            return response()->json([
+                'status' => 200,
+                "review" => $review,
+            ],200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => 'No review found!'
+            ],404);
+        }
+    }
 }
