@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
@@ -57,8 +58,23 @@ class AdminDeleteController extends Controller
 
     // method for delete selected semester
     public function selectedSemesterDelete(Request $req){
+
         foreach($req->id as $semester_id){
-            $semester = Semister::findOrFail($semester_id)->delete();
+            $semester = Semister::findOrFail($semester_id);
+            
+            foreach ($semester->materials as $material) {
+                $searchMaterial = Material::findOrFail($material->id);
+                foreach($searchMaterial->getPdf as $pdf){
+                    $searchPdf = Pdf::findOrFail($pdf->id);
+                    if (Storage::disk('public')->exists($searchPdf->pdf)) {
+                        Storage::disk('public')->delete($searchPdf->pdf);
+                    }
+                    $searchPdf->delete();
+                }
+                $searchMaterial->delete();
+            }
+            $semester->delete();
+         
         }
 
         $findSem = Semister::where('university_id',$req->universityId)->get();
@@ -77,6 +93,19 @@ class AdminDeleteController extends Controller
         $University->delete();
 
         return ['delete' => $title.' has been deleted!'];
+    }
+
+    // method for delete reviews
+    public function deleteReviews(string $id){
+        $delete = Review::find($id);
+        
+        if($delete){
+            $delete->delete();
+            return redirect()->route('admin.reviews',['key' => 'reviews'])->with('success','Deleted successfully!');
+        }else{
+            return ['message' => 'invalid!'];
+        }
+        
     }
 
 }

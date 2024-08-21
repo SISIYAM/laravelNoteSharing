@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
@@ -272,7 +273,15 @@ class AdminDashboardController extends Controller
         // return $insert;
     }
 
+    // method for load reviews
+    public function loadReviews(){
 
+        // table headers
+        $thead = ['No','Time','Rating','Name','Review','Pdf',''];
+
+        $reviews = Review::orderBy('id','DESC')->get();
+        return view('admin.list',['key' => 'reviews','thead' => $thead, 'tableRow' => $reviews]);
+    }
 
 
 }

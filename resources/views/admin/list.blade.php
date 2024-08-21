@@ -100,7 +100,36 @@
                                 data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button></a>
-                        <a href="{{ route('admin.delete.faculties', $row->slug) }}">
+                        <a href="{{ route('admin.delete.faculties', $row->slug) }}"
+                            onclick="return confirm('Are you sure?')">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                                data-original-title="Remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @endsection
+@elseif ($key == 'reviews')
+    @section('table-row')
+        @foreach ($tableRow as $count => $row)
+            <tr>
+                <td>{{ $count + 1 }}</td>
+                <td>{{ $row->created_at->format('d M Y h:i A') }}</td>
+                <td>{{ $row->rating }}</td>
+                <td>{{ $row->name }}</td>
+                <td>{{ $row->review }}</td>
+                <td>{{ $row->pdf_id }}</td>
+
+                <td>
+                    <div class="form-button-action">
+                        <a href=""><button type="button" data-bs-toggle="tooltip" title=""
+                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                <i class="fa fa-edit"></i>
+                            </button></a>
+                        <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
                             <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
                                 data-original-title="Remove">
                                 <i class="fa fa-times"></i>

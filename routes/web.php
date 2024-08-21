@@ -50,6 +50,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/faculties/form/update/{slug?}','loadFacultiesUpdateForm')->name('admin.form.update.faculties');
         Route::post('/admin/ajax/pdf','loadPdfInfo')->name('admin.ajax.pdf');
         Route::get('/admin/manage/contents/university/form/update/{slug?}','loadUpdateUniversityForm')->name('admin.form.update.university');
+        Route::get('/admin/manage/reviews', 'loadReviews')->name('admin.reviews');
     });
 
     // controller for update queries
@@ -68,5 +69,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/delete/materials','deleteMaterials')->name('admin.delete.materials');
         Route::post('/admin/delete/university','deleteUniversity')->name('admin.delete.university');
         Route::post('/admin/delete/semester/selected','selectedSemesterDelete')->name('admin.delete.semester.selected');
+        Route::get('/admin/delete/reviews/{id}','deleteReviews')->name('admin.delete.reviews');
     });
 });
