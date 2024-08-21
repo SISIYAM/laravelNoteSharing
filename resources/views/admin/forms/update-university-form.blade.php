@@ -69,6 +69,17 @@
                                     @endforeach
                                 </div>
                                 <p id="checkedCount"></p>
+                                <div id="switchBox" style="position: relative; left: -10px; display:none">
+                                    <div class="form-check form-switch" style="margin-bottom: -20px;">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="deleteMaterialsSwitch" style="transform: scale(1.2);">
+                                        <label class="form-check-label" for="deleteMaterialsSwitch" style="font-size: 1.2em;">Deletes its related materials</label>
+                                    </div>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" role="switch" id="deletePdfSwitch" style="transform: scale(1.2);">
+                                        <label class="form-check-label" for="deletePdfSwitch" style="font-size: 1.2em;">Deletes its related pdfs</label>
+                                    </div>
+                                </div>
+                                
                                 <button type="button" class="btn btn-danger btn-sm" style="display: none"
                                     id="selectedDeleteBtn" value="{{ $data->id }}">Delete
                                     Selected</button>
@@ -193,6 +204,17 @@
         // delete selected semester
         $(document).on('click', '#selectedDeleteBtn', function(e) {
             e.preventDefault();
+            let isDeleteMaterials = "off";
+            let isDeletePdf = "off";
+            // first check switched
+            if($("#deleteMaterialsSwitch").is(":checked")){
+                isDeleteMaterials = "on";
+            }
+            if($("#deletePdfSwitch").is(":checked")){
+                isDeletePdf = "on";
+            }
+            // end
+
             const universityId = $(this).val();
             let id = [];
             $(".isCheck:checked").each(function() {
@@ -209,6 +231,8 @@
                         _token: "{{ csrf_token() }}", // Include CSRF token
                         id: id,
                         universityId: universityId,
+                        isDeleteMaterials:isDeleteMaterials,
+                        isDeletePdf:isDeletePdf,
                     },
                     success: function(response) {
                         let newOutput = "";
@@ -229,7 +253,7 @@
                         $('#appendAfterInsert').html(newOutput);
                         $('#selectedDeleteBtn').hide();
                         $('#checkedCount').html("");
-                        console.log(response.newSemesterData);
+                        console.log(response);
                     }
                 });
             }

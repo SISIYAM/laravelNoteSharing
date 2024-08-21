@@ -63,15 +63,26 @@ class AdminDeleteController extends Controller
             $semester = Semister::findOrFail($semester_id);
             
             foreach ($semester->materials as $material) {
+                
                 $searchMaterial = Material::findOrFail($material->id);
                 foreach($searchMaterial->getPdf as $pdf){
                     $searchPdf = Pdf::findOrFail($pdf->id);
-                    if (Storage::disk('public')->exists($searchPdf->pdf)) {
-                        Storage::disk('public')->delete($searchPdf->pdf);
+                    if($req->isDeletePdf === "on" ){
+                        if (Storage::disk('public')->exists($searchPdf->pdf)) {
+                            Storage::disk('public')->delete($searchPdf->pdf);
+                        }
+                        $searchPdf->delete();
                     }
-                    $searchPdf->delete();
+                    
                 }
-                $searchMaterial->delete();
+                if($req->isDeleteMaterials === "on" ){
+                    $searchMaterial->delete();
+                }else{
+                    $searchMaterial->update([
+                        "semester_id" => null,
+                        "allocated" => 0,
+                    ]);
+                }
             }
             $semester->delete();
          

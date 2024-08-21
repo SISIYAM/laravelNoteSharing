@@ -112,8 +112,10 @@ const checkBoxCount = () => {
     if (jQuery.isEmptyObject(checked)) {
         $("#selectedDeleteBtn").hide();
         $("#checkedCount").html("");
+        $("#switchBox").hide();
     } else {
         $("#checkedCount").html(`Selected item ${checked.length}`);
         $("#selectedDeleteBtn").show();
+        $("#switchBox").show();
     }
 };

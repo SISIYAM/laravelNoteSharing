@@ -52,7 +52,7 @@ class AdminDashboardController extends Controller
     public function loadMaterials(){
         $data = ['No','University','Semester','Title','Author','Status',''];
 
-        $materials = Material::with('getUniversity','getSemester','getAuthor')->get();
+        $materials = Material::where('allocated',1)->with('getUniversity','getSemester','getAuthor')->get();
         // return $materials;
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
     }

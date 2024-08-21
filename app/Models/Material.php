@@ -21,6 +21,7 @@ class Material extends Model
         'description',
         'status',
         'author',
+        'allocated',
     ];
 
 
