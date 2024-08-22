@@ -234,6 +234,29 @@ class AdminUpdateController extends Controller
             'notAllocated' => $notAllocatedMaterials,
         ]);
     }
+
+    // update materials and assigned pdfs into it
+    public function assignPdfs(Request $req) {
+        
+        if($req->checkedPdfs){
+            foreach($req->checkedPdfs as $pdfId) {
+                $assign = Pdf::findOrFail($pdfId);
+                if ($assign) { 
+                    $assign->update([
+                        'material_id' => $req->material_id,
+                    ]);
+                }
+            }
+        }
+
+        $searchPdfs = Pdf::where('material_id',$req->material_id)->get();
+        $notAllocatedPdfs = Pdf::where('material_id', null)
+                     ->get();
+        return response()->json([
+            "existPdfs" => $searchPdfs,
+            'notAllocatedPdfs' => $notAllocatedPdfs,
+        ]);
+    }
     
     // remove assinged materials from semester
     public function removeAssignedMaterial(Request $req){
@@ -258,6 +281,30 @@ class AdminUpdateController extends Controller
         return response()->json([
             "materials" => $searchMaterials,
             'notAllocated' => $notAllocatedMaterials,
+        ]);
+
+    }
+
+    // remove assinged pdfs from materials
+    public function removeAssignedPdf(Request $req){
+
+        $updatePdf = Pdf::findOrFail($req->pdf_id);
+
+        $updatePdf->update([
+            'material_id' => null,
+
+        ]);
+
+        // now search after remove pdfs
+        $searchPdfs = Pdf::where('material_id',$req->material_id)->get();
+        
+        // now search updated not allocated pdfs
+        $notAllocatedPdfs = Pdf::where('material_id', null)
+                     ->get();
+                     
+        return response()->json([
+            "pdfs" => $searchPdfs,
+            'notAllocated' => $notAllocatedPdfs,
         ]);
 
     }

@@ -52,6 +52,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/contents/university/form/update/{slug?}','loadUpdateUniversityForm')->name('admin.form.update.university');
         Route::get('/admin/manage/reviews', 'loadReviews')->name('admin.reviews');
         Route::get('/admin/assign/materials','loadNotAssignedMaterials')->name('admin.assign.material');
+        Route::get('/admin/assign/materials/pdfs','loadNotAssignedPdfs')->name('admin.assign.pdf');
     });
 
     // controller for update queries
@@ -63,6 +64,8 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::put('/admin/manage/contents/university/update/{slug}','updateUniversity')->name('admin.update.university');
         Route::post('/admin/assign/materials/semister','assignMaterials')->name('ajax.assing.materials.semister');
         Route::post('/admin/notassign/materials/','removeAssignedMaterial')->name('ajax.not.assing.materials.semister');
+        Route::post('/admin/ajax/assign/pdf','assignPdfs')->name('admin.ajax.assign.pdf');
+        Route::post('/admin/ajax/remove/assigned/pdf', 'removeAssignedPdf')->name('admin.ajax.not.assigned.pdf');
     });
 
     // controller for delete queries

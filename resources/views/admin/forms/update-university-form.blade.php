@@ -19,7 +19,7 @@
                         <div class="form-group">
                             <label for="email">Assigned Materials</label>
                             <div class="shadow-lg p-3 bg-body rounded"
-                                style="display: flex; flex-direction:column; max-height:20vh; overflow-y:hidden"
+                                style="display: flex; flex-direction:column; max-height:20vh; overflow-y:auto"
                                 id="existMaterialsOutput">
 
                             </div>
@@ -39,7 +39,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger hideAddFormModal" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitAssignForm" class="btn btn-primary">Update</button>
+                    <button disabled type="button" id="submitAssignForm" class="btn btn-primary">Update</button>
                 </div>
                 </form>
             </div>
@@ -307,7 +307,22 @@
                     $("#notAllocatedMaterialOutput").html(notAllocatedData);
                 }
             });
-        })
+        });
+
+        // enable assign material form submit btn
+        $(document).on("click", ".isMatCheck", function(e) {
+            const materials = [];
+            $(".isMatCheck:checked").each(function() {
+                materials.push($(this).val());
+            });
+
+            if (!jQuery.isEmptyObject(materials)) {
+                $("#submitAssignForm").removeAttr('disabled');
+            } else {
+                $("#submitAssignForm").attr('disabled',
+                    'disabled');
+            }
+        });
 
         // submit assigned materials form
         $(document).on("click", "#submitAssignForm", function(e) {
@@ -376,7 +391,7 @@
                     console.log(xhr)
                 }
             });
-        })
+        });
 
         // save semister edit
         $(document).on("click", ".cancelEditSemesterBtn", function(e) {
