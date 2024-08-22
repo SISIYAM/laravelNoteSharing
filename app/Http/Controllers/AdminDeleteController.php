@@ -57,40 +57,96 @@ class AdminDeleteController extends Controller
     }
 
     // method for delete selected semester
-    public function selectedSemesterDelete(Request $req){
+    // public function selectedSemesterDelete(Request $req){
 
-        foreach($req->id as $semester_id){
-            $semester = Semister::findOrFail($semester_id);
+    //     foreach($req->id as $semester_id){
+    //         $semester = Semister::findOrFail($semester_id);
             
-            foreach ($semester->materials as $material) {
+    //         foreach ($semester->materials as $material) {
                 
+    //             $searchMaterial = Material::findOrFail($material->id);
+    //             foreach($searchMaterial->getPdf as $pdf){
+    //                 $searchPdf = Pdf::findOrFail($pdf->id);
+    //                 if($req->isDeletePdf === "on" ){
+    //                     if (Storage::disk('public')->exists($searchPdf->pdf)) {
+    //                         Storage::disk('public')->delete($searchPdf->pdf);
+    //                     }
+    //                     $searchPdf->delete();
+    //                 }
+                    
+    //             }
+    //             if ($req->isDeletePdf === "off" && $req->isDeleteMaterials === "on") {
+    //                 $findAllPdf = Pdf::where('material_id',$material->id)->get();
+    //                 $findAllpdf->update([
+    //                     "material_id" => null,
+    //                 ]);
+    //             }
+    //             if($req->isDeleteMaterials === "on" ){
+    //                 $searchMaterial->delete();
+    //             }else{
+    //                 $searchMaterial->update([
+    //                     "semester_id" => null,
+    //                     "allocated" => 0,
+    //                 ]);
+    //             }
+    //         }
+    //         $semester->delete();
+         
+    //     }
+
+    //     $findSem = Semister::where('university_id',$req->universityId)->get();
+    //     return ['success' => $req->id,'newSemesterData' => $findSem];
+    // }
+
+    public function selectedSemesterDelete(Request $req) {
+        foreach($req->id as $semester_id) {
+            $semester = Semister::findOrFail($semester_id);
+    
+            foreach ($semester->materials as $material) {
                 $searchMaterial = Material::findOrFail($material->id);
-                foreach($searchMaterial->getPdf as $pdf){
+    
+                foreach($searchMaterial->getPdf as $pdf) {
                     $searchPdf = Pdf::findOrFail($pdf->id);
-                    if($req->isDeletePdf === "on" ){
+    
+                    // If delete PDFs switch is on, delete the PDFs
+                    if($req->isDeletePdf === "on") {
+
                         if (Storage::disk('public')->exists($searchPdf->pdf)) {
                             Storage::disk('public')->delete($searchPdf->pdf);
                         }
+
                         $searchPdf->delete();
                     }
-                    
                 }
-                if($req->isDeleteMaterials === "on" ){
+    
+                // if delete PDFs switch is off and delete materials switch is on
+                if ($req->isDeletePdf === "off" && $req->isDeleteMaterials === "on") {
+
+                    Pdf::where('material_id', $material->id)->update([
+                        "material_id" => null,
+                    ]);
+                }
+    
+                // if delete materials switch is on
+                if($req->isDeleteMaterials === "on") {
                     $searchMaterial->delete();
-                }else{
+                } else {
+                    // if delete materials switch is off, unlink the material from the semester
                     $searchMaterial->update([
                         "semester_id" => null,
                         "allocated" => 0,
                     ]);
                 }
             }
+    
             $semester->delete();
-         
         }
-
-        $findSem = Semister::where('university_id',$req->universityId)->get();
-        return ['success' => $req->id,'newSemesterData' => $findSem];
+    
+        $findSem = Semister::where('university_id', $req->universityId)->get();
+    
+        return response()->json(['success' => $req->id, 'newSemesterData' => $findSem]);
     }
+    
 
     // method for delete university
     public function deleteUniversity(Request $req){

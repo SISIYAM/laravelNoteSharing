@@ -93,7 +93,12 @@
                     @enderror">
                             <label for="exampleFormControlSelect1">University Name</label>
                             <select class="form-select" name="university_id" id="selectUniversity">
-                                <option value="{{ $data->university_id }}" selected>{{ $data->getUniversity->name }}
+                                <option value="{{ $data->university_id }}" selected>
+                                    @isset($data->getUniversity->name)
+                                    {{ $data->getUniversity->name }}
+                                    @else
+                                    Not allocated
+                                    @endisset                   
                                 </option>
                                 @foreach ($universities as $university)
                                     @php
@@ -114,7 +119,12 @@
                     @enderror">
                             <label for="exampleFormControlSelect1">Semester</label>
                             <select class="form-select" name="semester_id" id="semester">
-                                <option value="{{ $data->semester_id }}" selected>{{ $data->getSemester->semister_name }}
+                                <option value="{{ $data->semester_id }}" selected>
+                                    @isset($data->getSemester->semister_name)
+                                    {{ $data->getSemester->semister_name }}
+                                    @else
+                                    Not allocated
+                                    @endisset
                                 </option>
                                 @foreach ($semesters as $semester)
                                     @php

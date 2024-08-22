@@ -47,10 +47,29 @@
         @foreach ($tableRow as $row)
             <tr>
                 <td>{{ $count }}</td>
-                <td>{{ $row->getUniversity->name }}</td>
-                <td>{{ $row->getSemester->semister_name }}</td>
+                <td>
+                    @isset($row->getUniversity->name)
+                    {{ $row->getUniversity->name }}
+                    @else
+                    <b class="text-danger"> Not Allocated</b>
+                    @endisset
+                    
+                </td >
+                <td>
+                    @isset($row->getSemester->semister_name)
+                        {{$row->getSemester->semister_name}}
+                        @else
+                        <b class="text-danger"> Not Allocated</b>
+                    @endisset
+                </td>
                 <td>{{ $row->title }}</td>
-                <td>{{ $row->getAuthor->name }}</td>
+                <td>
+                    @isset($row->getAuthor->name)
+                    {{ $row->getAuthor->name }}
+                    @else
+                    User not found!
+                    @endisset
+                </td>
                 <td>
                     @if ($row->status == 0)
                         <button class="badge bg-danger">Deactivated</button>

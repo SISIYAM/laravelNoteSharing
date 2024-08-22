@@ -206,5 +206,57 @@ class AdminUpdateController extends Controller
 
         return redirect()->route('admin.form.update.university',$slug)->with('success',$req->name.' Updated Successfully!');
     }
+    
+
+    // update semester and assigned materials into it
+    public function assignMaterials(Request $req) {
+        
+        if($req->assignedMaterials){
+            foreach($req->assignedMaterials as $materialId) {
+                $assign = Material::findOrFail($materialId);
+                if ($assign) { 
+                    $assign->update([
+                        'semester_id' => $req->semester_id,
+                        'allocated' => 1,
+                    ]);
+                }
+            }
+        }
+
+        $searchMaterials = Material::where('semester_id',$req->semester_id)->get();
+        $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->where('status', 1)
+                     ->get();
+        return response()->json([
+            "materials" => $searchMaterials,
+            'notAllocated' => $notAllocatedMaterials,
+        ]);
+    }
+    
+    // remove assinged materials from semester
+    public function removeAssignedMaterial(Request $req){
+
+        $updateMaterial = Material::findOrFail($req->material_id);
+
+        $updateMaterial->update([
+            'semester_id' => null,
+            'allocated' => 0,
+
+        ]);
+
+        // now search after remove materials
+        $searchMaterials = Material::where('semester_id',$req->semester_id)->get();
+        
+        // now search updated not allocated materials
+        $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->where('status', 1)
+                     ->get();
+                     
+        return response()->json([
+            "materials" => $searchMaterials,
+            'notAllocated' => $notAllocatedMaterials,
+        ]);
+
+    }
 
 }

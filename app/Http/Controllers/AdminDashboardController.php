@@ -118,6 +118,21 @@ class AdminDashboardController extends Controller
         return view('admin.forms.update-university-form',['data' => $university]);
     }
 
+    // method for load not assigned materials
+    public function loadNotAssignedMaterials(Request $req){
+        $materials = Material::where('allocated', 0)
+                     ->where('status', 1)
+                     ->get();
+        $existsMaterials = Material::where('semester_id',$req->semester_id)
+                                    ->get();
+        return response()->json([
+            'success' => true,
+            'notAllocatedMaterials' => $materials,
+            'existMaterials' => $existsMaterials,
+        ]);
+    }
+    
+
 
     // methods for query
 
