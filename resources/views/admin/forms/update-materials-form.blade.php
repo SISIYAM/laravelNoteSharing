@@ -14,7 +14,7 @@
                 <div class="modal-body">
                     <form id="">
 
-                        <input type="hidden" name="material_id_assign" id="material_id_assign">
+                        <input type="hidden" name="material_id_assign" value="{{ $data->id }}" id="material_id_assign">
                         <div class="form-group">
                             <label for="email">Assigned pdfs</label>
                             <div class="shadow-lg p-3 bg-body rounded"
@@ -233,12 +233,12 @@
                                         @endif
                                         <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
                                             value="{{ $pdf->id }}">Change</button>
-                                        <button type="button" class="badge bg-danger border-0 deletPdfBtn"
-                                            value="{{ $pdf->id }}">Delete</button>
+                                        <button type="button" class="badge bg-danger border-0 removeAssignedPdf"
+                                            value="{{ $pdf->id }}">Remove</button>
                                     </div>
                                 @endforeach
                             @else
-                                <p class="alert alert-danger bg-danger text-light d-inline">No pdfs added yet!</p>
+                                <p class="alert alert-danger">No pdfs added yet!</p>
                             @endif
                         </div>
                         <hr>
@@ -474,8 +474,8 @@
                            ${view}
                            <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
                                value="${value.id}">Change</button>
-                           <button type="button" class="badge bg-danger border-0 deletPdfBtn"
-                               value="${value.id}">Delete</button>
+                           <button type="button" class="badge bg-danger border-0 removeAssignedPdf"
+                               value="${value.id}">Remove</button>
                             </div>`;
 
                     });
@@ -567,8 +567,8 @@
                            ${view}
                            <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
                                value="${value.id}">Change</button>
-                           <button type="button" class="badge bg-danger border-0 deletPdfBtn"
-                               value="${value.id}">Delete</button>
+                           <button type="button" class="badge bg-danger border-0 removeAssignedPdf"
+                               value="${value.id}">Remove</button>
                             </div>`;
 
                     });
@@ -692,8 +692,8 @@
                          ${view}
                          <button type="button" class="badge bg-primary border-0 showUpdatePdfModal"
                          value="${value.id}">Change</button>
-                         <button type="button" class="badge bg-danger border-0 deletPdfBtn"
-                             value="${value.id}">Delete</button>
+                         <button type="button" class="badge bg-danger border-0 removeAssignedPdf"
+                             value="${value.id}">Remove</button>
                          </div>`;
 
                         });
