@@ -203,7 +203,8 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
                                                 id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title}</label>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
+                                            
                                         </div>
                                     </div>`;
                         });
@@ -218,7 +219,7 @@
             border-radius: 7px;
             padding: 8px;
             box-sizing: border-box;">
-                                <span>${element.title}</span>
+                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`
                         });
@@ -277,7 +278,7 @@
             border-radius: 7px;
             padding: 8px;
             box-sizing: border-box;">
-                                <span>${element.title}</span>
+                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`;
                     });
@@ -287,7 +288,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
                                                 id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title}</label>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
                                         </div>
 
 
@@ -341,7 +342,7 @@
             border-radius: 7px;
             padding: 8px;
             box-sizing: border-box;">
-                                <span>${element.title}</span>
+                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`;
                     });
@@ -351,7 +352,7 @@
                                         <div class="form-check form-switch">
                                             <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
                                                 id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title}</label>
+                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
                                         </div>
 
 

@@ -122,9 +122,11 @@ class AdminDashboardController extends Controller
     public function loadNotAssignedMaterials(Request $req){
         $materials = Material::where('allocated', 0)
                      ->where('status', 1)
+                     ->with('getPdf')
                      ->get();
         $existsMaterials = Material::where('semester_id',$req->semester_id)
-                                    ->get();
+                        ->with('getPdf')         
+                        ->get();
         return response()->json([
             'success' => true,
             'notAllocatedMaterials' => $materials,

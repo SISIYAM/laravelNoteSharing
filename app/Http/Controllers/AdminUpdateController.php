@@ -148,7 +148,7 @@ class AdminUpdateController extends Controller
        return ['success' => $req->semester .' Updated Successfully!'];
     }
 
-    // method for add new semester while updating materials
+    // method for add new semester while updating university
     public function addNewSemester(Request $req){
         $admin = Auth::user()->name;
         $req->validate([
@@ -224,8 +224,9 @@ class AdminUpdateController extends Controller
             }
         }
 
-        $searchMaterials = Material::where('semester_id',$req->semester_id)->get();
+        $searchMaterials = Material::where('semester_id',$req->semester_id)->with('getPdf')->get();
         $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->with('getPdf')
                      ->where('status', 1)
                      ->get();
         return response()->json([
@@ -246,10 +247,11 @@ class AdminUpdateController extends Controller
         ]);
 
         // now search after remove materials
-        $searchMaterials = Material::where('semester_id',$req->semester_id)->get();
+        $searchMaterials = Material::where('semester_id',$req->semester_id)->with('getPdf')->get();
         
         // now search updated not allocated materials
         $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->with('getPdf')
                      ->where('status', 1)
                      ->get();
                      
