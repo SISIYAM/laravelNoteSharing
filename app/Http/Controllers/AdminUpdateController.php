@@ -92,6 +92,7 @@ class AdminUpdateController extends Controller
             'semester_id' => $req->semester_id,
             'title' => $req->title,
             'description' => $req->description,
+            'status' => $req->status,
         ]);
 
         // Handle the file uploads

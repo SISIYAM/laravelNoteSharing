@@ -48,26 +48,29 @@
             <tr>
                 <td>{{ $count }}</td>
                 <td>
+                    <b class="{{ count($row->getPdf) > 0 ? 'text-success' : 'text-danger' }}">{{ count($row->getPdf) }}</b>
+                </td>
+                <td>
                     @isset($row->getUniversity->name)
-                    {{ $row->getUniversity->name }}
+                        {{ $row->getUniversity->name }}
                     @else
-                    <b class="text-danger"> Not Allocated</b>
+                        <b class="text-danger"> Not Allocated</b>
                     @endisset
-                    
-                </td >
+
+                </td>
                 <td>
                     @isset($row->getSemester->semister_name)
-                        {{$row->getSemester->semister_name}}
-                        @else
+                        {{ $row->getSemester->semister_name }}
+                    @else
                         <b class="text-danger"> Not Allocated</b>
                     @endisset
                 </td>
                 <td>{{ $row->title }}</td>
                 <td>
                     @isset($row->getAuthor->name)
-                    {{ $row->getAuthor->name }}
+                        {{ $row->getAuthor->name }}
                     @else
-                    User not found!
+                        User not found!
                     @endisset
                 </td>
                 <td>

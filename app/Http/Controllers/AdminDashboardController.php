@@ -50,9 +50,9 @@ class AdminDashboardController extends Controller
 
     // load materials
     public function loadMaterials(){
-        $data = ['No','University','Semester','Title','Author','Status',''];
+        $data = ['No','Pdfs','University','Semester','Title','Author','Status',''];
 
-        $materials = Material::where('allocated',1)->with('getUniversity','getSemester','getAuthor')->get();
+        $materials = Material::with('getUniversity','getSemester','getPdf','getAuthor')->get();
         // return $materials;
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
     }
@@ -209,6 +209,7 @@ class AdminDashboardController extends Controller
             'semester_id' => $req->semester_id,
             'title' => $req->title,
             'description' => $req->description,
+            'status' => 1,
             'author' => $admin,
         ]);
 

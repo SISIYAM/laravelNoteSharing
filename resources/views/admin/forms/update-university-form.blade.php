@@ -62,15 +62,13 @@
                         </div>
                         <div class="form-group">
                             <label for="">Status</label>
-                            <select name="status" class="form-select">
-                                @if ($data->status == 1)
-                                    <option value="1" selected>Active</option>
-                                    <option value="0">Deactivated</option>
-                                @else
-                                    <option value="1">Active</option>
-                                    <option value="0" selected>Deactivated</option>
-                                @endif
-                            </select>
+                            <div class="form-check form-switch">
+                                <input style="transform: scale(2);" class="form-check-input" type="checkbox" role="switch"
+                                    id="statusSwitch" {{ $data->status == 1 ? 'checked' : '' }}>
+                            </div>
+                            <input type="hidden" name="status" id="status"
+                                value="{{ $data->status == 1 ? '1' : '0' }}">
+
                         </div>
 
                         <div class="form-group @error('description') has-error @enderror">
@@ -175,6 +173,15 @@
 @endsection
 @push('ajax')
     <script>
+        // handle status switch
+        $(document).on("click", "#statusSwitch", function(e) {
+            if ($("#statusSwitch").is(':checked')) {
+                $("#status").val(1);
+            } else {
+                $("#status").val(0);
+            }
+        })
+
         // show assign modal
         $(document).on("click", ".assignMaterials", function(e) {
             e.preventDefault();

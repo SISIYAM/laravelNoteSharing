@@ -95,10 +95,10 @@
                             <select class="form-select" name="university_id" id="selectUniversity">
                                 <option value="{{ $data->university_id }}" selected>
                                     @isset($data->getUniversity->name)
-                                    {{ $data->getUniversity->name }}
+                                        {{ $data->getUniversity->name }}
                                     @else
-                                    Not allocated
-                                    @endisset                   
+                                        Not allocated
+                                    @endisset
                                 </option>
                                 @foreach ($universities as $university)
                                     @php
@@ -121,9 +121,9 @@
                             <select class="form-select" name="semester_id" id="semester">
                                 <option value="{{ $data->semester_id }}" selected>
                                     @isset($data->getSemester->semister_name)
-                                    {{ $data->getSemester->semister_name }}
+                                        {{ $data->getSemester->semister_name }}
                                     @else
-                                    Not allocated
+                                        Not allocated
                                     @endisset
                                 </option>
                                 @foreach ($semesters as $semester)
@@ -149,6 +149,16 @@
                             @error('title')
                                 <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                             @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="">Status</label>
+                            <div class="form-check form-switch">
+                                <input style="transform: scale(2);" class="form-check-input" type="checkbox"
+                                    role="switch" id="statusSwitch" {{ $data->status == 1 ? 'checked' : '' }}>
+                            </div>
+                            <input type="hidden" name="status" id="status"
+                                value="{{ $data->status == 1 ? '1' : '0' }}">
+
                         </div>
                         <div
                             class="form-group  @error('description')
@@ -247,6 +257,15 @@
 
 @push('ajax')
     <script>
+        // handle status switch
+        $(document).on("click", "#statusSwitch", function(e) {
+            if ($("#statusSwitch").is(':checked')) {
+                $("#status").val(1);
+            } else {
+                $("#status").val(0);
+            }
+        })
+
         // search semester according to university name
         $(document).on("change", "#selectUniversity", function(e) {
             e.preventDefault();
