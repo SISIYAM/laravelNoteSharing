@@ -142,7 +142,7 @@ class AdminDeleteController extends Controller
             $semester->delete();
         }
     
-        $findSem = Semister::where('university_id', $req->universityId)->get();
+        $findSem = Semister::where('university_id', $req->universityId)->with('materials')->get();
     
         return response()->json(['success' => $req->id, 'newSemesterData' => $findSem]);
     }

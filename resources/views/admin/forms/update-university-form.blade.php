@@ -106,6 +106,9 @@
                                                 Assign Materials
                                             </button>
                                         </div>
+                                        <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+                                            Materials {{ $semester->materials->count() }}
+                                        </div>
                                         <br />
                                     @endforeach
                                 </div>
@@ -450,7 +453,9 @@
         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${valueOfElement.id}">Save</button>
         <button type="button" class="badge bg-danger m-3 assignMaterials" value="${valueOfElement.id}">Assign Materials</button>
-        </div><br>`;
+        </div>
+        <div class="form-group" style="margin-left: 30px;color:chocolate">
+            Assigned Materials 0 </div><br>`;
 
                         $("#appendAfterInsert").append(newData);
                         $("#dynamicSemester").hide();
@@ -507,7 +512,10 @@
         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
         <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
-    </div><br>`;
+    </div>
+    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+    Materials ${value.materials.length} </div>
+    <br>`;
                         });
 
 

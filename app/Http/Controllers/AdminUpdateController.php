@@ -229,9 +229,13 @@ class AdminUpdateController extends Controller
                      ->with('getPdf')
                      ->where('status', 1)
                      ->get();
+        
+        // search semesters
+        $semesters = Semister::where('university_id',$req->university_id)->with('materials')->get();
         return response()->json([
             "materials" => $searchMaterials,
             'notAllocated' => $notAllocatedMaterials,
+            'semesters' => $semesters,
         ]);
     }
 
