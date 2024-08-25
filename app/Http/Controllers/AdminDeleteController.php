@@ -115,7 +115,7 @@ class AdminDeleteController extends Controller
         if (Storage::disk('public')->exists($University->image)) {
             Storage::disk('public')->delete($University->image);
         }
-
+        
         $University->delete();
 
         return ['delete' => $title.' has been deleted!'];

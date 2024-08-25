@@ -183,6 +183,7 @@ class AdminUpdateController extends Controller
             'name' => 'alpha|required|min:2',
             'description' => 'nullable|string',
             'image' => 'nullable|mimes:png,jpg,jpeg,webp|max:3000',
+            'status' => 'required|numeric',
         ]);
 
         $university = Universitie::where(compact('slug'))->first();
@@ -359,4 +360,47 @@ class AdminUpdateController extends Controller
         return response()->json(["success" => "true", "data" => $output]);
     }
 
+    // method for update department
+    public function adminUpdateDepartment(Request $req, $slug){
+        
+        
+        $req->validate([
+            'department' => 'regex:/^[A-Za-z0-9\s\(\)\-_]+$/|required|min:2',
+            'university_id' => 'nullable|numeric',
+            'status' => 'required|numeric',
+        ]);
+
+        $findDept = Department::where(compact('slug'))->first();
+
+        $findDept->update([
+            'university_id' => $req->university_id,
+            'department' => $req->department,
+            'status' => $req->status,
+        ]);
+
+        // After updating the department, update the materials and semesters table 
+
+        // Update the semesters table
+        $findSemesters = Semister::where('department_id', $findDept->id)->get();
+        foreach ($findSemesters as $semester) {
+            $semester->update([
+                'university_id' => $req->university_id,
+            ]);
+
+        // Update the materials table
+        $findMaterials = Material::where('semester_id', $semester->id)->get();
+        foreach ($findMaterials as $material) {
+            $material->update([
+                'university_id' => $req->university_id,
+            ]);
+        }
+        }
+
+        
+
+
+
+
+        return redirect()->route('admin.manage.department.update',$slug)->with('success',$req->department.' Updated Successfully!');
+    }
 }

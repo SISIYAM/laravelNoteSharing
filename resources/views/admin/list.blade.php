@@ -9,7 +9,7 @@
             <tr>
                 <td>{{ $count }}</td>
                 <td>{{ $row->name }}</td>
-                <td>{{ $row->semester }}</td>
+                <td>{{ $row->getDepartments->count() }}</td>
                 <td class="text-primary"> {{ $row->material->count() }} materials &
                     {{ $row->material->flatMap(function ($material) {
                             return $material->getPdf;
@@ -202,7 +202,8 @@
             <tr>
                 <td>{{ $count + 1 }}</td>
                 <td>{{ $row->department }}</td>
-                <td>{{ $row->getUniversity->name }}</td>
+                <td>{!! isset($row->getUniversity->name) ? $row->getUniversity->name : '<b class="text-danger">Not Allocated</b>' !!}</td>
+
                 <td>{{ $row->getSemesters->count() }}</td>
                 <td class="text-dark">
                     {{ $row->getSemesters->flatMap(function ($semester) {

@@ -47,7 +47,7 @@
     </div>
 
     @if ($data)
-        <form action="{{ route('admin.update.university', $data->slug) }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.update.department', $data->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
             <div class="card-body" id="dynamicForm">
                 <input type="hidden" name="" id="universityID" value="{{ $data->university_id }}">
@@ -176,15 +176,17 @@
                             </div>
                         </div>
                         <div id="checkOut"></div>
-                        <div class="form-group">
-                            <img src="{{ asset('storage/' . $data->getUniversity->image) }}" height="225"
-                                width="300" alt="" srcset="" />
-                        </div>
+                        @isset($data->getUniversity->image)
+                            <div class="form-group">
+                                <img src="{{ asset('storage/' . $data->getUniversity->image) }}" height="225"
+                                    width="300" alt="" srcset="" />
+                            </div>
+                        @endisset
                     </div>
                 </div>
             </div>
             <div class="card-action">
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success">Update</button>
                 <button type="button" class="btn btn-danger">Cancel</button>
             </div>
         </form>
