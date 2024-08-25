@@ -39,7 +39,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger hideAddFormModal" data-dismiss="modal">Close</button>
-                    <button disabled type="button" id="submitAssignForm" class="btn btn-primary">Update</button>
+                    <button type="button" id="submitAssignForm" class="btn btn-primary" disabled>Update</button>
                 </div>
                 </form>
             </div>
@@ -50,6 +50,7 @@
         <form action="{{ route('admin.update.university', $data->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
             <div class="card-body" id="dynamicForm">
+                <input type="hidden" name="" id="universityID" value="{{ $data->id }}">
                 <div class="row shadow-lg p-3 mb-5 bg-ligth rounded m-1">
                     <div class="col-md-6 col-lg-10">
                         <div class="form-group @error('name') has-error @enderror has-feedback">
@@ -86,31 +87,35 @@
                                 <b class="" style="" id="">Select all for delete</b>
                                 <hr />
                                 <div id="appendAfterInsert" class="my-1">
-                                    @foreach ($data->semisters as $semester)
-                                        <div class="d-flex">
-                                            <input type="checkbox" value="{{ $semester->id }}" class="isCheck m-3"
-                                                id="" />
-                                            <input type="text" name="semesters[]" class="form-control semisterField"
-                                                readonly value="{{ $semester->semister_name }}" />
-                                            <button type="button" class="badge bg-success m-3 editSemesterBtn">
-                                                Edit
-                                            </button>
+                                    @if ($data->semisters->count())
+                                        @foreach ($data->semisters as $semester)
+                                            <div class="d-flex">
+                                                <input type="checkbox" value="{{ $semester->id }}" class="isCheck m-3"
+                                                    id="" />
+                                                <input type="text" name="semesters[]" class="form-control semisterField"
+                                                    readonly value="{{ $semester->semister_name }}" />
+                                                <button type="button" class="badge bg-success m-3 editSemesterBtn">
+                                                    Edit
+                                                </button>
 
 
-                                            <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
-                                                style="display: none" value="{{ $semester->id }}">
-                                                Save
-                                            </button>
-                                            <button type="button" class="badge bg-danger m-3 assignMaterials"
-                                                value="{{ $semester->id }}">
-                                                Assign Materials
-                                            </button>
-                                        </div>
-                                        <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-                                            Materials {{ $semester->materials->count() }}
-                                        </div>
-                                        <br />
-                                    @endforeach
+                                                <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
+                                                    style="display: none" value="{{ $semester->id }}">
+                                                    Save
+                                                </button>
+                                                <button type="button" class="badge bg-danger m-3 assignMaterials"
+                                                    value="{{ $semester->id }}">
+                                                    Assign Materials
+                                                </button>
+                                            </div>
+                                            <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+                                                Materials {{ $semester->materials->count() }}
+                                            </div>
+                                            <br />
+                                        @endforeach
+                                    @else
+                                        <p class="alert alert-danger" id="ifSemesterSNotExist">No semesters added yet!</p>
+                                    @endif
                                 </div>
                                 <p id="checkedCount"></p>
                                 <div id="switchBox"
@@ -213,15 +218,15 @@
                         });
                         response.existMaterials.forEach(element => {
                             existData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-            radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-            radial-gradient(#2ad10c 0%, #48abe0 100%);
-            border-radius: 7px;
-            padding: 8px;
-            box-sizing: border-box;">
+                            radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
+                            radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
+                            radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
+                            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
+                            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
+                            radial-gradient(#2ad10c 0%, #48abe0 100%);
+                            border-radius: 7px;
+                            padding: 8px;
+                            box-sizing: border-box;">
                                 <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`
@@ -258,6 +263,8 @@
             e.preventDefault();
             const id = $(this).val();
             const semester_id = $("#semester_id").val();
+            const university_id = $("#universityID").val();
+
             $.ajax({
                 type: "POST",
                 url: "{{ route('ajax.not.assing.materials.semister') }}",
@@ -265,22 +272,25 @@
                     _token: "{{ csrf_token() }}", // Include CSRF token
                     material_id: id,
                     semester_id: semester_id,
+                    university_id: university_id,
                 },
                 success: function(response) {
                     let newData = "";
                     let notAllocatedData = "";
+                    let newSemesterData = "";
+
                     console.log(response);
                     response.materials.forEach(element => {
                         newData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-            radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-            radial-gradient(#2ad10c 0%, #48abe0 100%);
-            border-radius: 7px;
-            padding: 8px;
-            box-sizing: border-box;">
+                        radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
+                        radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
+                        radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
+                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
+                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
+                        radial-gradient(#2ad10c 0%, #48abe0 100%);
+                        border-radius: 7px;
+                        padding: 8px;
+                        box-sizing: border-box;">
                                 <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`;
@@ -298,6 +308,20 @@
                                     </div>`;
                     });
 
+                    // collect all semesters data
+                    response.semesters.forEach(value => {
+                        newSemesterData += `<div class="d-flex">
+                    <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
+                    <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
+                    <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
+                    <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
+                    <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
+                    </div>
+                    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+                    Materials ${value.materials.length} </div>
+                    <br>`
+                    });
+
                     if (newData == "") {
                         newData = `<p class="text-danger">No result found</p>`
                     }
@@ -306,6 +330,11 @@
                         notAllocatedData = `<p class="text-danger">No result found</p>`
                     }
 
+                    if (newSemesterData == "") {
+                        newSemesterData = `<p class="alert alert-danger">No semesters added yet!</p>`
+                    }
+
+                    $("#appendAfterInsert").html(newSemesterData);
                     $("#existMaterialsOutput").html(newData);
                     $("#notAllocatedMaterialOutput").html(notAllocatedData);
                 }
@@ -331,6 +360,7 @@
         $(document).on("click", "#submitAssignForm", function(e) {
             e.preventDefault();
             const semesterId = $("#semester_id").val();
+            const universityID = $("#universityID").val();
 
             // Collect all  assigned materials id into an array
             const materials = [];
@@ -342,24 +372,27 @@
                 url: "{{ route('ajax.assing.materials.semister') }}",
                 data: {
                     _token: "{{ csrf_token() }}", // Include CSRF token
+                    university_id: universityID,
                     semester_id: semesterId,
                     assignedMaterials: materials,
                 },
                 success: function(response) {
                     let newData = "";
                     let notAllocatedData = "";
+                    let newSemesterData = "";
+
                     console.log(response.materials);
                     response.materials.forEach(element => {
                         newData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-            radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-            radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-            radial-gradient(#2ad10c 0%, #48abe0 100%);
-            border-radius: 7px;
-            padding: 8px;
-            box-sizing: border-box;">
+                        radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
+                        radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
+                        radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
+                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
+                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
+                        radial-gradient(#2ad10c 0%, #48abe0 100%);
+                        border-radius: 7px;
+                        padding: 8px;
+                        box-sizing: border-box;">
                                 <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
                                 <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
                                 </div>`;
@@ -377,6 +410,20 @@
                                     </div>`;
                     });
 
+                    // collect all semesters data
+                    response.semesters.forEach(value => {
+                        newSemesterData += `<div class="d-flex">
+                    <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
+                    <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
+                    <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
+                    <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
+                    <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
+                    </div>
+                    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+                    Materials ${value.materials.length} </div>
+                    <br>`
+                    });
+
                     if (newData == "") {
                         newData = `<p class="text-danger">No result found</p>`
                     }
@@ -385,6 +432,11 @@
                         notAllocatedData = `<p class="text-danger">No result found</p>`
                     }
 
+                    if (newSemesterData == "") {
+                        newSemesterData = `<p class="alert alert-danger">No semesters added yet!</p>`
+                    }
+
+                    $("#appendAfterInsert").html(newSemesterData);
                     $("#existMaterialsOutput").html(newData);
                     $("#notAllocatedMaterialOutput").html(notAllocatedData);
 
@@ -457,6 +509,7 @@
         <div class="form-group" style="margin-left: 30px;color:chocolate">
             Assigned Materials 0 </div><br>`;
 
+                        $("#ifSemesterSNotExist").hide();
                         $("#appendAfterInsert").append(newData);
                         $("#dynamicSemester").hide();
                         $("#dynamicSemesterAppend").empty();
@@ -506,18 +559,21 @@
                         let newOutput = "";
                         $.each(response.newSemesterData, function(key, value) {
                             newOutput += `
-        <div class="d-flex">
-        <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
-        <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
-        <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
-        <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
-        <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
-    </div>
-    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-    Materials ${value.materials.length} </div>
-    <br>`;
+                        <div class="d-flex">
+                        <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
+                        <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
+                        <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
+                        <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
+                        <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
+                        </div>
+                        <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
+                        Materials ${value.materials.length} </div>
+                        <br>`;
                         });
 
+                        if (newOutput == "") {
+                            newOutput = `<p class="alert alert-danger">No semesters added yet!</p>`
+                        }
 
                         $("#appendAfterInsert").html(newOutput);
                         $("#selectedDeleteBtn").hide();

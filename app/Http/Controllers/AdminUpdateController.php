@@ -230,8 +230,9 @@ class AdminUpdateController extends Controller
                      ->where('status', 1)
                      ->get();
         
-        // search semesters
+        // search all semesters
         $semesters = Semister::where('university_id',$req->university_id)->with('materials')->get();
+        
         return response()->json([
             "materials" => $searchMaterials,
             'notAllocated' => $notAllocatedMaterials,
@@ -281,10 +282,14 @@ class AdminUpdateController extends Controller
                      ->with('getPdf')
                      ->where('status', 1)
                      ->get();
+          
+        // search all semesters
+        $semesters = Semister::where('university_id',$req->university_id)->with('materials')->get();
                      
         return response()->json([
             "materials" => $searchMaterials,
             'notAllocated' => $notAllocatedMaterials,
+            "semesters" => $semesters,
         ]);
 
     }
