@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Department;
 use App\Models\Pdf;
 use App\Models\Review;
 use App\Models\Facultie;
@@ -24,7 +25,7 @@ class AdminDashboardController extends Controller
 
     // load universities list
     public function loadUniversities(){
-        $data = ['No','Name','Semesters','Materials & Pdfs','Author','Status',''];
+        $data = ['No','Name','Departments','Materials & Pdfs','Author','Status',''];
 
         $universities = Universitie::with('material.getPdf')->get();
         // return $universities;
@@ -32,6 +33,14 @@ class AdminDashboardController extends Controller
         return view('admin.list',['key' => 'university','thead' => $data,'tableRow' => $universities]);
     }
 
+    // load departments list
+    public function loadDepartments() {
+        $thead = ['No','Department', 'University','Semesters','Materials','Author','Status',''];
+        
+        $departments = Department::with('getUniversity','getSemesters.materials.getPdf')->get();
+        // return $departments;
+        return view('admin.list',['key' => 'departments','thead' => $thead,'tableRow' => $departments]);
+    }
 
     // load materials form
     public function loadMaterialsForm(){
@@ -49,11 +58,11 @@ class AdminDashboardController extends Controller
         return response()->json($searchSemester);
     }
 
-    // load materials
+    // load materials list
     public function loadMaterials(){
-        $data = ['No','Title','Pdfs','University','Semester','Author','Status',''];
+        $data = ['No','Title','Pdfs','University','Department','Semester','Author','Status',''];
 
-        $materials = Material::with('getUniversity','getSemester','getPdf','getAuthor')->get();
+        $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->get();
         // return $materials;
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
     }
@@ -114,11 +123,19 @@ class AdminDashboardController extends Controller
     }
 
     // method for load university update form
-    public function loadUpdateUniversityForm(String $slug){
-        $university = Universitie::where(compact('slug'))->with('semisters.materials')->first();
+    public function loadUpdateUniversityForm(String $slug = null){
+        $university = Universitie::where(compact('slug'))->with('getDepartments','semisters.materials')->first();
         return view('admin.forms.update-university-form',['data' => $university]);
         // return $university;
     }
+
+    // load department update form
+    public function loadUpdateDepartmentForm(string $slug = null) {
+        $department = Department::where(compact('slug'))->with('getUniversity','getSemesters')->first();
+
+        $universities = Universitie::all();
+        return view('admin.forms.update-department-form',['data' => $department,'universities' => $universities]);
+     }
 
     // method for load not assigned materials
     public function loadNotAssignedMaterials(Request $req){
@@ -159,6 +176,7 @@ class AdminDashboardController extends Controller
         return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
     }
     
+   
 
 
     // methods for query

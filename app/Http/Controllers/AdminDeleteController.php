@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,48 +56,6 @@ class AdminDeleteController extends Controller
 
         return ['delete' => $title.' has been deleted!'];
     }
-
-    // method for delete selected semester
-    // public function selectedSemesterDelete(Request $req){
-
-    //     foreach($req->id as $semester_id){
-    //         $semester = Semister::findOrFail($semester_id);
-            
-    //         foreach ($semester->materials as $material) {
-                
-    //             $searchMaterial = Material::findOrFail($material->id);
-    //             foreach($searchMaterial->getPdf as $pdf){
-    //                 $searchPdf = Pdf::findOrFail($pdf->id);
-    //                 if($req->isDeletePdf === "on" ){
-    //                     if (Storage::disk('public')->exists($searchPdf->pdf)) {
-    //                         Storage::disk('public')->delete($searchPdf->pdf);
-    //                     }
-    //                     $searchPdf->delete();
-    //                 }
-                    
-    //             }
-    //             if ($req->isDeletePdf === "off" && $req->isDeleteMaterials === "on") {
-    //                 $findAllPdf = Pdf::where('material_id',$material->id)->get();
-    //                 $findAllpdf->update([
-    //                     "material_id" => null,
-    //                 ]);
-    //             }
-    //             if($req->isDeleteMaterials === "on" ){
-    //                 $searchMaterial->delete();
-    //             }else{
-    //                 $searchMaterial->update([
-    //                     "semester_id" => null,
-    //                     "allocated" => 0,
-    //                 ]);
-    //             }
-    //         }
-    //         $semester->delete();
-         
-    //     }
-
-    //     $findSem = Semister::where('university_id',$req->universityId)->get();
-    //     return ['success' => $req->id,'newSemesterData' => $findSem];
-    // }
 
     public function selectedSemesterDelete(Request $req) {
         foreach($req->id as $semester_id) {
@@ -187,5 +146,22 @@ class AdminDeleteController extends Controller
         }
         
     }
+
+    // method for delete selected departments
+    public function deleteSelectedSemester(Request $req){
+        foreach($req->id as $department_id) {
+            $department = Department::findOrFail($department_id);
+
+           // Delete all associated semesters first
+            Semister::where('department_id', $department_id)->delete();
+            
+            $department->delete();
+        }
+    
+        $findDept = Department::where('university_id', $req->universityId)->get();
+    
+        return response()->json(['success' => $req->id, 'newDepartmentData' => $findDept]);
+    }
+
 
 }

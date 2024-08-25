@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -15,6 +16,7 @@ class Semister extends Model
         'semister_name',
         'status',
         'author',
+        'department_id',
     ];
 
     public function university()
@@ -25,6 +27,11 @@ class Semister extends Model
     public function materials()
     {
         return $this->hasMany(Material::class, 'semester_id', 'id');
+    }
+
+    // relation with department
+    public function getDepartment(){
+        return $this->belongsTo(Department::class,'department_id','id');
     }
 
 }

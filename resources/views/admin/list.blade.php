@@ -67,6 +67,13 @@
 
                 </td>
                 <td>
+                    @isset($row->getSemester->getDepartment)
+                        {{ $row->getSemester->getDepartment->department }}
+                    @else
+                        <b class="text-danger"> Not Allocated</b>
+                    @endisset
+                </td>
+                <td>
                     @isset($row->getSemester->semister_name)
                         {{ $row->getSemester->semister_name }}
                     @else
@@ -184,6 +191,51 @@
                                 <i class="fa fa-times"></i>
                             </button>
                         </a>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @endsection
+@elseif ('departments')
+    @section('table-row')
+        @foreach ($tableRow as $count => $row)
+            <tr>
+                <td>{{ $count + 1 }}</td>
+                <td>{{ $row->department }}</td>
+                <td>{{ $row->getUniversity->name }}</td>
+                <td>{{ $row->getSemesters->count() }}</td>
+                <td class="text-dark">
+                    {{ $row->getSemesters->flatMap(function ($semester) {
+                            return $semester->materials;
+                        })->count() }}
+                    Materials &
+                    {{ $row->getSemesters->flatMap(function ($semester) {
+                            return $semester->materials->flatMap(function ($material) {
+                                return $material->getPdf;
+                            });
+                        })->count() }}
+                    Pdfs
+                </td>
+                <td>{{ $row->author }}</td>
+                <td>
+                    @if ($row->status == 0)
+                        <button class="badge bg-danger">Deactivated</button>
+                    @else
+                        <button class="badge bg-success">Active</button>
+                    @endif
+                </td>
+                <td>
+                    <div class="form-button-action">
+                        <a href="{{ route('admin.manage.department.update', $row->slug) }}">
+                            <button type="button" data-bs-toggle="tooltip" title=""
+                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                        </a>
+                        <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger "
+                            value="{{ $row->id }}" data-original-title="Remove">
+                            <i class="fa fa-times"></i>
+                        </button>
                     </div>
                 </td>
             </tr>

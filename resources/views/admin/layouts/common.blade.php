@@ -91,6 +91,11 @@
                                             <span class="sub-item">Universities</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.manage.department.list') }}">
+                                            <span class="sub-item">Departments</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

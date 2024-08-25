@@ -54,6 +54,8 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/assign/materials','loadNotAssignedMaterials')->name('admin.assign.material');
         Route::get('/admin/assign/materials/pdfs','loadNotAssignedPdfs')->name('admin.assign.pdf');
         Route::get('/admin/manage/contents/materials/pdfs','loadPdfs')->name('admin.manage.pdf.list');
+        Route::get('/admin/manage/contents/universites/departments','loadDepartments')->name('admin.manage.department.list');
+        Route::get('/admin/manage/contents/universites/departments/update/{slug?}','loadUpdateDepartmentForm')->name('admin.manage.department.update');
     });
 
     // controller for update queries
@@ -67,6 +69,8 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/notassign/materials/','removeAssignedMaterial')->name('ajax.not.assing.materials.semister');
         Route::post('/admin/ajax/assign/pdf','assignPdfs')->name('admin.ajax.assign.pdf');
         Route::post('/admin/ajax/remove/assigned/pdf', 'removeAssignedPdf')->name('admin.ajax.not.assigned.pdf');
+        Route::post('/admin/ajax/add/new/department', 'addNewDepartment')->name('admin.ajax.add.department');
+        Route::post('/admin/ajax/update/new/department', 'updateDepartment')->name('admin.ajax.update.department');
     });
 
     // controller for delete queries
@@ -78,5 +82,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/delete/semester/selected','selectedSemesterDelete')->name('admin.delete.semester.selected');
         Route::get('/admin/delete/reviews/{id}','deleteReviews')->name('admin.delete.reviews');
         Route::get('/admin/delete/pdfs/{id}','deletePdfs')->name('admin.delete.pdfs');
+        Route::post('/admin/delete/department/selected','deleteSelectedSemester')->name('admin.delete.department.selected');
     });
 });

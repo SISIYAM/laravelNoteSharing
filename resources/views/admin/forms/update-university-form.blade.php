@@ -1,51 +1,6 @@
 @extends('admin.layouts.common-form') @section('form-title')
     Update University
     @endsection @section('form-content')
-    <!-- Modal -->
-    <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Assign Material to semester</h5>
-                    <button type="button" id="" class="close hideAddFormModal" data-dismiss="modal"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="">
-
-                        <input type="hidden" name="semester_id" id="semester_id">
-                        <div class="form-group">
-                            <label for="email">Assigned Materials</label>
-                            <div class="shadow-lg p-3 bg-body rounded"
-                                style="display: flex; flex-direction:column; max-height:20vh; overflow-y:auto"
-                                id="existMaterialsOutput">
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Assign New Materials</label>
-                            <div class="field shadow-lg p-3 mb-5 bg-body rounded" style="max-height:30vh; overflow-y:auto">
-                                <div style="display:flex;flex-direction:column;padding:5px;font-size: 15px"
-                                    id="notAllocatedMaterialOutput">
-
-                                </div>
-                            </div>
-
-                        </div>
-
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger hideAddFormModal" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitAssignForm" class="btn btn-primary" disabled>Update</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     @if ($data)
         <form action="{{ route('admin.update.university', $data->slug) }}" method="POST" enctype="multipart/form-data">
             @csrf @method('PUT')
@@ -79,65 +34,40 @@
                                 <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                             @enderror
                         </div>
-
+                        <hr>
                         <div class="form-group">
-                            <b class="badge bg-primary my-2" style="font-size: 15px">Added Semesters</b>
+                            <h2 class="badge bg-primary" style="font-size: 15px">Departments</h2>
                             <div class="col-6">
                                 <input type="checkbox" style="width: 30px; height: 20px" class="my-2" id="selectAll" />
                                 <b class="" style="" id="">Select all for delete</b>
                                 <hr />
                                 <div id="appendAfterInsert" class="my-1">
-                                    @if ($data->semisters->count())
-                                        @foreach ($data->semisters as $semester)
+                                    @if ($data->getDepartments->count())
+                                        @foreach ($data->getDepartments as $department)
                                             <div class="d-flex">
-                                                <input type="checkbox" value="{{ $semester->id }}" class="isCheck m-3"
+                                                <input type="checkbox" value="{{ $department->id }}" class="isCheck m-3"
                                                     id="" />
-                                                <input type="text" name="semesters[]" class="form-control semisterField"
-                                                    readonly value="{{ $semester->semister_name }}" />
+                                                <input type="text" name="" class="form-control semisterField"
+                                                    readonly value="{{ $department->department }}" />
                                                 <button type="button" class="badge bg-success m-3 editSemesterBtn">
                                                     Edit
                                                 </button>
 
 
                                                 <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn"
-                                                    style="display: none" value="{{ $semester->id }}">
+                                                    style="display: none" value="{{ $department->id }}">
                                                     Save
                                                 </button>
-                                                <button type="button" class="badge bg-danger m-3 assignMaterials"
-                                                    value="{{ $semester->id }}">
-                                                    Assign Materials
-                                                </button>
-                                            </div>
-                                            <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-                                                Materials {{ $semester->materials->count() }}
+
                                             </div>
                                             <br />
                                         @endforeach
                                     @else
-                                        <p class="alert alert-danger" id="ifSemesterSNotExist">No semesters added yet!</p>
+                                        <p class="alert alert-danger" id="ifDepartmentdExist">No Departments added yet!
+                                        </p>
                                     @endif
                                 </div>
                                 <p id="checkedCount"></p>
-                                <div id="switchBox"
-                                    style="
-                                position: relative;
-                                left: -10px;
-                                display: none;
-                            ">
-                                    <div class="form-check form-switch" style="margin-bottom: -20px">
-                                        <input class="form-check-input" type="checkbox" role="switch"
-                                            id="deleteMaterialsSwitch" style="transform: scale(1.2)" />
-                                        <label class="form-check-label" for="deleteMaterialsSwitch"
-                                            style="font-size: 1.2em">Deletes its related materials</label>
-                                    </div>
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" role="switch"
-                                            id="deletePdfSwitch" style="transform: scale(1.2)" />
-                                        <label class="form-check-label" for="deletePdfSwitch"
-                                            style="font-size: 1.2em">Deletes
-                                            its related pdfs</label>
-                                    </div>
-                                </div>
 
                                 <button type="button" class="btn btn-danger btn-sm" style="display: none"
                                     id="selectedDeleteBtn" value="{{ $data->id }}">
@@ -148,7 +78,7 @@
                                 </button>
                                 <div class="my-2" style="display: none" id="dynamicSemester">
                                     <div id="dynamicSemesterAppend"></div>
-                                    <button id="saveNewSemesters" class="btn btn-success btn-sm my-1"
+                                    <button id="saveNewDepartments" class="btn btn-success btn-sm my-1"
                                         value="{{ $data->id }}">
                                         Save
                                     </button>
@@ -158,16 +88,15 @@
                         <div id="checkOut"></div>
                         <div class="form-group @error('image') has-error @enderror has-feedback">
                             <label for="exampleFormControlFile1">University Logo (Dimensiond: 600x450 px)</label><br />
-                            <input type="file" name="image" class="form-control-file"
-                                id="exampleFormControlFile1" />
+                            <input type="file" name="image" class="form-control-file" id="exampleFormControlFile1" />
                             @error('image')
                                 <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
                             @enderror
                         </div>
 
                         <div class="form-group">
-                            <img src="{{ asset('storage/' . $data->image) }}" height="225" width="300"
-                                alt="" srcset="" />
+                            <img src="{{ asset('storage/' . $data->image) }}" height="225" width="300" alt=""
+                                srcset="" />
                         </div>
                     </div>
                 </div>
@@ -190,277 +119,21 @@
             }
         })
 
-        // show assign modal
-        $(document).on("click", ".assignMaterials", function(e) {
-            e.preventDefault();
-            const semester_id = $(this).val();
-            $.ajax({
-                type: "GET",
-                url: "{{ route('admin.assign.material') }}",
-                data: {
-                    _token: "{{ csrf_token() }}", // Include CSRF token
-                    semester_id: semester_id,
-                },
-                success: function(response) {
-                    console.log(response.notAllocatedMaterials);
-                    let data = "";
-                    let existData = "";
-                    if (response.success) {
-                        response.notAllocatedMaterials.forEach(element => {
-                            data += `<div style="display:flex;align-items:center;">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
-                                                id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
-                                            
-                                        </div>
-                                    </div>`;
-                        });
-                        response.existMaterials.forEach(element => {
-                            existData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-                            radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-                            radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-                            radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-                            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-                            linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-                            radial-gradient(#2ad10c 0%, #48abe0 100%);
-                            border-radius: 7px;
-                            padding: 8px;
-                            box-sizing: border-box;">
-                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
-                                <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
-                                </div>`
-                        });
-
-                    }
-                    if (existData == "") {
-                        existData = `<p class="text-danger">No result found</p>`;
-
-                    }
-                    if (data == "") {
-                        data = `<p class="text-danger">No result found</p>`;
-                    }
-
-                    $("#existMaterialsOutput").html(existData);
-                    $("#notAllocatedMaterialOutput").html(data);
-                },
-                error: function(xhr) {
-                    // Handle error
-                    console.log(xhr);
-                },
-            });
-            $("#semester_id").val(semester_id);
-            $("#assignModal").modal("show");
-        })
-        // hide assign modal
-        $(document).on("click", ".hideAddFormModal", function(e) {
-            e.preventDefault();
-            $("#assignModal").modal("hide");
-        })
-
-        // removed assigned materials
-        $(document).on("click", ".removeAssignedMaterial", function(e) {
-            e.preventDefault();
-            const id = $(this).val();
-            const semester_id = $("#semester_id").val();
-            const university_id = $("#universityID").val();
-
-            $.ajax({
-                type: "POST",
-                url: "{{ route('ajax.not.assing.materials.semister') }}",
-                data: {
-                    _token: "{{ csrf_token() }}", // Include CSRF token
-                    material_id: id,
-                    semester_id: semester_id,
-                    university_id: university_id,
-                },
-                success: function(response) {
-                    let newData = "";
-                    let notAllocatedData = "";
-                    let newSemesterData = "";
-
-                    console.log(response);
-                    response.materials.forEach(element => {
-                        newData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-                        radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-                        radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-                        radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-                        radial-gradient(#2ad10c 0%, #48abe0 100%);
-                        border-radius: 7px;
-                        padding: 8px;
-                        box-sizing: border-box;">
-                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
-                                <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
-                                </div>`;
-                    });
-
-                    response.notAllocated.forEach(element => {
-                        notAllocatedData += `<div style="display:flex;align-items:center;">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
-                                                id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
-                                        </div>
-
-
-                                    </div>`;
-                    });
-
-                    // collect all semesters data
-                    response.semesters.forEach(value => {
-                        newSemesterData += `<div class="d-flex">
-                    <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
-                    <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
-                    <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
-                    <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
-                    <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
-                    </div>
-                    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-                    Materials ${value.materials.length} </div>
-                    <br>`
-                    });
-
-                    if (newData == "") {
-                        newData = `<p class="text-danger">No result found</p>`
-                    }
-
-                    if (notAllocatedData == "") {
-                        notAllocatedData = `<p class="text-danger">No result found</p>`
-                    }
-
-                    if (newSemesterData == "") {
-                        newSemesterData = `<p class="alert alert-danger">No semesters added yet!</p>`
-                    }
-
-                    $("#appendAfterInsert").html(newSemesterData);
-                    $("#existMaterialsOutput").html(newData);
-                    $("#notAllocatedMaterialOutput").html(notAllocatedData);
-                }
-            });
-        });
-
-        // enable assign material form submit btn
-        $(document).on("click", ".isMatCheck", function(e) {
-            const materials = [];
-            $(".isMatCheck:checked").each(function() {
-                materials.push($(this).val());
-            });
-
-            if (!jQuery.isEmptyObject(materials)) {
-                $("#submitAssignForm").removeAttr('disabled');
-            } else {
-                $("#submitAssignForm").attr('disabled',
-                    'disabled');
-            }
-        });
-
-        // submit assigned materials form
-        $(document).on("click", "#submitAssignForm", function(e) {
-            e.preventDefault();
-            const semesterId = $("#semester_id").val();
-            const universityID = $("#universityID").val();
-
-            // Collect all  assigned materials id into an array
-            const materials = [];
-            $(".isMatCheck:checked").each(function() {
-                materials.push($(this).val());
-            });
-            $.ajax({
-                type: "POST",
-                url: "{{ route('ajax.assing.materials.semister') }}",
-                data: {
-                    _token: "{{ csrf_token() }}", // Include CSRF token
-                    university_id: universityID,
-                    semester_id: semesterId,
-                    assignedMaterials: materials,
-                },
-                success: function(response) {
-                    let newData = "";
-                    let notAllocatedData = "";
-                    let newSemesterData = "";
-
-                    console.log(response.materials);
-                    response.materials.forEach(element => {
-                        newData += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
-                        radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
-                        radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
-                        radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
-                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
-                        linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
-                        radial-gradient(#2ad10c 0%, #48abe0 100%);
-                        border-radius: 7px;
-                        padding: 8px;
-                        box-sizing: border-box;">
-                                <span>${element.title} | ${element.get_pdf.length} pdfs found</span>
-                                <button class="badge bg-danger removeAssignedMaterial" value="${element.id}">Remove</button>
-                                </div>`;
-                    });
-
-                    response.notAllocated.forEach(element => {
-                        notAllocatedData += `<div style="display:flex;align-items:center;">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input isMatCheck" type="checkbox" value=${element.id} role="switch"
-                                                id="flexSwitchCheckChecked">
-                                            <label class="form-check-label" for="flexSwitchCheckChecked">${element.title} | ${element.get_pdf.length} pdfs found</label>
-                                        </div>
-
-
-                                    </div>`;
-                    });
-
-                    // collect all semesters data
-                    response.semesters.forEach(value => {
-                        newSemesterData += `<div class="d-flex">
-                    <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
-                    <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
-                    <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
-                    <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
-                    <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
-                    </div>
-                    <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-                    Materials ${value.materials.length} </div>
-                    <br>`
-                    });
-
-                    if (newData == "") {
-                        newData = `<p class="text-danger">No result found</p>`
-                    }
-
-                    if (notAllocatedData == "") {
-                        notAllocatedData = `<p class="text-danger">No result found</p>`
-                    }
-
-                    if (newSemesterData == "") {
-                        newSemesterData = `<p class="alert alert-danger">No semesters added yet!</p>`
-                    }
-
-                    $("#appendAfterInsert").html(newSemesterData);
-                    $("#existMaterialsOutput").html(newData);
-                    $("#notAllocatedMaterialOutput").html(notAllocatedData);
-
-                },
-                error: function(xhr) {
-                    // Handle error
-                    console.log(xhr)
-                }
-            });
-        });
-
-        // save semister edit
+        // save departments edit
         $(document).on("click", ".cancelEditSemesterBtn", function(e) {
             e.preventDefault();
             const button = $(this);
-            const id = button.val();
-            const semester = button.siblings(".semisterField").val();
+            const department_id = button.val();
+            const department = button.siblings(".semisterField").val();
+            const universityID = $("#universityID").val();
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin.update.semester') }}",
+                url: "{{ route('admin.ajax.update.department') }}",
                 data: {
                     _token: "{{ csrf_token() }}", // Include CSRF token
-                    id: id,
-                    semester: semester,
+                    university_id: universityID,
+                    department_id: department_id,
+                    department: department,
                 },
                 success: function(response) {
                     if (response.success) {
@@ -477,39 +150,39 @@
             });
         });
 
-        // save new semesters
-        $(document).on("click", "#saveNewSemesters", function(e) {
+        // save new departments
+        $(document).on("click", "#saveNewDepartments", function(e) {
             e.preventDefault();
-            const id = $(this).val();
+            const university_id = $(this).val();
 
-            // Collect all the semester values into an array
-            const semesters = [];
-            $("input[name='newSemester[]']").each(function() {
-                semesters.push($(this).val());
-            });
+            // Collect all the departments values into an array
+            const departments = [];
+            $("input[name='newSemester[]']").each(
+                function() { // here i use same code for semester and departments so thats why for semester and department has same input field name newSemesters in script.js
+                    departments.push($(this).val());
+                });
 
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin.ajax.new.semester') }}",
+                url: "{{ route('admin.ajax.add.department') }}",
                 data: {
                     _token: "{{ csrf_token() }}", // Include CSRF token
-                    id: id,
-                    semesters: semesters,
+                    university_id: university_id,
+                    departments: departments,
                 },
                 success: function(response) {
+                    console.log(response)
                     $.each(response.data, function(indexInArray, valueOfElement) {
                         const newData = `
         <div class="d-flex">
         <input type="checkbox" value="${valueOfElement.id}" class="isCheck m-3" id="">
-        <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${valueOfElement.semister_name}">
+        <input type="text" name="" class="form-control semisterField" readonly value="${valueOfElement.department}">
         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${valueOfElement.id}">Save</button>
-        <button type="button" class="badge bg-danger m-3 assignMaterials" value="${valueOfElement.id}">Assign Materials</button>
         </div>
-        <div class="form-group" style="margin-left: 30px;color:chocolate">
-            Assigned Materials 0 </div><br>`;
+        <br>`;
 
-                        $("#ifSemesterSNotExist").hide();
+                        $("#ifDepartmentdExist").hide();
                         $("#appendAfterInsert").append(newData);
                         $("#dynamicSemester").hide();
                         $("#dynamicSemesterAppend").empty();
@@ -522,19 +195,9 @@
             });
         });
 
-        // delete selected semester
+        // delete selected departments
         $(document).on("click", "#selectedDeleteBtn", function(e) {
             e.preventDefault();
-            let isDeleteMaterials = "off";
-            let isDeletePdf = "off";
-            // first check switched
-            if ($("#deleteMaterialsSwitch").is(":checked")) {
-                isDeleteMaterials = "on";
-            }
-            if ($("#deletePdfSwitch").is(":checked")) {
-                isDeletePdf = "on";
-            }
-            // end
 
             const universityId = $(this).val();
             let id = [];
@@ -547,32 +210,27 @@
             } else {
                 $.ajax({
                     type: "POST",
-                    url: "{{ route('admin.delete.semester.selected') }}",
+                    url: "{{ route('admin.delete.department.selected') }}",
                     data: {
                         _token: "{{ csrf_token() }}", // Include CSRF token
                         id: id,
                         universityId: universityId,
-                        isDeleteMaterials: isDeleteMaterials,
-                        isDeletePdf: isDeletePdf,
                     },
                     success: function(response) {
                         let newOutput = "";
-                        $.each(response.newSemesterData, function(key, value) {
+                        $.each(response.newDepartmentData, function(key, value) {
                             newOutput += `
                         <div class="d-flex">
                         <input type="checkbox" value="${value.id}" class="isCheck m-3" id="">
-                        <input type="text" name="semesters[]" class="form-control semisterField" readonly value="${value.semister_name}">
+                        <input type="text" name="" class="form-control semisterField" readonly value="${value.department}">
                         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
                         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
-                        <button type="button" class="badge bg-danger m-3 assignMaterials" value="${value.id}">Assign Materials</button>
                         </div>
-                        <div class="form-group" style="margin-left: 30px;color:chocolate">Assigned
-                        Materials ${value.materials.length} </div>
                         <br>`;
                         });
 
                         if (newOutput == "") {
-                            newOutput = `<p class="alert alert-danger">No semesters added yet!</p>`
+                            newOutput = `<p class="alert alert-danger">No Departments added yet!</p>`
                         }
 
                         $("#appendAfterInsert").html(newOutput);

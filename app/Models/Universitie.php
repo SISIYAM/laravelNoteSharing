@@ -4,9 +4,10 @@ namespace App\Models;
 
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\Department;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Universitie extends Model
 {
@@ -31,6 +32,9 @@ class Universitie extends Model
         return $this->hasMany(Material::class,'university_id','id');
     }
 
+    public function getDepartments() {
+        return $this->hasMany(Department::class,'university_id','id');
+    }
 
     //method for generate slug
     public function sluggable(): array

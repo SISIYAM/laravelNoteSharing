@@ -6,6 +6,7 @@ use App\Models\Pdf;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -160,7 +161,8 @@ class AdminUpdateController extends Controller
         foreach ($req->semesters as $semester) {
             if($semester != NULL){
                 $insert = Semister::create([
-                    'university_id' => $req->id,
+                    'university_id' => $req->university_id,
+                    'department_id' => $req->department_id,
                     'semister_name' => $semester,
                     'status' => 1,
                     'author' => $admin,
@@ -171,6 +173,7 @@ class AdminUpdateController extends Controller
 
         return response()->json(["success" => "true", "data" => $output]);
     }
+
 
     // method for update university
     public function updateUniversity(Request $req, string $slug){
@@ -318,6 +321,42 @@ class AdminUpdateController extends Controller
             'notAllocated' => $notAllocatedPdfs,
         ]);
 
+    }
+
+    // method for update department
+    public function updateDepartment(Request $req){
+        $req->validate([
+            'department' => 'required|string',
+           ]);
+           $department = Department::findOrFail($req->department_id);
+           $department->update([
+            'department' => $req->department,
+           ]);
+    
+           return ['success' => $req->department .' Updated Successfully!'];
+    }
+
+    // method for add new departments
+    public function addNewDepartment(Request $req){
+        $admin = Auth::user()->name;
+        $req->validate([
+        'departments' => 'array',
+        'departments.*' => 'nullable|string',
+        ]);
+        $output = [];
+        foreach ($req->departments as $department) {
+            if($department != NULL){
+                $insert = Department::create([
+                    'university_id' => $req->university_id,
+                    'department' => $department,
+                    'status' => 1,
+                    'author' => $admin,
+                ]);
+                array_push($output,$insert);
+            }
+        }
+
+        return response()->json(["success" => "true", "data" => $output]);
     }
 
 }
