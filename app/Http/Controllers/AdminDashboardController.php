@@ -22,11 +22,12 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard');
     }
 
-    // load universities page
+    // load universities list
     public function loadUniversities(){
-        $data = ['No','Name','Semesters','Author','Status',''];
+        $data = ['No','Name','Semesters','Materials & Pdfs','Author','Status',''];
 
-        $universities = Universitie::all();
+        $universities = Universitie::with('material.getPdf')->get();
+        // return $universities;
 
         return view('admin.list',['key' => 'university','thead' => $data,'tableRow' => $universities]);
     }
@@ -146,6 +147,16 @@ class AdminDashboardController extends Controller
             'notAllocatedPdfs' => $pdfs,
             'existPdfs' => $existsPdfs,
         ]);
+    }
+
+    // method for load pdfs list
+    public function loadPdfs(){
+
+        $thead = ['No','Material','Title', 'Type','Author', ''];
+
+        $getPdfs = Pdf::with('getMaterial','getAuthor')->get();
+
+        return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
     }
     
 

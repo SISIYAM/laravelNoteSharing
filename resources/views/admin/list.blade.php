@@ -10,6 +10,12 @@
                 <td>{{ $count }}</td>
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->semester }}</td>
+                <td> {{ $row->material->count() }} materials &
+                    {{ $row->material->flatMap(function ($material) {
+                            return $material->getPdf;
+                        })->count() }}
+                    pdfs
+                </td>
                 <td>{{ $row->author }}</td>
                 <td>
                     @if ($row->status == 0)
@@ -151,6 +157,30 @@
                                 class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button></a>
+                        <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                                data-original-title="Remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @endsection
+@elseif ($key == 'pdfs')
+    @section('table-row')
+        @foreach ($tableRow as $count => $row)
+            <tr>
+                <td>{{ $count + 1 }}</td>
+                <td>{!! isset($row->getMaterial->title) ? $row->getMaterial->title : '<b class="text-danger">Not allocated</b>' !!}
+                </td>
+                <td>{{ $row->title }}</td>
+                <td>{!! $row->type == 1 ? 'Pdf File' : 'Drive Link' !!}</td>
+                <td>{{ $row->getAuthor->name }}</td>
+
+                <td>
+                    <div class="form-button-action">
                         <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
                             <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
                                 data-original-title="Remove">

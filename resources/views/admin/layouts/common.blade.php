@@ -108,6 +108,12 @@
                                         </a>
                                     </li>
                                     <li>
+                                    <li>
+                                        <a href="{{ route('admin.manage.pdf.list') }}">
+                                            <span class="sub-item">Pdfs</span>
+                                        </a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('admin.form.materials') }}">
                                             <span class="sub-item">Add Materials</span>
                                         </a>

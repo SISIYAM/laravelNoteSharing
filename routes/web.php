@@ -53,6 +53,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/reviews', 'loadReviews')->name('admin.reviews');
         Route::get('/admin/assign/materials','loadNotAssignedMaterials')->name('admin.assign.material');
         Route::get('/admin/assign/materials/pdfs','loadNotAssignedPdfs')->name('admin.assign.pdf');
+        Route::get('/admin/manage/contents/materials/pdfs','loadPdfs')->name('admin.manage.pdf.list');
     });
 
     // controller for update queries

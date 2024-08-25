@@ -217,6 +217,7 @@ class AdminUpdateController extends Controller
                 $assign = Material::findOrFail($materialId);
                 if ($assign) { 
                     $assign->update([
+                        'university_id' => $req->university_id,
                         'semester_id' => $req->semester_id,
                         'allocated' => 1,
                     ]);
@@ -269,6 +270,7 @@ class AdminUpdateController extends Controller
         $updateMaterial = Material::findOrFail($req->material_id);
 
         $updateMaterial->update([
+            'university_id' => null,
             'semester_id' => null,
             'allocated' => 0,
 
