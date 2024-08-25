@@ -77,5 +77,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/delete/university','deleteUniversity')->name('admin.delete.university');
         Route::post('/admin/delete/semester/selected','selectedSemesterDelete')->name('admin.delete.semester.selected');
         Route::get('/admin/delete/reviews/{id}','deleteReviews')->name('admin.delete.reviews');
+        Route::get('/admin/delete/pdfs/{id}','deletePdfs')->name('admin.delete.pdfs');
     });
 });

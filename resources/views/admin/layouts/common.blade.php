@@ -166,6 +166,23 @@
                             </div>
                         </li>
 
+                        <li class="nav-item">
+                            <a data-bs-toggle="collapse" href="#other">
+                                <i class="fas fa-table"></i>
+                                <p>Others</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="other">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="{{ route('admin.reviews') }}">
+                                            <span class="sub-item">Reviews</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
                     </ul>
                 </div>
             </div>

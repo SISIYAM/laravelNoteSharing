@@ -175,4 +175,17 @@ class AdminDeleteController extends Controller
         
     }
 
+     // method for delete pdfs
+     public function deletePdfs(string $id){
+        $delete = Pdf::find($id);
+        
+        if($delete){
+            $delete->delete();
+            return redirect()->route('admin.manage.pdf.list',['key' => 'pdfs'])->with('success','Deleted successfully!');
+        }else{
+            return ['message' => 'invalid!'];
+        }
+        
+    }
+
 }

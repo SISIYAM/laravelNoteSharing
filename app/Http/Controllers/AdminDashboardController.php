@@ -51,7 +51,7 @@ class AdminDashboardController extends Controller
 
     // load materials
     public function loadMaterials(){
-        $data = ['No','Pdfs','University','Semester','Title','Author','Status',''];
+        $data = ['No','Title','Pdfs','University','Semester','Author','Status',''];
 
         $materials = Material::with('getUniversity','getSemester','getPdf','getAuthor')->get();
         // return $materials;

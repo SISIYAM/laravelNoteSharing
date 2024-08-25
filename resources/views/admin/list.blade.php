@@ -10,7 +10,7 @@
                 <td>{{ $count }}</td>
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->semester }}</td>
-                <td> {{ $row->material->count() }} materials &
+                <td class="text-primary"> {{ $row->material->count() }} materials &
                     {{ $row->material->flatMap(function ($material) {
                             return $material->getPdf;
                         })->count() }}
@@ -53,8 +53,10 @@
         @foreach ($tableRow as $row)
             <tr>
                 <td>{{ $count }}</td>
+                <td>{{ $row->title }}</td>
                 <td>
-                    <b class="{{ count($row->getPdf) > 0 ? 'text-success' : 'text-danger' }}">{{ count($row->getPdf) }}</b>
+                    <b
+                        class="{{ count($row->getPdf) > 0 ? 'text-success' : 'text-danger' }}">{{ count($row->getPdf) }}</b>
                 </td>
                 <td>
                     @isset($row->getUniversity->name)
@@ -71,7 +73,6 @@
                         <b class="text-danger"> Not Allocated</b>
                     @endisset
                 </td>
-                <td>{{ $row->title }}</td>
                 <td>
                     @isset($row->getAuthor->name)
                         {{ $row->getAuthor->name }}
@@ -153,10 +154,6 @@
 
                 <td>
                     <div class="form-button-action">
-                        <a href=""><button type="button" data-bs-toggle="tooltip" title=""
-                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
-                                <i class="fa fa-edit"></i>
-                            </button></a>
                         <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
                             <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
                                 data-original-title="Remove">
@@ -181,7 +178,7 @@
 
                 <td>
                     <div class="form-button-action">
-                        <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
+                        <a href="{{ route('admin.delete.pdfs', $row->id) }}" onclick="return confirm('Are you sure?')">
                             <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
                                 data-original-title="Remove">
                                 <i class="fa fa-times"></i>
