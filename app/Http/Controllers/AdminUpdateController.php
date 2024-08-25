@@ -73,8 +73,6 @@ class AdminUpdateController extends Controller
     public function updateMaterials(Request $req, string $slug){
         $admin = Auth::user()->id;
         $req->validate([
-            'university_id' => 'required|numeric',
-            'semester_id' => 'required|numeric',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'pdfs' => 'array', // Validate that 'pdfs' is an array
@@ -89,8 +87,6 @@ class AdminUpdateController extends Controller
 
         $material = Material::where(compact('slug'))->first();
         $material->update([
-            'university_id' => $req->university_id,
-            'semester_id' => $req->semester_id,
             'title' => $req->title,
             'description' => $req->description,
             'status' => $req->status,

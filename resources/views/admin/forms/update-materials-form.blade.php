@@ -133,58 +133,29 @@
             <div class="card-body">
                 <div class="row shadow-lg p-3 mb-5 bg-ligth rounded m-1">
                     <div class="col-md-6 col-lg-10">
-                        <div
-                            class="form-group @error('university_id')
-                    has-error
-                    @enderror">
+                        <div class="form-group">
                             <label for="exampleFormControlSelect1">University Name</label>
-                            <select class="form-select" name="university_id" id="selectUniversity">
-                                <option value="{{ $data->university_id }}" selected>
-                                    @isset($data->getUniversity->name)
-                                        {{ $data->getUniversity->name }}
-                                    @else
-                                        Not allocated
-                                    @endisset
-                                </option>
-                                @foreach ($universities as $university)
-                                    @php
-                                        if ($university->id == $data->university_id) {
-                                            continue;
-                                        }
-                                    @endphp
-                                    <option value="{{ $university->id }}">{{ $university->name }}</option>
-                                @endforeach
-                            </select>
-                            @error('university_id')
-                                <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
-                            @enderror
+                            <input readonly type="text" id="successInput" class="form-control"
+                                value="{!! isset($data->getUniversity->name) ? $data->getUniversity->name : 'Not allocated' !!}" />
+
                         </div>
-                        <div
-                            class="form-group @error('semester_id')
-                        has-error
-                    @enderror">
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Department Name</label>
+                            <input readonly type="text" id="departmentInput" class="form-control"
+                                value="{!! isset($data->getSemester->getDepartment->department)
+                                    ? $data->getSemester->getDepartment->department
+                                    : 'Not allocated' !!}" />
+                        </div>
+
+
+                        <div class="form-group">
                             <label for="exampleFormControlSelect1">Semester</label>
-                            <select class="form-select" name="semester_id" id="semester">
-                                <option value="{{ $data->semester_id }}" selected>
-                                    @isset($data->getSemester->semister_name)
-                                        {{ $data->getSemester->semister_name }}
-                                    @else
-                                        Not allocated
-                                    @endisset
-                                </option>
-                                @foreach ($semesters as $semester)
-                                    @php
-                                        if ($semester->id == $data->semester_id) {
-                                            continue;
-                                        }
-                                    @endphp
-                                    <option value="{{ $semester->id }}">{{ $semester->semister_name }}</option>
-                                @endforeach
-                            </select>
-                            @error('semester_id')
-                                <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
-                            @enderror
+                            <input readonly type="text" id="semesterInput" class="form-control"
+                                value="{!! isset($data->getSemester->semister_name) ? $data->getSemester->semister_name : 'Not allocated' !!}" />
                         </div>
+
+
                         <div
                             class="form-group  @error('title')
                       has-error
@@ -597,36 +568,6 @@
                 $("#status").val(0);
             }
         })
-
-        // search semester according to university name
-        $(document).on("change", "#selectUniversity", function(e) {
-            e.preventDefault();
-
-            const universityId = $(this).val();
-
-            $.ajax({
-                type: "POST",
-                url: "{{ route('admin.semester.ajax') }}",
-                data: {
-                    _token: "{{ csrf_token() }}", // Include CSRF token
-                    id: universityId,
-                },
-
-                success: function(response) {
-                    $('#semester').empty();
-
-                    if (response.length > 0) {
-                        $.each(response, function(key, value) {
-                            $('#semester').append('<option value="' + value.id + '">' + value
-                                .semister_name +
-                                '</option>');
-                        });
-                    } else {
-                        $('#semester').append('<option value="">No semesters added yet</option>');
-                    }
-                },
-            });
-        });
     </script>
 @endpush
 

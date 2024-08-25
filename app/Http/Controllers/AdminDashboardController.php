@@ -76,8 +76,8 @@ class AdminDashboardController extends Controller
     public function loadMaterialsUpdateForm(string $slug = null){
 
         // fetch materials data
-        $data = Material::where('slug',$slug)->with('getUniversity','getSemester','getPdf')->first();
-
+        $data = Material::where('slug',$slug)->with('getUniversity','getSemester.getDepartment','getPdf')->first();
+        
         // fetch universities
         $universities = Universitie::all();
 

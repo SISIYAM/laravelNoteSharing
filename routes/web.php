@@ -77,12 +77,13 @@ Route::middleware([AdminMiddleware::class])->group(function(){
     // controller for delete queries
     Route::controller(AdminDeleteController::class)->group(function () {
         Route::get('/admin/delete/faculties/{slug}','deleteFaculties')->name('admin.delete.faculties');
-        Route::post('/admin/delete/pdf','deletePdf')->name('admin.delete.pdf');
+        Route::get('/admin/delete/pdf/{id}','deletePdf')->name('admin.delete.pdf');
         Route::post('/admin/delete/materials','deleteMaterials')->name('admin.delete.materials');
         Route::post('/admin/delete/university','deleteUniversity')->name('admin.delete.university');
         Route::post('/admin/delete/semester/selected','selectedSemesterDelete')->name('admin.delete.semester.selected');
         Route::get('/admin/delete/reviews/{id}','deleteReviews')->name('admin.delete.reviews');
         Route::get('/admin/delete/pdfs/{id}','deletePdfs')->name('admin.delete.pdfs');
         Route::post('/admin/delete/department/selected','deleteSelectedSemester')->name('admin.delete.department.selected');
+        Route::get('/admin/delete/department/list/{id?}','deleteListDepartment')->name('admin.delete.list.department');
     });
 });

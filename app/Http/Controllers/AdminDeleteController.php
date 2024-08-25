@@ -115,7 +115,7 @@ class AdminDeleteController extends Controller
         if (Storage::disk('public')->exists($University->image)) {
             Storage::disk('public')->delete($University->image);
         }
-        
+
         $University->delete();
 
         return ['delete' => $title.' has been deleted!'];
@@ -161,6 +161,19 @@ class AdminDeleteController extends Controller
         $findDept = Department::where('university_id', $req->universityId)->get();
     
         return response()->json(['success' => $req->id, 'newDepartmentData' => $findDept]);
+    }
+
+    // method for delete departments form list
+    public function deleteListDepartment($id) {
+        
+        $findDept = Department::findOrFail($id);
+        $title = $findDept->deparment;
+
+        $findSemesters = Semister::where('department_id',$id)->delete();
+
+        $findDept->delete();
+
+        return redirect()->route('admin.manage.department.list')->with(['delete' => $title.' has been deleted!']); 
     }
 
 

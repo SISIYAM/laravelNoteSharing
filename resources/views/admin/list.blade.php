@@ -233,10 +233,13 @@
                                 <i class="fa fa-edit"></i>
                             </button>
                         </a>
-                        <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger "
-                            value="{{ $row->id }}" data-original-title="Remove">
-                            <i class="fa fa-times"></i>
-                        </button>
+                        <a href="{{ route('admin.delete.list.department', $row->id) }}"
+                            onclick="return confirm('Are you sure?')">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                                data-original-title="Remove">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </a>
                     </div>
                 </td>
             </tr>
