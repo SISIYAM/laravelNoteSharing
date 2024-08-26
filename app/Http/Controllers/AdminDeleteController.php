@@ -152,8 +152,22 @@ class AdminDeleteController extends Controller
         foreach($req->id as $department_id) {
             $department = Department::findOrFail($department_id);
 
-           // Delete all associated semesters first
-            Semister::where('department_id', $department_id)->delete();
+           
+           $findSemesters = Semister::where('department_id', $department_id)->get();
+           foreach($findSemesters as $semester){
+
+           $findMaterials = Material::where('semester_id',$semester->id)->get();
+           foreach($findMaterials as $material){
+            $material->update([
+                "university_id" => null,
+                "semester_id" => null,
+                "allocated" => 0,
+               ]);
+           }
+           }
+
+            // Delete all associated semesters first
+            $semester->delete();
             
             $department->delete();
         }
@@ -169,7 +183,18 @@ class AdminDeleteController extends Controller
         $findDept = Department::findOrFail($id);
         $title = $findDept->deparment;
 
-        $findSemesters = Semister::where('department_id',$id)->delete();
+        $findSemesters = Semister::where('department_id',$id)->get();
+        foreach ($findSemesters as $semester) {
+            $findMaterials = Material::where('semester_id',$semester->id)->get();
+            foreach($findMaterials as $material){
+             $material->update([
+                 "university_id" => null,
+                 "semester_id" => null,
+                 "allocated" => 0,
+                ]);
+            }
+            $semester->delete();
+        }
 
         $findDept->delete();
 
