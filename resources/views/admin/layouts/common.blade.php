@@ -98,17 +98,6 @@
                                             <span class="sub-item">Departments</span>
                                         </a>
                                     </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#forms">
-                                <i class="fas fa-pen-square"></i>
-                                <p>Manage Materials</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="forms">
-                                <ul class="nav nav-collapse">
                                     <li>
                                         <a href="{{ route('admin.manage.universities.semesters.materials') }}">
                                             <span class="sub-item">Materials</span>
@@ -125,10 +114,10 @@
                                             <span class="sub-item">Add Materials</span>
                                         </a>
                                     </li>
-
                                 </ul>
                             </div>
                         </li>
+
                         @can('isAdmin')
                             <li class="nav-item">
                                 <a data-bs-toggle="collapse" href="#tables">

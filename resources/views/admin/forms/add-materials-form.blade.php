@@ -170,17 +170,15 @@
 
 
                     if (response.availableSemesters.length > 0) {
-                        $.each(response.availableSemesters, function(key, semesterArray) {
-                            $.each(semesterArray, function(innerKey, value) {
-                                $('#semesterField').append(
-                                    `<option value="${value.id}">${value.semister_name}</option>`
-                                );
-                            });
+                        $.each(response.availableSemesters, function(key, value) {
+                            $('#semesterField').append(
+                                `<option value="${value.id}">${value.semister_name}</option>`
+                            );
                         });
-
                     } else {
                         $('#semesterField').append(
-                            '<option value="">No departments added yet</option>');
+                            '<option value="">No semesters available</option>'
+                        );
                     }
 
                 },

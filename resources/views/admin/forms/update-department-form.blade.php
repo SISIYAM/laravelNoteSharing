@@ -552,6 +552,7 @@
             // end
 
             const universityId = $(this).val();
+            const departmentId = $("#departmentID").val();
             let id = [];
             $(".isCheck:checked").each(function() {
                 id.push($(this).val());
@@ -567,6 +568,7 @@
                         _token: "{{ csrf_token() }}", // Include CSRF token
                         id: id,
                         universityId: universityId,
+                        department_id: departmentId,
                         isDeleteMaterials: isDeleteMaterials,
                         isDeletePdf: isDeletePdf,
                     },

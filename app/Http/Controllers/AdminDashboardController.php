@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\Gate;
 class AdminDashboardController extends Controller
 {
    
+    // Method to fetch assigned department IDs for the logged-in user
+    protected function getAssignedDepartmentIds()
+    {
+        $user_id = Auth::user()->id;
+        return AssignUser::where('user_id', $user_id)->pluck('department_id');
+    }
 
     // methods for load views
 
@@ -59,11 +65,10 @@ class AdminDashboardController extends Controller
             return view('admin.list',['key' => 'departments','thead' => $thead,'tableRow' => $departments]);
 
         }elseif (Gate::allows('isModarator')) {
-             // moderator can view assigned departments
-            $user_id = Auth::user()->id;
+            // moderator can view assigned departments
 
             // fetch assigned department IDs for the user
-            $assignedDeptIds = AssignUser::where('user_id', $user_id)->pluck('department_id');
+            $assignedDeptIds = $this->getAssignedDepartmentIds();
             
             // fetch departments based on the assigned IDs
             $departments = Department::with('getUniversity', 'getSemesters.materials.getPdf')
@@ -79,34 +84,60 @@ class AdminDashboardController extends Controller
     // load materials form
     public function loadMaterialsForm(){
         // get university name
-        $university = Universitie::where('status',1)->get();
-        return view('admin.forms.add-materials-form',['universities' => $university]);
 
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $university = Universitie::where('status',1)->get();
+            return view('admin.forms.add-materials-form',['universities' => $university]);
+        }elseif(Gate::allows('isModarator')){
+         // moderator can view assigned departments
+
+         // fetch assigned department IDs for the user
+         $assignedDeptIds = $this->getAssignedDepartmentIds();
+         
+         // fetch universities ids based on the department IDs
+         $findUniversitiesId = Department::whereIn('id',$assignedDeptIds)->pluck('university_id');
+         // now find universities based on assigned department
+         $university = Universitie::where('status',1)->whereIn('id',$findUniversitiesId)->get();
+         return view('admin.forms.add-materials-form',['universities' => $university]);
+
+        }else{
+            return redirect()->route('error.403');
+        }
     }
 
     // search department using ajax
     public function universityDepartment(Request $req){
 
-        $searchDepartment = Department::where('university_id',$req->id)->get();
-        
+    // if admin
+    if(Gate::allows('isAdmin')){
+        $searchDepartment = Department::where('university_id',$req->id)->get();     
+    }elseif(Gate::allows('isModarator')){
+         // moderator can view assigned departments
+
+         // fetch assigned department IDs for the user
+         $assignedDeptIds = $this->getAssignedDepartmentIds();   
+         // fetch departments based on the assigned IDs
+         $searchDepartment = Department::where('university_id',$req->id)->whereIn('id',$assignedDeptIds)->get();
+    }
         $availableSemester = [];
-        foreach($searchDepartment as $department){
-            $searchSem = Semister::where('department_id', $department->id)->get();
-            
-            if($searchSem->count() != null){
-                array_push($availableSemester,$searchSem);
+        if ($searchDepartment->isNotEmpty()) {
+  
+            $firstDepartment = $searchDepartment->first();
+            $searchSem = Semister::where('department_id', $firstDepartment->id)->get();
+            if ($searchSem->isNotEmpty()) {
+                $availableSemester = $searchSem;
             }
         }
-
-
         return response()->json(['departments'=> $searchDepartment, 'availableSemesters' => $availableSemester]);
+    
+      
     }
 
     // search semester using ajax
     public function departmentSemester(Request $req){
 
         $searchSemester = Semister::where('department_id', $req->id)->get();
-
 
         return response()->json($searchSemester);
     }
@@ -122,16 +153,17 @@ class AdminDashboardController extends Controller
         }elseif (Gate::allows('isModarator')) {
 
         // moderator can view assigned departments
-        $user_id = Auth::user()->id;
 
         // fetch assigned department IDs for the user
-        $assignedDeptIds = AssignUser::where('user_id', $user_id)->pluck('department_id');
+        $assignedDeptIds = $this->getAssignedDepartmentIds();
         
-        // fetch department based semesters
+        // fetch department based semesters and user id
         $findSemestersId = Semister::whereIn('department_id',$assignedDeptIds)->pluck('id');
         
         // now find materials based on this semesters Ids
-        $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->whereIn('semester_id',$findSemestersId)->get();
+        $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->whereIn('semester_id',$findSemestersId)
+                                                    ->orWhere('author',Auth::user()->id)
+                                                    ->get();
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
 
         }else{
@@ -208,21 +240,48 @@ class AdminDashboardController extends Controller
 
     // load department update form
     public function loadUpdateDepartmentForm(string $slug = null) {
-        $department = Department::where(compact('slug'))->with('getUniversity','getSemesters')->first();
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $department = Department::where(compact('slug'))->with('getUniversity','getSemesters')->first();
 
-        $universities = Universitie::all();
-        return view('admin.forms.update-department-form',['data' => $department,'universities' => $universities]);
+            $universities = Universitie::all();
+            return view('admin.forms.update-department-form',['data' => $department,'universities' => $universities]);
+        }elseif(Gate::allows('isModarator')){
+            // if modarator
+
+            $assignedDeptIds = $this->getAssignedDepartmentIds();
+            // search universities id based on departments
+            $findUniversitiesId = Department::whereIn('id',$assignedDeptIds)->pluck('university_id');
+            
+            $department = Department::where(compact('slug'))->with('getUniversity','getSemesters')->first();
+
+            $universities = Universitie::whereIn('id',$findUniversitiesId)->get();
+            return view('admin.forms.update-department-form',['data' => $department,'universities' => $universities]);
+        }
      }
 
     // method for load not assigned materials
     public function loadNotAssignedMaterials(Request $req){
-        $materials = Material::where('allocated', 0)
+        //if admin
+        if(Gate::allows('isAdmin')){
+            $materials = Material::where('allocated', 0)
                      ->where('status', 1)
                      ->with('getPdf')
                      ->get();
         $existsMaterials = Material::where('semester_id',$req->semester_id)
                         ->with('getPdf')         
                         ->get();
+        }elseif(Gate::allows('isModarator')){
+        // materials based on user id
+        $materials = Material::where('allocated', 0)
+                     ->where('status', 1)
+                     ->where('author',Auth::user()->id)
+                     ->with('getPdf')
+                     ->get();
+        $existsMaterials = Material::where('semester_id',$req->semester_id)
+                        ->with('getPdf')         
+                        ->get();
+        }
         return response()->json([
             'success' => true,
             'notAllocatedMaterials' => $materials,
@@ -248,9 +307,36 @@ class AdminDashboardController extends Controller
 
         $thead = ['No','Material','Title', 'Type','Author', ''];
 
-        $getPdfs = Pdf::with('getMaterial','getAuthor')->get();
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $getPdfs = Pdf::with('getMaterial','getAuthor')->get();
 
-        return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
+            return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
+        
+        }elseif(Gate::allows('isModarator')){
+            // moderator can view assigned departments
+ 
+
+            // fetch assigned department IDs for the user
+            $assignedDeptIds = $this->getAssignedDepartmentIds();
+
+            // fetch department based semesters
+            $findSemestersId = Semister::whereIn('department_id',$assignedDeptIds)->pluck('id');
+            
+            // fetch materials based on semester ids
+            $findMaterialsId = Material::whereIn('semester_id',$findSemestersId)->pluck('id');
+            
+            $getPdfs = Pdf::with('getMaterial','getAuthor')
+                                    ->whereIn('material_id',$findMaterialsId)
+                                    ->orWhere('author',Auth::user()->id)
+                                    ->get();
+
+            return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
+        }else{
+            return redirect()->route('error.403');  
+        }
+
+        
     }
     
    

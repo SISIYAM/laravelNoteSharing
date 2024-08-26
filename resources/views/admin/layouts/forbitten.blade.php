@@ -17,7 +17,7 @@
                 <div class="col-md-5">
                     <div class="form-input-content text-center">
                         <div class="mb-5">
-                            <a class="btn btn-primary" href="{{ route('home') }}">Back to Home</a>
+                            <a class="btn btn-primary" href="{{ route('admin.dashboard') }}">Back to Home</a>
                         </div>
                         <h1 class="error-text  font-weight-bold">403</h1>
                         <h4 class="mt-4"><i class="fa fa-times-circle text-danger"></i> Forbidden Error!</h4>
