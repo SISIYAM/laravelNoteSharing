@@ -217,7 +217,7 @@ class AdminDashboardController extends Controller
         }
 
         // admin name
-        $admin = Auth::user()->name;
+        $admin = Auth::user()->id;
         $insert = Universitie::create([
             'name' => $req->name,
             'semester' => $req->semester,

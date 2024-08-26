@@ -68,7 +68,7 @@
                             <label for="email">Current Title</label>
                             <b class="badge bg-success" id="currentTitle"></b>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="overflow: auto">
                             <label for="email">Current pdf</label>
                             <b class="badge bg-danger" id="currentPdf"></b>
                         </div>

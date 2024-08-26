@@ -147,7 +147,7 @@ class AdminUpdateController extends Controller
 
     // method for add new semester while updating university
     public function addNewSemester(Request $req){
-        $admin = Auth::user()->name;
+        $admin = Auth::user()->id;
         $req->validate([
         'semesters' => 'array',
         'semesters.*' => 'nullable|string',
@@ -173,7 +173,7 @@ class AdminUpdateController extends Controller
 
     // method for update university
     public function updateUniversity(Request $req, string $slug){
-        $admin = Auth::user()->name;
+        $admin = Auth::user()->id;
 
         $req->validate([
             'name' => 'alpha|required|min:2',
@@ -335,7 +335,7 @@ class AdminUpdateController extends Controller
 
     // method for add new departments
     public function addNewDepartment(Request $req){
-        $admin = Auth::user()->name;
+        $admin = Auth::user()->id;
         $req->validate([
         'departments' => 'array',
         'departments.*' => 'nullable|string',
