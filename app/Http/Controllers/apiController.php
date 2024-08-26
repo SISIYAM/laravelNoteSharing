@@ -84,27 +84,42 @@ class apiController extends Controller
         }
     }
 
-    // method for fetch departments
-
     public function fetchDepartments(Request $req){
-        $select = Universitie::where('slug',$req->university_slug)->where('status', 1)->first();
+        $select = Universitie::where('slug', $req->university_slug)->where('status', 1)->first();
+
         if ($select) {
-            $getDepartment = Department::where('slug',$req->slug)->where('status',1)
-                            ->with('getSemesters.materials')->first();
-            return response()->json([
-                'status' => true,
-                'select' => $select,
-                'department' => $getDepartment,
-            ], 200);
+            $getDepartment = Department::where('slug', $req->slug)
+                ->where('status', 1)
+                ->with(['getSemesters' => function($query) {
+                    $query->where('status', 1)
+                        ->with(['materials' => function($query) {
+                            $query->where('status', 1);
+                        }]);
+                }])
+                ->first();
+
+            if ($getDepartment) {
+                return response()->json([
+                    'status' => true,
+                    'select' => $select,
+                    'department' => $getDepartment,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => false,
+                    'status_code' => 404,
+                    'message' => 'Department not found or inactive!',
+                ], 404);
+            }
         } else {
             return response()->json([
                 'status' => false,
                 'status_code' => 404,
-                'department' => null,
                 'message' => $req->university_slug . ' not found!',
             ], 404);
         }
     }
+
 
 
     // method for fetch materials details
