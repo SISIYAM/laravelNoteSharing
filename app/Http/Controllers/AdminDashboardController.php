@@ -124,7 +124,7 @@ class AdminDashboardController extends Controller
 
     // method for load university update form
     public function loadUpdateUniversityForm(String $slug = null){
-        $university = Universitie::where(compact('slug'))->with('getDepartments','semisters.materials')->first();
+        $university = Universitie::where(compact('slug'))->with('getDepartments.getSemesters','semisters.materials')->first();
         return view('admin.forms.update-university-form',['data' => $university]);
         // return $university;
     }

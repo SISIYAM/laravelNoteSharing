@@ -164,15 +164,18 @@ class AdminDeleteController extends Controller
                 "allocated" => 0,
                ]);
            }
+
+           // Delete all associated semesters first
+           $semester->delete();
+
            }
 
-            // Delete all associated semesters first
-            $semester->delete();
+            
             
             $department->delete();
         }
     
-        $findDept = Department::where('university_id', $req->universityId)->get();
+        $findDept = Department::where('university_id', $req->universityId)->with('getSemesters')->get();
     
         return response()->json(['success' => $req->id, 'newDepartmentData' => $findDept]);
     }

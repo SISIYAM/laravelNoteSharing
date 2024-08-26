@@ -60,6 +60,13 @@
                                                 </button>
 
                                             </div>
+                                            <div class="form-group" style="margin-left: 30px;color:chocolate">
+                                                Assigned Semesters
+                                                {{ $data->getDepartments->flatMap(function ($department) {
+                                                        return $department->getSemesters;
+                                                    })->count() }}
+
+                                            </div>
                                             <br />
                                         @endforeach
                                     @else
@@ -180,6 +187,8 @@
         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${valueOfElement.id}">Save</button>
         </div>
+        <div class="form-group" style="margin-left: 30px;color:chocolate">
+                        Assigned Semesters 0 </div>
         <br>`;
 
                         $("#ifDepartmentdExist").hide();
@@ -226,6 +235,8 @@
                         <button type="button" class="badge bg-success m-3 editSemesterBtn">Edit</button>
                         <button type="button" class="badge bg-primary m-3 cancelEditSemesterBtn" style="display:none" value="${value.id}">Save</button>
                         </div>
+                        <div class="form-group" style="margin-left: 30px;color:chocolate">
+                        Assigned Semesters ${value.get_semesters.length} </div>
                         <br>`;
                         });
 
