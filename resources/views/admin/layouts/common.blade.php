@@ -86,11 +86,13 @@
                             </a>
                             <div class="collapse" id="base">
                                 <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{ route('admin.manage.universities') }}">
-                                            <span class="sub-item">Universities</span>
-                                        </a>
-                                    </li>
+                                    @can('isAdmin')
+                                        <li>
+                                            <a href="{{ route('admin.manage.universities') }}">
+                                                <span class="sub-item">Universities</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                     <li>
                                         <a href="{{ route('admin.manage.department.list') }}">
                                             <span class="sub-item">Departments</span>
@@ -127,49 +129,51 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#tables">
-                                <i class="fas fa-table"></i>
-                                <p>Faculties</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="tables">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="{{ route('admin.form.faculties') }}">
-                                            <span class="sub-item">Add Faculty</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ route('admin.faculties') }}">
-                                            <span class="sub-item">Faculties List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        @can('isAdmin')
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#tables">
+                                    <i class="fas fa-table"></i>
+                                    <p>Faculties</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="tables">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="{{ route('admin.form.faculties') }}">
+                                                <span class="sub-item">Add Faculty</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ route('admin.faculties') }}">
+                                                <span class="sub-item">Faculties List</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
 
-                        <li class="nav-item">
-                            <a data-bs-toggle="collapse" href="#studens">
-                                <i class="fas fa-table"></i>
-                                <p>Students</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="studens">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="">
-                                            <span class="sub-item">Add Student</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="">
-                                            <span class="sub-item">Student List</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                            <li class="nav-item">
+                                <a data-bs-toggle="collapse" href="#studens">
+                                    <i class="fas fa-table"></i>
+                                    <p>Students</p>
+                                    <span class="caret"></span>
+                                </a>
+                                <div class="collapse" id="studens">
+                                    <ul class="nav nav-collapse">
+                                        <li>
+                                            <a href="">
+                                                <span class="sub-item">Add Student</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="">
+                                                <span class="sub-item">Student List</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </li>
+                        @endcan
 
                         <li class="nav-item">
                             <a data-bs-toggle="collapse" href="#other">

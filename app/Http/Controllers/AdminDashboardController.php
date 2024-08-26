@@ -2,44 +2,78 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Department;
 use App\Models\Pdf;
 use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\AssignUser;
+use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AdminDashboardController extends Controller
 {
+   
 
     // methods for load views
 
 
     // load admin dashboard
     public function loadDashboard(){
-        return view('admin.dashboard');
+
+        if (Gate::any(['isAdmin', 'isModarator'])) {
+            return view('admin.dashboard');
+        } else {
+            return redirect()->route('error.403');
+        }
+        
     }
 
     // load universities list
     public function loadUniversities(){
-        $data = ['No','Name','Departments','Materials & Pdfs','Author','Status',''];
 
-        $universities = Universitie::with('material.getPdf')->get();
-        // return $universities;
+        // check if logged in user admin or not
+        if(Gate::allows('isAdmin')){
+            $data = ['No','Name','Departments','Materials & Pdfs','Author','Status',''];
 
-        return view('admin.list',['key' => 'university','thead' => $data,'tableRow' => $universities]);
+            $universities = Universitie::with('material.getPdf')->get();
+            // return $universities;
+    
+            return view('admin.list',['key' => 'university','thead' => $data,'tableRow' => $universities]);
+        }else{
+            return redirect()->route('error.403');
+        }
+        
     }
 
     // load departments list
     public function loadDepartments() {
-        $thead = ['No','Department', 'University','Semesters','Materials','Author','Status',''];
-        
-        $departments = Department::with('getUniversity','getSemesters.materials.getPdf')->get();
-        // return $departments;
-        return view('admin.list',['key' => 'departments','thead' => $thead,'tableRow' => $departments]);
+
+      $thead = ['No','Department', 'University','Semesters','Materials','Author','Status',''];   
+        if(Gate::allows('isAdmin')){ 
+            $departments = Department::with('getUniversity','getSemesters.materials.getPdf')->get();
+            // return $departments;
+            return view('admin.list',['key' => 'departments','thead' => $thead,'tableRow' => $departments]);
+
+        }elseif (Gate::allows('isModarator')) {
+             // moderator can view assigned departments
+            $user_id = Auth::user()->id;
+
+            // fetch assigned department IDs for the user
+            $assignedDeptIds = AssignUser::where('user_id', $user_id)->pluck('department_id');
+            
+            // fetch departments based on the assigned IDs
+            $departments = Department::with('getUniversity', 'getSemesters.materials.getPdf')
+                ->whereIn('id', $assignedDeptIds)
+                ->get();
+
+            return view('admin.list', ['key' => 'departments', 'thead' => $thead, 'tableRow' => $departments]);
+        }else{
+            return redirect()->route('error.403');
+        }
     }
 
     // load materials form
@@ -80,10 +114,30 @@ class AdminDashboardController extends Controller
     // load materials list
     public function loadMaterials(){
         $data = ['No','Title','Pdfs','University','Department','Semester','Author','Status',''];
+        
+        //if admin
+        if(Gate::allows('isAdmin')){
+            $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->get();
+            return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
+        }elseif (Gate::allows('isModarator')) {
 
-        $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->get();
-        // return $materials;
+        // moderator can view assigned departments
+        $user_id = Auth::user()->id;
+
+        // fetch assigned department IDs for the user
+        $assignedDeptIds = AssignUser::where('user_id', $user_id)->pluck('department_id');
+        
+        // fetch department based semesters
+        $findSemestersId = Semister::whereIn('department_id',$assignedDeptIds)->pluck('id');
+        
+        // now find materials based on this semesters Ids
+        $materials = Material::with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->whereIn('semester_id',$findSemestersId)->get();
         return view('admin.list',['key' => 'materials','thead' => $data,'tableRow' => $materials]);
+
+        }else{
+            return redirect()->route('error.403');
+        }
+        
     }
 
     // load university form
@@ -116,10 +170,14 @@ class AdminDashboardController extends Controller
     // load faculties list
     public function loadFaculties(){
         $thead = ['No','Name','Post','Author','Status',''];
-
+        if(Gate::allows('isAdmin')){
+        
         $data = Facultie::all();
-
         return view('admin.list',['key' => 'faculties', 'thead' => $thead,'tableRow' => $data]);
+        
+        }else{
+            return redirect()->route('error.403');
+        }
         // return $data;
     }
 

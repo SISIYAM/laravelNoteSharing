@@ -46,4 +46,7 @@ class Department extends Model
         return $this->belongsTo(User::class,'author','id');
     }
     
+    public function getAssigned(){
+        return $this->hasMany(AssignUser::class,'department_id','id');
+    }
 }

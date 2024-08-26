@@ -56,7 +56,7 @@ class AuthController extends Controller
 
         $credential = $req->only('email','password');
         if(Auth::attempt($credential)){
-            if(Auth::user()->role == 2){
+            if(Auth::user()->role == 2 || Auth::user()->role == 1 ){
                 return redirect()->route('admin.dashboard');
             }else{
                 return redirect()->route('error.403');
