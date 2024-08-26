@@ -22,6 +22,10 @@
                             <i class="fa fa-plus"></i>
                             Add
                         </a>
+                    @elseif ($key == 'departments')
+                        <h4 class="card-title">Departments</h4>
+                    @elseif ($key == 'pdfs')
+                        <h4 class="card-title">Pdfs</h4>
                     @endif
                 </div>
             </div>
