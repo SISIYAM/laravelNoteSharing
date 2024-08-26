@@ -305,11 +305,11 @@ class AdminDashboardController extends Controller
     // method for load pdfs list
     public function loadPdfs(){
 
-        $thead = ['No','Material','Title', 'Type','Author', ''];
+        $thead = ['No','Title','Material','Department', 'Type','Author', ''];
 
         // if admin
         if(Gate::allows('isAdmin')){
-            $getPdfs = Pdf::with('getMaterial','getAuthor')->get();
+            $getPdfs = Pdf::with('getMaterial.getSemester.getDepartment','getAuthor')->get();
 
             return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
         
@@ -326,11 +326,11 @@ class AdminDashboardController extends Controller
             // fetch materials based on semester ids
             $findMaterialsId = Material::whereIn('semester_id',$findSemestersId)->pluck('id');
             
-            $getPdfs = Pdf::with('getMaterial','getAuthor')
+            $getPdfs = Pdf::with('getMaterial.getSemester.getDepartment','getAuthor')
                                     ->whereIn('material_id',$findMaterialsId)
                                     ->orWhere('author',Auth::user()->id)
                                     ->get();
-
+           
             return view('admin.list',['key' => 'pdfs', 'thead' => $thead, 'tableRow' => $getPdfs]);
         }else{
             return redirect()->route('error.403');  
@@ -507,12 +507,35 @@ class AdminDashboardController extends Controller
 
     // method for load reviews
     public function loadReviews(){
-
         // table headers
-        $thead = ['No','Time','Rating','Name','Review','Pdf',''];
+        $thead = ['No','Pdf','Material','Time','Rating','Name','Dept','Batch','Review',''];
 
-        $reviews = Review::orderBy('id','DESC')->get();
-        return view('admin.list',['key' => 'reviews','thead' => $thead, 'tableRow' => $reviews]);
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $reviews = Review::orderBy('id','DESC')->get();
+            return view('admin.list',['key' => 'reviews','thead' => $thead, 'tableRow' => $reviews]);
+        }elseif(Gate::allows('isModarator')){
+            // assigned departments
+            $assignedDeptIds = $this->getAssignedDepartmentIds();
+            
+            // find assigned semesters based on department
+            $assignedSemestersId = Semister::whereIn('department_id',$assignedDeptIds)->pluck('id');
+
+            // find assigned material id
+            $assignedMaterialsId = Material::whereIn('semester_id',$assignedSemestersId)->pluck('id');
+            
+            // find assigned pdfs
+            $findAssignedPdfsId = Pdf::whereIn('material_id',$assignedMaterialsId)->pluck('id');
+            
+            $reviews = Review::orderBy('id','DESC')
+                                ->whereIn('pdf_id',$findAssignedPdfsId)
+                                ->with('getPdf.getMaterial')
+                                ->get();
+            return view('admin.list',['key' => 'reviews','thead' => $thead, 'tableRow' => $reviews]);
+        }else{
+            return redirect()->route('error.403');            
+        }
+        
     }
 
 

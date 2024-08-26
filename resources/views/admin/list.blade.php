@@ -68,14 +68,16 @@
                 </td>
                 <td>
                     @isset($row->getSemester->getDepartment)
-                        {{ $row->getSemester->getDepartment->department }}
+                        <a
+                            href="{{ route('admin.manage.department.update', $row->getSemester->getDepartment->slug) }}">{{ $row->getSemester->getDepartment->department }}</a>
                     @else
                         <b class="text-danger"> Not Allocated</b>
                     @endisset
                 </td>
                 <td>
                     @isset($row->getSemester->semister_name)
-                        {{ $row->getSemester->semister_name }}
+                        <a
+                            href="{{ route('admin.manage.department.update', $row->getSemester->getDepartment->slug) }}">{{ $row->getSemester->semister_name }}</a>
                     @else
                         <b class="text-danger"> Not Allocated</b>
                     @endisset
@@ -153,11 +155,17 @@
         @foreach ($tableRow as $count => $row)
             <tr>
                 <td>{{ $count + 1 }}</td>
+                <td>{!! isset($row->getPdf->title) ? $row->getPdf->title : `<b class="text-danger">Not Found!</b>` !!}</td>
+                <td>{!! isset($row->getPdf->getMaterial->title)
+                    ? $row->getPdf->getMaterial->title
+                    : `<b class="text-danger">Not Found!</b>` !!}</td>
                 <td>{{ $row->created_at->format('d M Y h:i A') }}</td>
                 <td>{{ $row->rating }}</td>
                 <td>{{ $row->name }}</td>
+                <td>{{ $row->department }}</td>
+                <td>{{ $row->batch }}</td>
                 <td>{{ $row->review }}</td>
-                <td>{{ $row->pdf_id }}</td>
+
 
                 <td>
                     <div class="form-button-action">
@@ -177,9 +185,25 @@
         @foreach ($tableRow as $count => $row)
             <tr>
                 <td>{{ $count + 1 }}</td>
-                <td>{!! isset($row->getMaterial->title) ? $row->getMaterial->title : '<b class="text-danger">Not allocated</b>' !!}
-                </td>
                 <td>{{ $row->title }}</td>
+                <td>
+                    @isset($row->getMaterial->title)
+                        <a href="{{ route('admin.update.materials.form', $row->getMaterial->slug) }}">
+                            {{ $row->getMaterial->title }}
+                        </a>
+                    @else
+                        <b class="text-danger">Not allocated</b>
+                    @endisset
+
+                </td>
+                <td>
+                    @isset($row->getMaterial->getSemester->getDepartment)
+                        <a
+                            href="{{ route('admin.manage.department.update', $row->getMaterial->getSemester->getDepartment->slug) }}">{{ $row->getMaterial->getSemester->getDepartment->department }}</a>
+                    @else
+                        <b class="text-danger">Not allocated</b>
+                    @endisset
+                </td>
                 <td>{!! $row->type == 1 ? 'Pdf File' : 'Drive Link' !!}</td>
                 <td>{{ $row->getAuthor->name }}</td>
 
