@@ -160,7 +160,7 @@
                                 </div>
 
                                 <button type="button" class="btn btn-danger btn-sm" style="display: none"
-                                    id="selectedDeleteBtn" value="{{ $data->id }}">
+                                    id="selectedDeleteBtn" value="{{ $data->university_id }}">
                                     Delete Selected
                                 </button>
                                 <button type="button" class="btn btn-dark btn-sm" id="addDynamicSemesterBtn">

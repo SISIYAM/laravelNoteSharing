@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
 use App\Models\MaterialRequest;
@@ -59,17 +60,19 @@ class apiController extends Controller
         }
     }
 
-    // method for show university details
-    public function showUniversityDetails(string $slug){
+       // method for show university details
+       public function showUniversityDetails(string $slug = null){
 
-        $select = Universitie::where('slug',$slug)->where('status',1)->with(['semisters' => function($query){
-            $query->where('status',1);
-        },'semisters.materials'])->first();
+        $select = Universitie::where('slug',$slug)->where('status',1)->first();
 
         if($select){
+            // search departments 
+            $getDepartment = Department::where('university_id', $select->id)->with('getSemesters.materials')->get();
+
             return response()->json([
                 'status' => true,
                 'select' => $select,
+                'department' => $getDepartment,
             ],200);
         }else{
             return response()->json([
@@ -81,10 +84,33 @@ class apiController extends Controller
         }
     }
 
+    // method for fetch departments
+
+    public function fetchDepartments(Request $req){
+        $select = Universitie::where('slug',$req->university_slug)->where('status', 1)->first();
+        if ($select) {
+            $getDepartment = Department::where('slug',$req->slug)->where('status',1)
+                            ->with('getSemesters.materials')->first();
+            return response()->json([
+                'status' => true,
+                'select' => $select,
+                'department' => $getDepartment,
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => false,
+                'status_code' => 404,
+                'department' => null,
+                'message' => $req->university_slug . ' not found!',
+            ], 404);
+        }
+    }
+
+
     // method for fetch materials details
     public function fetchMaterialsDetails(string $slug = null){
 
-        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester','getPdf','getAuthor')->first();
+        $material = Material::where('slug',$slug)->where('status',1)->with('getUniversity','getSemester.getDepartment','getPdf','getAuthor')->first();
 
         if($material){
             return response()->json([
@@ -105,7 +131,7 @@ class apiController extends Controller
     public function fetchPdfDetails(string $slug = null){
 
         $pdf = Pdf::where('slug',$slug)->with(['getMaterial' => function($query){
-            $query->with('getUniversity','getSemester');
+            $query->with('getUniversity','getSemester.getDepartment');
         },'getAuthor'])->first();
 
         if($pdf){

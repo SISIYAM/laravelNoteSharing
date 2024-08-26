@@ -50,10 +50,29 @@ class AdminDashboardController extends Controller
 
     }
 
-    // search semester using ajax
-    public function universitySemester(Request $req){
+    // search department using ajax
+    public function universityDepartment(Request $req){
 
-        $searchSemester = Semister::where('university_id', $req->id)->get();
+        $searchDepartment = Department::where('university_id',$req->id)->get();
+        
+        $availableSemester = [];
+        foreach($searchDepartment as $department){
+            $searchSem = Semister::where('department_id', $department->id)->get();
+            
+            if($searchSem->count() != null){
+                array_push($availableSemester,$searchSem);
+            }
+        }
+
+
+        return response()->json(['departments'=> $searchDepartment, 'availableSemesters' => $availableSemester]);
+    }
+
+    // search semester using ajax
+    public function departmentSemester(Request $req){
+
+        $searchSemester = Semister::where('department_id', $req->id)->get();
+
 
         return response()->json($searchSemester);
     }
@@ -187,14 +206,14 @@ class AdminDashboardController extends Controller
             'name' => 'alpha|required|min:2',
             'semester' => 'required|numeric|min:1|max_digits:2',
             'description' => 'required|string',
-            'image' => 'required|mimes:png,jpg,jpeg,webp|max:3000',
+            'image' => 'mimes:png,jpg,jpeg,webp|max:3000',
         ]);
 
         // Handle the image upload
         if ($req->hasFile('image')) {
             $path = $req->file('image')->store('images', 'public');
         } else {
-            $path = 'imgae/default_image.jpg'; // This will never be reached because 'image' is required
+            $path = 'images/default-image.jpg'; 
         }
 
         // admin name
@@ -234,8 +253,8 @@ class AdminDashboardController extends Controller
     public function addMaterials(Request $req){
         $admin = Auth::user()->id;
         $req->validate([
-            'university_id' => 'required|numeric',
-            'semester_id' => 'required|numeric',
+            'university_id' => 'numeric|nullable',
+            'semester_id' => 'numeric|nullable',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'pdfs' => 'array', // Validate that 'pdfs' is an array
@@ -245,7 +264,15 @@ class AdminDashboardController extends Controller
             'titlesDrive' => 'array',
             'titlesDrive.*' => 'nullable|string',
             'links' => 'array',
-            'links.*' => 'nullable|url',
+            'links.*' => [
+            'nullable',
+            'url',
+            function ($attribute, $value, $fail) {
+                if (!preg_match('/^(https:\/\/)?(drive\.google\.com\/)/', $value)) {
+                    $fail('The '.$attribute.' must be a valid Google Drive link.');
+                }
+            },
+        ],
 
         ]);
 

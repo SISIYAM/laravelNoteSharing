@@ -57,6 +57,8 @@ class AdminDeleteController extends Controller
         return ['delete' => $title.' has been deleted!'];
     }
 
+    // method for delete selected materials
+
     public function selectedSemesterDelete(Request $req) {
         foreach($req->id as $semester_id) {
             $semester = Semister::findOrFail($semester_id);
@@ -103,7 +105,7 @@ class AdminDeleteController extends Controller
     
         $findSem = Semister::where('university_id', $req->universityId)->with('materials')->get();
     
-        return response()->json(['success' => $req->id, 'newSemesterData' => $findSem]);
+        return response()->json(['success' => $req->id,'university_id' => $req->universityId, 'newSemesterData' => $findSem]);
     }
     
 

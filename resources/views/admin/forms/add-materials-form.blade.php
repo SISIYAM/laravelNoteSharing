@@ -25,12 +25,26 @@
                             <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
+
+                    <div
+                        class="form-group @error('department_id')
+                        has-error
+                    @enderror">
+                        <label for="exampleFormControlSelect1">Department</label>
+                        <select class="form-select" name="department_id" id="departmentField">
+                            <option value="">Select a Department first</option>
+                        </select>
+                        @error('department_id')
+                            <small id="emailHelp" class="form-text text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+
                     <div
                         class="form-group @error('semester_id')
                         has-error
                     @enderror">
                         <label for="exampleFormControlSelect1">Semester</label>
-                        <select class="form-select" name="semester_id" id="semester">
+                        <select class="form-select" name="semester_id" id="semesterField">
                             <option value="">Select a university first</option>
                         </select>
                         @error('semester_id')
@@ -124,7 +138,7 @@
 
 @push('ajax')
     <script>
-        // search semester according to university name
+        // search department according to university name
         $("#selectUniversity").on("change", function(e) {
             e.preventDefault();
 
@@ -132,24 +146,76 @@
 
             $.ajax({
                 type: "POST",
-                url: "{{ route('admin.semester.ajax') }}",
+                url: "{{ route('admin.department.ajax') }}",
                 data: {
                     _token: "{{ csrf_token() }}", // Include CSRF token
                     id: universityId,
                 },
 
                 success: function(response) {
-                    $('#semester').empty();
+                    $('#departmentField').empty();
+                    $('#semesterField').empty();
+
+                    if (response.departments.length > 0) {
+                        $.each(response.departments, function(key, value) {
+                            $('#departmentField').append(
+                                `<option value="${value.id}">${value.department}</option>`);
+
+                        });
+                    } else {
+                        $('#departmentField').append(
+                            '<option value="">No departments added yet</option>');
+                    }
+
+
+
+                    if (response.availableSemesters.length > 0) {
+                        $.each(response.availableSemesters, function(key, semesterArray) {
+                            $.each(semesterArray, function(innerKey, value) {
+                                $('#semesterField').append(
+                                    `<option value="${value.id}">${value.semister_name}</option>`
+                                );
+                            });
+                        });
+
+                    } else {
+                        $('#semesterField').append(
+                            '<option value="">No departments added yet</option>');
+                    }
+
+                },
+            });
+        });
+
+        // search semesters according to department name
+        $("#departmentField").on("change", function(e) {
+            e.preventDefault();
+
+            const departmentID = $(this).val();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.semester.ajax') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id: departmentID,
+                },
+
+                success: function(response) {
+                    $('#semesterField').empty();
 
                     if (response.length > 0) {
                         $.each(response, function(key, value) {
-                            $('#semester').append('<option value="' + value.id + '">' + value
-                                .semister_name +
-                                '</option>');
+                            $('#semesterField').append(
+                                `<option value="${value.id}">${value.semister_name}</option>`
+                            );
+
                         });
                     } else {
-                        $('#semester').append('<option value="">No semesters added yet</option>');
+                        $('#semesterField').append(
+                            '<option value="">No departments added yet</option>');
                     }
+
                 },
             });
         });
