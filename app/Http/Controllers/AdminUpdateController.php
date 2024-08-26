@@ -6,14 +6,25 @@ use App\Models\Pdf;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\AssignUser;
 use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class AdminUpdateController extends Controller
 {
+
+    // Method to fetch assigned department IDs for the logged-in user
+    protected function getAssignedDepartmentIds()
+    {
+        $user_id = Auth::user()->id;
+        return AssignUser::where('user_id', $user_id)->pluck('department_id');
+    }
+
+
     // method for update pdf
     public function updatePdfAjax(Request $req){
         $admin = Auth::user()->id;
@@ -225,6 +236,8 @@ class AdminUpdateController extends Controller
             }
         }
 
+        // if admin
+        if(Gate::allows('isAdmin')){
         $searchMaterials = Material::where('semester_id',$req->semester_id)->with('getPdf')->get();
         $notAllocatedMaterials = Material::where('allocated', 0)
                      ->with('getPdf')
@@ -232,7 +245,20 @@ class AdminUpdateController extends Controller
                      ->get();
         
         // search all semesters
-        $semesters = Semister::where('university_id',$req->university_id)->with('materials')->get();
+        $semesters = Semister::where('department_id',$req->department_id)->with('materials')->get();
+        
+        }elseif(Gate::allows('isModarator')){
+        $searchMaterials = Material::where('semester_id',$req->semester_id)->with('getPdf')->get();
+        $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->with('getPdf')
+                     ->where('status', 1)
+                     ->where('author',Auth::user()->id)
+                     ->get();
+        
+        // search all semesters
+        $semesters = Semister::where('department_id',$req->department_id)->with('materials')->get();
+        
+        }
         
         return response()->json([
             "materials" => $searchMaterials,
@@ -256,8 +282,16 @@ class AdminUpdateController extends Controller
         }
 
         $searchPdfs = Pdf::where('material_id',$req->material_id)->get();
-        $notAllocatedPdfs = Pdf::where('material_id', null)
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $notAllocatedPdfs = Pdf::where('material_id', null)
                      ->get();
+        }elseif(Gate::allows('isModarator')){
+            $notAllocatedPdfs = Pdf::where('material_id', null)
+                     ->where('author',Auth::user()->id)
+                     ->get();
+        }
+
         return response()->json([
             "existPdfs" => $searchPdfs,
             'notAllocatedPdfs' => $notAllocatedPdfs,
@@ -276,6 +310,8 @@ class AdminUpdateController extends Controller
 
         ]);
 
+        // if admin
+        if(Gate::allows('isAdmin')){
         // now search after remove materials
         $searchMaterials = Material::where('semester_id',$req->semester_id)->with('getPdf')->get();
         
@@ -286,8 +322,27 @@ class AdminUpdateController extends Controller
                      ->get();
           
         // search all semesters
-        $semesters = Semister::where('university_id',$req->university_id)->with('materials')->get();
+        $semesters = Semister::where('department_id',$req->department_id)->with('materials')->get();
                      
+        }elseif(Gate::allows('isModarator')){
+
+        // now search after remove materials
+        $searchMaterials = Material::where('semester_id',$req->semester_id)
+                                    ->with('getPdf')
+                                    ->get();
+        
+        // now search updated not allocated materials
+        $notAllocatedMaterials = Material::where('allocated', 0)
+                     ->with('getPdf')
+                     ->where('status', 1)
+                     ->where('author',Auth::user()->id)
+                     ->get();
+          
+        // search all semesters based on department
+        $semesters = Semister::where('department_id',$req->department_id)->with('materials')->get();
+                     
+        }
+        
         return response()->json([
             "materials" => $searchMaterials,
             'notAllocated' => $notAllocatedMaterials,
@@ -309,9 +364,17 @@ class AdminUpdateController extends Controller
         // now search after remove pdfs
         $searchPdfs = Pdf::where('material_id',$req->material_id)->get();
         
-        // now search updated not allocated pdfs
+        // if admin
+        if(Gate::allows('isAdmin')){
+            // now search updated not allocated pdfs
         $notAllocatedPdfs = Pdf::where('material_id', null)
-                     ->get();
+        ->get();
+        }elseif(Gate::allows('isModarator')){
+            // now search updated not allocated pdfs
+        $notAllocatedPdfs = Pdf::where('material_id', null)
+        ->where('author',Auth::user()->id)
+        ->get();
+        }
                      
         return response()->json([
             "pdfs" => $searchPdfs,

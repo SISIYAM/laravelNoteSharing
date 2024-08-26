@@ -277,6 +277,7 @@
             const id = $(this).val();
             const semester_id = $("#semester_id").val();
             const university_id = $("#universityID").val();
+            const departmentId = $("#departmentID").val();
 
             $.ajax({
                 type: "POST",
@@ -286,6 +287,7 @@
                     material_id: id,
                     semester_id: semester_id,
                     university_id: university_id,
+                    department_id: departmentId,
                 },
                 success: function(response) {
                     let newData = "";
@@ -374,7 +376,7 @@
             e.preventDefault();
             const semesterId = $("#semester_id").val();
             const universityID = $("#universityID").val();
-
+            const department_id = $("#departmentID").val();
             // Collect all  assigned materials id into an array
             const materials = [];
             $(".isMatCheck:checked").each(function() {
@@ -387,6 +389,7 @@
                     _token: "{{ csrf_token() }}", // Include CSRF token
                     university_id: universityID,
                     semester_id: semesterId,
+                    department_id: department_id,
                     assignedMaterials: materials,
                 },
                 success: function(response) {

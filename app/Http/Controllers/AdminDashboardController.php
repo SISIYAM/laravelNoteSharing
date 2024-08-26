@@ -291,10 +291,20 @@ class AdminDashboardController extends Controller
 
       // method for load not assigned pdfs
       public function loadNotAssignedPdfs(Request $req){
-        $pdfs = Pdf::where('material_id', null)
-                     ->get();
-        $existsPdfs = Pdf::where('material_id',$req->material_id)       
-                        ->get();
+        // if admin
+        if(Gate::allows('isAdmin')){
+            $pdfs = Pdf::where('material_id', null)
+            ->get();
+            $existsPdfs = Pdf::where('material_id',$req->material_id)       
+               ->get();
+        }elseif(Gate::allows('isModarator')){
+            $pdfs = Pdf::where('material_id', null)
+            ->where('author',Auth::user()->id)
+            ->get();
+            $existsPdfs = Pdf::where('material_id',$req->material_id)       
+               ->get();
+        }
+       
         return response()->json([
             'success' => true,
             'notAllocatedPdfs' => $pdfs,
