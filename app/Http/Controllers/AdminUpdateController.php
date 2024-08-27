@@ -455,11 +455,21 @@ class AdminUpdateController extends Controller
         }
         }
 
-        
-
-
-
-
         return redirect()->route('admin.manage.department.update',$slug)->with('success',$req->department.' Updated Successfully!');
+    }
+
+    // method for update status
+    public function updateStatus(Request $req){
+        
+        // if university
+        if($req->key === 'university'){
+            $find = Universitie::findOrFail($req->id);
+            $find->update([
+                'status' => $req->status,
+            ]);
+
+            return response()->json(['success' => true, 'status' => $req->status]);
+        }
+
     }
 }

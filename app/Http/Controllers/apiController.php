@@ -67,13 +67,25 @@ class apiController extends Controller
 
         if($select){
             // search departments 
-            $getDepartment = Department::where('university_id', $select->id)->with('getSemesters.materials')->get();
+            $getDepartment = Department::where('university_id', $select->id)
+                            ->where('status',1)
+                            ->with('getSemesters.materials')
+                            ->get();
 
-            return response()->json([
-                'status' => true,
-                'select' => $select,
-                'department' => $getDepartment,
-            ],200);
+            if(!$getDepartment->isEmpty()){
+                return response()->json([
+                    'status' => true,
+                    'select' => $select,
+                    'department' => $getDepartment,
+                ],200);
+            }else{
+                return response()->json([
+                    'status' => false,
+                    'status_code' => 404,
+                    'message' => 'Departments not found or inactive!',
+                ], 404);
+            }
+            
         }else{
             return response()->json([
                 'status' => false,

@@ -73,6 +73,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/ajax/add/new/department', 'addNewDepartment')->name('admin.ajax.add.department');
         Route::post('/admin/ajax/update/new/department', 'updateDepartment')->name('admin.ajax.update.department');
         Route::put('/admin/manage/contents/universities/department/update/{slug?}','adminUpdateDepartment')->name('admin.update.department');
+        Route::post('/admin/ajax/update/status','updateStatus')->name('admin.ajax.status');
     });
 
     // controller for delete queries

@@ -61,11 +61,7 @@
 
                                             </div>
                                             <div class="form-group" style="margin-left: 30px;color:chocolate">
-                                                Assigned Semesters
-                                                {{ $data->getDepartments->flatMap(function ($department) {
-                                                        return $department->getSemesters;
-                                                    })->count() }}
-
+                                                Assigned Semesters {{ $department->getSemesters->count() }}
                                             </div>
                                             <br />
                                         @endforeach
@@ -124,6 +120,27 @@
             } else {
                 $("#status").val(0);
             }
+            const status = $("#status").val();
+            const universityID = $("#universityID").val();
+            // call ajax
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.ajax.status') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id: universityID,
+                    key: "university",
+                    status: status,
+                },
+                success: function(response) {
+                    console.log(response);
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
         })
 
         // save departments edit
