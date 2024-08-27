@@ -57,6 +57,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/manage/contents/materials/pdfs','loadPdfs')->name('admin.manage.pdf.list');
         Route::get('/admin/manage/contents/universites/departments','loadDepartments')->name('admin.manage.department.list');
         Route::get('/admin/manage/contents/universites/departments/update/{slug?}','loadUpdateDepartmentForm')->name('admin.manage.department.update');
+        Route::get('/admin/manage/admins/account','loadAdminsPage')->name('admin.users');
     });
 
     // controller for update queries

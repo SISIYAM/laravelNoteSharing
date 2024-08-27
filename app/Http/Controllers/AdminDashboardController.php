@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\User;
 use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
@@ -349,6 +350,14 @@ class AdminDashboardController extends Controller
         
     }
     
+    // method for load admins list
+    public function loadAdminsPage(){
+        $thead = ['No','Name','Email','Role','Status','Last Login',''];
+        
+        $users = User::all();
+        
+        return view('admin.list',['key'=>'users','thead' => $thead, 'tableRow' => $users]);
+    }
    
 
 

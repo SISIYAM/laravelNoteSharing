@@ -220,7 +220,7 @@
             </tr>
         @endforeach
     @endsection
-@elseif ('departments')
+@elseif ($key == 'departments')
     @section('table-row')
         @foreach ($tableRow as $count => $row)
             <tr>
@@ -265,6 +265,53 @@
                                     <i class="fa fa-times"></i>
                                 </button>
                             </a>
+                        @endcan
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @endsection
+@elseif ($key == 'users')
+    @section('table-row')
+        @foreach ($tableRow as $count => $row)
+            <tr>
+                <td>{{ $count + 1 }}</td>
+                <td>{{ $row->name }}</td>
+                <td>{{ $row->email }}</td>
+
+                <td>{!! $row->role === 2 ? 'Admin' : 'Modarator' !!}</td>
+                <td>
+
+                    <div class="containerSwitch">
+                        @if ($row->status == 0)
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput">
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="badge badge-danger switchStatus">Deactivated</span>
+                        @else
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" checked>
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="badge badge-success switchStatus">Active</span>
+                        @endif
+
+                    </div>
+                </td>
+                <td>{{ $row->last_login ? $row->last_login->format('D m y h:i A') : 'not found' }}</td>
+
+                <td>
+                    <div class="form-button-action">
+                        <button type="button" data-bs-toggle="tooltip" title=""
+                            class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                            <i class="fa fa-edit"></i>
+                        </button>
+                        @can('isAdmin')
+                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                                data-original-title="Remove">
+                                <i class="fa fa-times"></i>
+                            </button>
                         @endcan
                     </div>
                 </td>

@@ -1,0 +1,78 @@
+.customSwitchLabel {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 34px;
+    transform: scale(0.8);
+}
+
+.customSwitchInput {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.customSwitchSlider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #f90930; /* Danger color */
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.customSwitchSlider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.customSwitchInput:checked + .customSwitchSlider {
+    background-color: #17c964; /* Success color */
+}
+
+.customSwitchInput:checked + .customSwitchSlider:before {
+    transform: translateX(34px);
+}
+
+.switchStatus {
+    font-size: 12px;
+    padding: 7px 10px;
+    color: white;
+    transform: scale(0.8);
+}
+
+.containerSwitch {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 50px;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.badge-success {
+    background-color: #17c964; /* Success color */
+}
+
+.badge-danger {
+    background-color: #f90930; /* Danger color */
+}

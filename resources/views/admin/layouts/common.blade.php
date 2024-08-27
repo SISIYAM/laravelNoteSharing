@@ -35,6 +35,7 @@
 
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/demo.css') }}" />
+    <link rel="stylesheet" href="{{ asset('admin-assets/css/customStyle.css') }}" />
 </head>
 
 <body>
@@ -177,9 +178,17 @@
                                             <span class="sub-item">Reviews</span>
                                         </a>
                                     </li>
+                                    @can('isAdmin')
+                                        <li>
+                                            <a href="{{ route('admin.users') }}">
+                                                <span class="sub-item">Manage Admins</span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                 </ul>
                             </div>
                         </li>
+
 
                     </ul>
                 </div>

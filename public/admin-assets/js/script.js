@@ -119,3 +119,27 @@ const checkBoxCount = () => {
         $("#switchBox").show();
     }
 };
+
+// admin list status switch toggle
+$(document).ready(function () {
+    $(".customSwitchInput").on("change", function () {
+        let $switchStatus = $(this)
+            .closest(".custom-switch")
+            .next(".switchStatus");
+
+        if ($(this).is(":checked")) {
+            $switchStatus
+                .removeClass("badge-danger")
+                .addClass("badge-success")
+                .text("Active");
+        } else {
+            $switchStatus
+                .removeClass("badge-success")
+                .addClass("badge-danger")
+                .text("Deactivated");
+        }
+    });
+
+    // Trigger the change event on page load
+    $(".customSwitchInput").trigger("change");
+});
