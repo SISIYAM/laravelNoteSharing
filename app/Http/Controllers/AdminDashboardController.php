@@ -358,6 +358,44 @@ class AdminDashboardController extends Controller
         
         return view('admin.list',['key'=>'users','thead' => $thead, 'tableRow' => $users]);
     }
+
+    // load departments for assign
+    public function loadFilterUniversity(Request $req){
+        // search in assign table 
+        $findAssignedDepartment = AssignUser::where('user_id',$req->user_id)
+                                    ->with('getDepartment')                                        
+                                    ->get();
+
+        $universities = Universitie::with('getDepartments')->get();
+        // Retrieve assigned department IDs for the user
+        $AssignDepartmentIds = AssignUser::where('user_id', $req->user_id)->pluck('department_id');
+
+        // fetch universities with filtered departments
+        $universities = Universitie::with(['getDepartments' => function ($query) use ($AssignDepartmentIds) {
+            if ($AssignDepartmentIds->isNotEmpty()) {
+                // If the user has assigned departments
+                $query->whereNotIn('id', $AssignDepartmentIds);
+            }
+        }])->get();
+        return response()->json(['status' => true, 'universities' => $universities,'assignedDepartments' => $findAssignedDepartment]);
+    }
+
+    // method for filter departments according to university
+    public function filterUniversityDepartment(Request $req){
+
+        // Retrieve assigned department IDs for the user
+        $AssignDepartmentIds = AssignUser::where('user_id',$req->user_id)->pluck('department_id');
+
+        if ($AssignDepartmentIds->isEmpty()) {
+            $findDept = Department::where('university_id', $req->university_id)->get();
+        } else {
+            $findDept = Department::where('university_id', $req->university_id)
+                                  ->whereNotIn('id', $AssignDepartmentIds)
+                                  ->get();
+        }
+
+        return response()->json(['status' => true, 'departments' => $findDept]);
+    }
    
 
 

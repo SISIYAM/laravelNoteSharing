@@ -486,4 +486,31 @@ class AdminUpdateController extends Controller
         }
 
     }
+
+    // method for assign department to user
+    public function assignDepartmentToUser(Request $req){
+
+        // first check if  user already assigned this department or not
+        foreach ($req->departments as $department) {
+            $checkUser = AssignUser::where('user_id',$req->user_id)
+                                    ->where('department_id',$department)
+                                    ->first();
+            
+            // if checkUser null then proceed
+            if(!$checkUser){
+                $assign = AssignUser::create([
+                    'user_id' => $req->user_id,
+                    'department_id' => $department,
+                ]);
+            }
+        }
+        
+        // search in assign table 
+        $findAssignedDepartment = AssignUser::where('user_id',$req->user_id)
+                                    ->with('getDepartment')                                        
+                                    ->get();
+
+        return response()->json(['status' => true, 'assignedDepartments' => $findAssignedDepartment]);
+ 
+    }
 }

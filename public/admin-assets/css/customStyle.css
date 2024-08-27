@@ -58,7 +58,7 @@
     align-items: center;
 }
 
-.badge {
+.custmBadge {
     display: inline-block;
     padding: 0.5em 1em;
     font-size: 16px;

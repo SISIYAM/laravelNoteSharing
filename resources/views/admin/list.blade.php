@@ -272,8 +272,67 @@
         @endforeach
     @endsection
 @elseif ($key == 'users')
+    <!-- assign modal -->
+    <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Assign Departments</h5>
+                    <button type="button" id="" class="close hideAssignModal" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="">
+
+                        <input type="hidden" value="" id="userId">
+                        <div class="form-group">
+                            <label for="email">Assigned Departments</label>
+                            <div class="shadow-lg p-3 bg-body rounded"
+                                style="display: flex; flex-direction:column; max-height:20vh; overflow-y:auto"
+                                id="assignedOutput">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="shadow-lg p-3 bg-body rounded">
+                                <label for="email">Filter University</label>
+                                <select name="" class="form-select" id="filterUniversity">
+                                    <option value="">Select University</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Assign New Departments</label>
+                            <div class="field shadow-lg p-3 mb-5 bg-body rounded"
+                                style="max-height:30vh; overflow-y:auto">
+                                <div style="display:flex;flex-direction:column;padding:5px;font-size: 15px"
+                                    id="notAassignedOutput">
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger hideAssignModal" data-dismiss="modal">Close</button>
+                    <button type="button" id="submitAssignForm" class="btn btn-primary" disabled>Update</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- End assign  modal -->
     @section('table-row')
         @foreach ($tableRow as $count => $row)
+            @if ($row->id == $authUser->id)
+                @continue;
+            @endif
             <tr>
                 <td>{{ $count + 1 }}</td>
                 <td>{{ $row->name }}</td>
@@ -288,13 +347,13 @@
                                 <input type="checkbox" class="customSwitchInput">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="badge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="badge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus">Active</span>
                         @endif
 
                     </div>
@@ -303,9 +362,9 @@
 
                 <td>
                     <div class="form-button-action">
-                        <button type="button" data-bs-toggle="tooltip" title=""
-                            class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
-                            <i class="fa fa-edit"></i>
+                        <button value="{{ $row->id }}" type="button" data-bs-toggle="tooltip" title=""
+                            class="btn btn-link btn-primary btn-lg showAssignDeptBtn" data-original-title="Edit Task">
+                            <span class="badge bg-primary">assign</span>
                         </button>
                         @can('isAdmin')
                             <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
@@ -352,6 +411,203 @@
 
 @push('script')
     <script>
+        // assign departments to users modal code
+
+        // show assign department modal
+        $(document).on('click', '.showAssignDeptBtn', function(e) {
+            e.preventDefault();
+            const userId = $(this).val();
+            $("#userId").val(userId);
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.load.filter.university') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    user_id: userId,
+                },
+                success: function(response) {
+                    let university = "";
+                    let departments = "";
+                    let assignedDepartments = "";
+                    console.log(response);
+                    response.universities.forEach(element => {
+                        university += `<option value="${element.id}">${element.name}</option>`;
+                    });
+
+                    response.universities[0].get_departments.forEach(value => {
+                        departments += `<div style="display:flex;align-items:center;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input isDepartmentCheck" type="checkbox" value=${value.id} role="switch"
+                                                id="">
+                                            <label class="form-check-label" for="">${value.department} </label>
+                                        </div>
+                                    </div>`
+                    });
+
+                    // loop for assigned departments
+                    response.assignedDepartments.forEach(element => {
+                        assignedDepartments += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
+                                radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
+                                radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
+                                radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
+                                linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
+                                linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
+                                radial-gradient(#2ad10c 0%, #48abe0 100%);
+                                border-radius: 7px;
+                                padding: 8px;
+                                box-sizing: border-box;">
+                                <span>${element.get_department.department}</span>
+                                <button class="badge bg-danger removeAssignedPdf" value="${element.get_department.id}">Remove</button>
+                                </div>`
+
+                    });
+
+                    if (assignedDepartments == "") {
+                        assignedDepartments = `<p class="
+                        alert alert-danger ">No departments assigned yet!</p>`;
+                    }
+
+                    if (departments == "") {
+                        departments = `<p class="
+                        alert alert-danger ">No departments added yet!</p>`;
+                    }
+
+                    $("#assignedOutput").html(assignedDepartments);
+                    $("#filterUniversity").html(university);
+                    $("#notAassignedOutput").html(departments);
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
+
+            $("#assignModal").modal('show');
+        });
+
+        // filter departments according to university
+        $(document).on('change', '#filterUniversity', function(e) {
+            e.preventDefault();
+            const university_id = $(this).val();
+            const user_id = $("#userId").val();
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.filter.university.department') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    university_id,
+                    user_id,
+
+                },
+                success: function(response) {
+                    let departments = "";
+                    response.departments.forEach(value => {
+                        departments += `<div style="display:flex;align-items:center;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input isDepartmentCheck" type="checkbox" value=${value.id} role="switch"
+                                                id="">
+                                            <label class="form-check-label" for="">${value.department} </label>
+                                        </div>
+                                    </div>`
+                    });
+
+                    if (departments == "") {
+                        departments = `<p class="
+                        alert alert-danger ">No departments added yet!</p>`;
+                    }
+
+                    $("#notAassignedOutput").html(departments);
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
+        })
+
+        // enable assign departments form submit btn
+        $(document).on("click", ".isDepartmentCheck", function(e) {
+            const departments = [];
+            $(".isDepartmentCheck:checked").each(function() {
+                departments.push($(this).val());
+            });
+
+            if (!jQuery.isEmptyObject(departments)) {
+                $("#submitAssignForm").removeAttr('disabled');
+            } else {
+                $("#submitAssignForm").attr('disabled',
+                    'disabled');
+            }
+        });
+
+        // submit assign department form
+        $(document).on('click', '#submitAssignForm', function(e) {
+            e.preventDefault();
+            const user_id = $('#userId').val();
+
+            // Collect all  assigned departments id into an array
+            const departments = [];
+            $(".isDepartmentCheck:checked").each(function() {
+                departments.push($(this).val());
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.ajax.assign.department') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    user_id,
+                    departments,
+                },
+                success: function(response) {
+                    let assignedDepartments = "";
+                    console.log(response);
+                    // loop for assigned departments
+                    response.assignedDepartments.forEach(element => {
+                        assignedDepartments += `<div class="d-flex my-2" style="background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 4px, transparent 4px) 0% 0%/7px 7px no-repeat,
+                                radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 4px, transparent 4px) 100% 0%/7px 7px no-repeat,
+                                radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 4px, transparent 4px) 0% 100%/7px 7px no-repeat,
+                                radial-gradient(circle at 0 0, #ffffff 0, #ffffff 4px, transparent 4px) 100% 100%/7px 7px no-repeat,
+                                linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 6px) calc(100% - 14px) no-repeat,
+                                linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 14px) calc(100% - 6px) no-repeat,
+                                radial-gradient(#2ad10c 0%, #48abe0 100%);
+                                border-radius: 7px;
+                                padding: 8px;
+                                box-sizing: border-box;">
+                                <span>${element.get_department.department}</span>
+                                <button class="badge bg-danger removeAssignedPdf" value="${element.get_department.id}">Remove</button>
+                                </div>`
+
+                    });
+
+                    if (assignedDepartments == "") {
+                        assignedDepartments = `<p class="
+                        alert alert-danger ">No departments assigned yet!</p>`;
+                    }
+
+                    $("#assignedOutput").html(assignedDepartments)
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
+        })
+
+        // hide assign department modal
+        $(document).on('click', '.hideAssignModal', function(e) {
+            e.preventDefault();
+            $("#assignModal").modal('hide');
+        })
+
+        // assign departments to users modal code end
+
+
         // delete university
         $(document).on('click', '.deleteUniversityBtn', function() {
 
