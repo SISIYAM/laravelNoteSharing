@@ -75,7 +75,7 @@ $(document).ready(function () {
 
     $(document).on("click", "#addDynamicSemesterBtn", function () {
         const newField = `<div class="mb-3"><input type="text" name="newSemester[]" id="" class="form-control" placeholder="Enter" aria-describedby="helpId" />
-    <button class="badge bg-danger my-1 removeDynamicSemester">Remove</button><hr></div>`;
+    <button type="button" class="badge bg-danger my-1 removeDynamicSemester">Remove</button><hr></div>`;
         $("#dynamicSemester").show();
         $("#dynamicSemesterAppend").append(newField);
     });

@@ -619,6 +619,7 @@
 
                         $("#appendAfterInsert").html(newOutput);
                         $("#selectedDeleteBtn").hide();
+                        $("#switchBox").hide();
                         $("#checkedCount").html("");
                         console.log(response);
                     },
