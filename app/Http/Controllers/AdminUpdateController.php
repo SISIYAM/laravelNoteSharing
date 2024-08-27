@@ -505,12 +505,19 @@ class AdminUpdateController extends Controller
             }
         }
         
-        // search in assign table 
+        // search for the assigned departments 
         $findAssignedDepartment = AssignUser::where('user_id',$req->user_id)
                                     ->with('getDepartment')                                        
                                     ->get();
 
-        return response()->json(['status' => true, 'assignedDepartments' => $findAssignedDepartment]);
+        // get the IDs of the assigned departments
+        $assignedDepartmentIds = $findAssignedDepartment->pluck('department_id');
+
+        // find departments that are not assigned to the user for the given university
+        $availableDepartments = Department::where('university_id', $req->university_id)
+                                   ->whereNotIn('id', $assignedDepartmentIds)
+                                   ->get();                            
+        return response()->json(['status' => true,'id'=>$req->university_id, 'assignedDepartments' => $findAssignedDepartment,'departments' => $availableDepartments]);
  
     }
 }

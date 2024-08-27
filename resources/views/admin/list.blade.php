@@ -288,6 +288,7 @@
                     <form id="">
 
                         <input type="hidden" value="" id="userId">
+                        <input type="hidden" value="" id="universityId">
                         <div class="form-group">
                             <label for="email">Assigned Departments</label>
                             <div class="shadow-lg p-3 bg-body rounded"
@@ -477,6 +478,8 @@
                     $("#filterUniversity").html(university);
                     $("#notAassignedOutput").html(departments);
 
+                    // assign first loaded university id into universityId field
+                    $("#universityId").val(response.universities[0].id);
                 },
                 error: function(xhr) {
                     // Handle error
@@ -491,6 +494,7 @@
         $(document).on('change', '#filterUniversity', function(e) {
             e.preventDefault();
             const university_id = $(this).val();
+            $("#universityId").val(university_id);
             const user_id = $("#userId").val();
 
             $.ajax({
@@ -548,6 +552,7 @@
         $(document).on('click', '#submitAssignForm', function(e) {
             e.preventDefault();
             const user_id = $('#userId').val();
+            const university_id = $("#universityId").val();
 
             // Collect all  assigned departments id into an array
             const departments = [];
@@ -562,9 +567,11 @@
                     _token: "{{ csrf_token() }}", // Include CSRF token
                     user_id,
                     departments,
+                    university_id,
                 },
                 success: function(response) {
                     let assignedDepartments = "";
+                    let departments = "";
                     console.log(response);
                     // loop for assigned departments
                     response.assignedDepartments.forEach(element => {
@@ -584,11 +591,30 @@
 
                     });
 
+                    // loop for available departments
+                    response.departments.forEach(value => {
+                        departments += `<div style="display:flex;align-items:center;">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input isDepartmentCheck" type="checkbox" value=${value.id} role="switch"
+                                                id="">
+                                            <label class="form-check-label" for="">${value.department} </label>
+                                        </div>
+                                    </div>`
+                    });
+
+                    if (departments == "") {
+                        departments = `<p class="
+                        alert alert-danger ">No departments added yet!</p>`;
+                    }
+
+
+
                     if (assignedDepartments == "") {
                         assignedDepartments = `<p class="
                         alert alert-danger ">No departments assigned yet!</p>`;
                     }
 
+                    $("#notAassignedOutput").html(departments);
                     $("#assignedOutput").html(assignedDepartments)
 
                 },
