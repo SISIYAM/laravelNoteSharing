@@ -7,6 +7,7 @@ use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
 use App\Models\Semister;
+use App\Models\AssignUser;
 use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
@@ -206,5 +207,36 @@ class AdminDeleteController extends Controller
         return redirect()->route('admin.manage.department.list')->with(['delete' => $title.' has been deleted!']); 
     }
 
+    // method for delete assigned department
+    public function removeAssignedDepartment(Request $req) {
+        // search assigned users 
+        $assignUser = AssignUser::find($req->id);
+        
+        if ($assignUser) {
+            $assignUser->delete();
+        } else {
+            return response()->json(['status' => false, 'message' => 'Assignment not found']);
+        }
+    
+        // retrieve the updated list of assigned departments for the user
+        $findAssignedDepartment = AssignUser::where('user_id', $req->user_id)
+                                            ->with('getDepartment')
+                                            ->get();
+    
+        // get the IDs of the assigned departments
+        $assignedDepartmentIds = $findAssignedDepartment->pluck('department_id');
+    
+        // retrieve departments that are not assigned to the user for the given university
+        $availableDepartments = Department::where('university_id', $req->university_id)
+                                          ->whereNotIn('id', $assignedDepartmentIds)
+                                          ->get();
+    
+        return response()->json([
+            'status' => true,
+            'assignedDepartments' => $findAssignedDepartment,
+            'departments' => $availableDepartments
+        ]);
+    }
+    
 
 }
