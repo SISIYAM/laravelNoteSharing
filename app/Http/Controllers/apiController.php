@@ -178,42 +178,86 @@ class apiController extends Controller
     }
 
     // method for search 
-    public function fetchSearch(string $query = null){
+    // public function fetchSearch(string $query = null){
  
-        $search = Material::with(['getAuthor', 'getUniversity', 'getSemester','getPdf'])
-        ->where('status',1) // Ensure status is 1 
-        ->where('title', 'like', "%$query%")
-        ->orWhere('description', 'like', "%$query%")
-        ->orWhere('slug','like',"%$query%")
-        ->orWhereHas('getAuthor', function($q) use ($query) {
-            $q->where('name', 'like', "%$query%");
-        })
-        ->orWhereHas('getUniversity', function($q) use ($query) {
-            $q->where('name', 'like', "%$query%")
-            ->orWhere('slug','like',"%$query%");
-        })
-        ->orWhereHas('getSemester', function($q) use ($query) {
-            $q->where('semister_name', 'like', "%$query%");
-        })
-        ->orWhereHas('getPdf', function($q) use ($query){
-            $q->where('title','like',"%$query%")
-            ->orWhere('slug','like',"%$query%");
-        })
-        ->get();
+    //     $search = Material::with(['getAuthor', 'getUniversity', 'getSemester','getPdf'])
+    //     ->where('status',1) // Ensure status is 1 
+    //     ->where('title', 'like', "%$query%")
+    //     ->orWhere('description', 'like', "%$query%")
+    //     ->orWhere('slug','like',"%$query%")
+    //     ->orWhereHas('getAuthor', function($q) use ($query) {
+    //         $q->where('name', 'like', "%$query%");
+    //     })
+    //     ->orWhereHas('getUniversity', function($q) use ($query) {
+    //         $q->where('name', 'like', "%$query%")
+    //         ->orWhere('slug','like',"%$query%");
+    //     })
+    //     ->orWhereHas('getSemester', function($q) use ($query) {
+    //         $q->where('semister_name', 'like', "%$query%");
+    //     })
+    //     ->orWhereHas('getPdf', function($q) use ($query){
+    //         $q->where('title','like',"%$query%")
+    //         ->orWhere('slug','like',"%$query%");
+    //     })
+    //     ->get();
         
-        if(count($search) != null){
+    //     if(count($search) != null){
+    //         return response()->json([
+    //             'status' => true,
+    //             'search' => $search,
+    //         ]);
+    //     }else{
+    //         return response()->json([
+    //             'status' => false,
+    //             'status_code' => 404,
+    //             'message' => $query." not found!",
+    //         ]);
+    //     }
+    // }
+    public function fetchSearch(string $query = null){
+        $search = Material::with(['getAuthor', 'getUniversity', 'getSemester.getDepartment', 'getPdf'])
+            ->where('status', 1) // Ensure status is 1
+            ->whereHas('getSemester',function($sem){ // ensure department is active
+                $sem->whereHas('getDepartment',function($d){
+                    $d->where('status',1);
+                });
+            })
+            ->where(function ($queryBuilder) use ($query) {
+                // Group all search conditions
+                $queryBuilder->where('title', 'like', "%$query%")
+                    ->orWhere('description', 'like', "%$query%")
+                    ->orWhere('slug', 'like', "%$query%")
+                    ->orWhereHas('getAuthor', function($q) use ($query) {
+                        $q->where('name', 'like', "%$query%");
+                    })
+                    ->orWhereHas('getUniversity', function($q) use ($query) {
+                        $q->where('name', 'like', "%$query%")
+                            ->orWhere('slug', 'like', "%$query%");
+                    })
+                    ->orWhereHas('getSemester', function($q) use ($query) {
+                        $q->where('semister_name', 'like', "%$query%");
+                    })
+                    ->orWhereHas('getPdf', function($q) use ($query) {
+                        $q->where('title', 'like', "%$query%")
+                            ->orWhere('slug', 'like', "%$query%");
+                    });
+            })
+            ->get();
+    
+        if ($search->isNotEmpty()) {
             return response()->json([
                 'status' => true,
                 'search' => $search,
             ]);
-        }else{
+        } else {
             return response()->json([
                 'status' => false,
                 'status_code' => 404,
-                'message' => $query." not found!",
+                'message' => "$query not found!",
             ]);
         }
     }
+    
 
     // method for fetch faculties
     public function fetchFaculties () {
