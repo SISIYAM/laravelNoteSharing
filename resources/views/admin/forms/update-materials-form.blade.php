@@ -567,6 +567,28 @@
             } else {
                 $("#status").val(0);
             }
+
+            const status = $("#status").val();
+            const materialID = $("#materialID").val();
+            // call ajax
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.ajax.status') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id: materialID,
+                    key: "material",
+                    status: status,
+                },
+                success: function(response) {
+                    console.log(response);
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
         })
     </script>
 @endpush

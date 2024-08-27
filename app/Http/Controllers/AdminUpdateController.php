@@ -469,6 +469,20 @@ class AdminUpdateController extends Controller
             ]);
 
             return response()->json(['success' => true, 'status' => $req->status]);
+        }elseif($req->key === 'department'){
+            $find = Department::findOrFail($req->id);
+            $find->update([
+                'status' => $req->status,
+            ]);
+
+            return response()->json(['success' => true, 'status' => $req->status]);
+        }elseif($req->key === 'material'){
+            $find = Material::findOrFail($req->id);
+            $find->update([
+                'status' => $req->status,
+            ]);
+
+            return response()->json(['success' => true, 'status' => $req->status]);
         }
 
     }

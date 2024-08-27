@@ -201,6 +201,28 @@
             } else {
                 $("#status").val(0);
             }
+
+            const status = $("#status").val();
+            const departmentID = $("#departmentID").val();
+            // call ajax
+            $.ajax({
+                type: "POST",
+                url: "{{ route('admin.ajax.status') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id: departmentID,
+                    key: "department",
+                    status: status,
+                },
+                success: function(response) {
+                    console.log(response);
+
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
         })
 
         // show assign modal
