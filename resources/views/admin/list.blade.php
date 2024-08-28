@@ -18,11 +18,24 @@
                 </td>
                 <td>{{ $row->author }}</td>
                 <td>
-                    @if ($row->status == 0)
-                        <button class="badge bg-danger">Deactivated</button>
-                    @else
-                        <button class="badge bg-success">Active</button>
-                    @endif
+                    <div class="containerSwitch">
+                        @if ($row->status == 0)
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="university">
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                        @else
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="university" checked>
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-success switchStatus">Active</span>
+                        @endif
+
+                    </div>
                 </td>
                 <td>
                     <div class="form-button-action">
@@ -90,11 +103,24 @@
                     @endisset
                 </td>
                 <td>
-                    @if ($row->status == 0)
-                        <button class="badge bg-danger">Deactivated</button>
-                    @else
-                        <button class="badge bg-success">Active</button>
-                    @endif
+                    <div class="containerSwitch">
+                        @if ($row->status == 0)
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="material">
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                        @else
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="material" checked>
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-success switchStatus">Active</span>
+                        @endif
+
+                    </div>
                 </td>
                 <td>
                     <div class="form-button-action">
@@ -125,11 +151,24 @@
                 <td>{{ $row->post }}</td>
                 <td>{{ $row->author }}</td>
                 <td>
-                    @if ($row->status == 0)
-                        <button class="badge bg-danger">Deactivated</button>
-                    @else
-                        <button class="badge bg-success">Active</button>
-                    @endif
+                    <div class="containerSwitch">
+                        @if ($row->status == 0)
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="faculty">
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                        @else
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="faculty" checked>
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-success switchStatus">Active</span>
+                        @endif
+
+                    </div>
                 </td>
                 <td>
                     <div class="form-button-action">
@@ -170,8 +209,8 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
-                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
-                                data-original-title="Remove">
+                            <button type="button" data-bs-toggle="tooltip" title=""
+                                class="btn btn-link btn-danger" data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
                         </a>
@@ -210,8 +249,8 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.delete.pdfs', $row->id) }}" onclick="return confirm('Are you sure?')">
-                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
-                                data-original-title="Remove">
+                            <button type="button" data-bs-toggle="tooltip" title=""
+                                class="btn btn-link btn-danger" data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
                         </a>
@@ -243,11 +282,26 @@
                 </td>
                 <td>{{ $row->author }}</td>
                 <td>
-                    @if ($row->status == 0)
-                        <button class="badge bg-danger">Deactivated</button>
-                    @else
-                        <button class="badge bg-success">Active</button>
-                    @endif
+                    <input type="hidden" class="statusKey" value="department">
+                    <div class="containerSwitch">
+                        @if ($row->status == 0)
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="department">
+                                <span class="slider customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                        @else
+                            <label class="custom-switch customSwitchLabel">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="department" checked>
+                                <span class="slider
+                                    customSwitchSlider"></span>
+                            </label>
+                            <span class="custmBadge badge-success switchStatus">Active</span>
+                        @endif
+
+                    </div>
                 </td>
                 <td>
                     <div class="form-button-action">
@@ -260,8 +314,8 @@
                         @can('isAdmin')
                             <a href="{{ route('admin.delete.list.department', $row->id) }}"
                                 onclick="return confirm('Are you sure?')">
-                                <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
-                                    data-original-title="Remove">
+                                <button type="button" data-bs-toggle="tooltip" title=""
+                                    class="btn btn-link btn-danger" data-original-title="Remove">
                                     <i class="fa fa-times"></i>
                                 </button>
                             </a>
@@ -315,10 +369,7 @@
 
                                 </div>
                             </div>
-
                         </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger hideAssignModal" data-dismiss="modal">Close</button>
@@ -345,13 +396,15 @@
                     <div class="containerSwitch">
                         @if ($row->status == 0)
                             <label class="custom-switch customSwitchLabel">
-                                <input type="checkbox" class="customSwitchInput">
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="user">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
                             <span class="custmBadge badge-danger switchStatus">Deactivated</span>
                         @else
                             <label class="custom-switch customSwitchLabel">
-                                <input type="checkbox" class="customSwitchInput" checked>
+                                <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
+                                    data-key="user" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
                             <span class="custmBadge badge-success switchStatus">Active</span>
@@ -688,7 +741,11 @@
 
                     $("#notAassignedOutput").html(departments);
                     $("#assignedOutput").html(assignedDepartments)
-                }
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
             });
         });
 
@@ -699,6 +756,34 @@
         })
 
         // assign departments to users modal code end
+
+
+        // handle status update 
+        $(document).on('click', '.customSwitchInput', function(e) {
+
+            const id = $(this).data('id');
+            const key = $(this).data('key');
+            const status = $(this).is(':checked') ? 1 : 0;
+
+            $.ajax({
+                type: "post",
+                url: "{{ route('admin.update.list.status') }}",
+                data: {
+                    _token: "{{ csrf_token() }}", // Include CSRF token
+                    id,
+                    key,
+                    status,
+                },
+
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr) {
+                    // Handle error
+                    console.log(xhr);
+                },
+            });
+        })
 
 
         // delete university

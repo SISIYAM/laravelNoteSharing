@@ -520,4 +520,26 @@ class AdminUpdateController extends Controller
         return response()->json(['status' => true,'id'=>$req->university_id, 'assignedDepartments' => $findAssignedDepartment,'departments' => $availableDepartments]);
  
     }
+
+    // method for handle status update 
+    public function updateListStatus(Request $req){
+        
+        if($req->key === 'university'){
+            $search = Universitie::where('id',$req->id)->first();
+        }elseif($req->key === 'department'){
+            $search = Department::where('id',$req->id)->first();
+        }elseif($req->key === 'material'){
+            $search = Material::where('id',$req->id)->first();
+        }elseif($req->key === 'faculty'){
+            $search = Facultie::where('id',$req->id)->first();
+        }elseif($req->key === 'user'){
+            $search = User::where('id',$req->id)->first();
+        }
+
+        $search->update([
+            'status' => $req->status 
+        ]);
+
+        return response()->json(['status' => $req->status]);
+    }
 }

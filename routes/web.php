@@ -78,6 +78,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::put('/admin/manage/contents/universities/department/update/{slug?}','adminUpdateDepartment')->name('admin.update.department');
         Route::post('/admin/ajax/update/status','updateStatus')->name('admin.ajax.status');
         Route::post('/admin/ajax/assign/user/department','assignDepartmentToUser')->name('admin.ajax.assign.department');
+        Route::post('/admin/ajax/update/list/status', 'updateListStatus')->name('admin.update.list.status');
         
     });
 
