@@ -3,7 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Pdf;
+use App\Models\Facultie;
+use App\Models\Semister;
 use App\Models\AssignUser;
+use App\Models\Department;
+use App\Models\Universitie;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -58,5 +63,25 @@ class User extends Authenticatable
 
     public function getAssigned(){
         return $this->hasMany(AssignUser::class,'user_id','id');
+    }
+
+    public function departments(){
+        return $this->hasMany(Department::class,'author','id');
+    }
+
+    public function univerisity(){
+        return $this->hasMany(Universitie::class,'author','id');
+    }
+
+    public function semester(){
+        return $this->hasMany(Semister::class,'author','id');
+    }
+
+    public function pdf(){
+        return $this->hasMany(Pdf::class,'author','id');
+    }
+
+    public function faculty(){
+        return $this->hasMany(Facultie::class,'author','id');
     }
 }

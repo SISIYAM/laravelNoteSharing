@@ -96,5 +96,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::post('/admin/delete/department/selected','deleteSelectedSemester')->name('admin.delete.department.selected');
         Route::get('/admin/delete/department/list/{id?}','deleteListDepartment')->name('admin.delete.list.department');
         Route::post('/admin/remove/assigned/department','removeAssignedDepartment')->name('admin.remove.assigned.department');
+        Route::post('/admin/delete/user/account', 'deleteUser')->name('admin.delete.user');
     });
 });

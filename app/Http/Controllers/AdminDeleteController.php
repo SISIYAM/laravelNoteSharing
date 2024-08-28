@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pdf;
+use App\Models\User;
 use App\Models\Review;
 use App\Models\Facultie;
 use App\Models\Material;
@@ -237,6 +238,45 @@ class AdminDeleteController extends Controller
             'departments' => $availableDepartments
         ]);
     }
+
+    // method for delete users
+    public function deleteUser(Request $req)
+{
+    $userId = $req->input('user_id');
+    $isDeleteMaterials = $req->input('isDeleteMaterials') === 'on';
+    $isDeletePdf = $req->input('isDeletePdf') === 'on';
+
+    $user = User::find($userId);
+
+    if (!$user) {
+        return response()->json(['message' => 'User not found'], 404);
+    }
+
+    // check if we should delete related materials
+    if ($isDeleteMaterials) {
+        $user->materials()->delete();
+    } else {
+        $user->materials()->update(['author' => null]);
+    }
+
+    // check if we should delete related PDFs
+    if ($isDeletePdf) {
+        $user->pdf()->delete();
+    } else {
+        $user->pdf()->update(['author' => null]);
+    }
+
+    // update other related models
+    $user->departments()->update(['author' => null]);
+    $user->univerisity()->update(['author' => null]);
+    $user->semester()->update(['author' => null]);
+    $user->faculty()->update(['author' => null]);
+
+    $user->delete();
+
+    return response()->json(['message' => 'User deleted successfully']);
+}
+
     
 
 }
