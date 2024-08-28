@@ -26,6 +26,12 @@
                         <h4 class="card-title">Departments</h4>
                     @elseif ($key == 'pdfs')
                         <h4 class="card-title">Pdfs</h4>
+                    @elseif ($key == 'users')
+                        <h4 class="card-title">Users</h4>
+                        <a href=""class="btn btn-primary btn-round ms-auto">
+                            <i class="fa fa-plus"></i>
+                            Add
+                        </a>
                     @endif
                 </div>
             </div>

@@ -352,9 +352,9 @@ class AdminDashboardController extends Controller
     
     // method for load admins list
     public function loadAdminsPage(){
-        $thead = ['No','Name','Email','Role','Status','Last Login',''];
+        $thead = ['No','Name','Email','Role','Assigned Departments','Status','Last Login',''];
         
-        $users = User::all();
+        $users = User::with('getAssigned')->get();
         
         return view('admin.list',['key'=>'users','thead' => $thead, 'tableRow' => $users]);
     }

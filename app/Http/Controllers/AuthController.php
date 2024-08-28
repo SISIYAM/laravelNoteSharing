@@ -35,13 +35,6 @@ class AuthController extends Controller
             'password' => $req->password,
         ]);
 
-        // $user  = new User();
-        // $user->name = $req->name;
-        // $user->email = $req->email;
-        // $user->password = $req->password;
-        // $user->save();
-
-        // return $user;
         return redirect()->route('admin.dashboard');
     }
 
@@ -56,7 +49,14 @@ class AuthController extends Controller
 
         $credential = $req->only('email','password');
         if(Auth::attempt($credential)){
+            $user = Auth::user();
+            
             if(Auth::user()->role == 2 || Auth::user()->role == 1 ){
+                
+                // update last login time
+                $user->last_login = now();
+                $user->save();
+
                 return redirect()->route('admin.dashboard');
             }else{
                 return redirect()->route('error.403');

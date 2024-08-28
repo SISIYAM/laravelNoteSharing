@@ -391,6 +391,7 @@
                 <td>{{ $row->email }}</td>
 
                 <td>{!! $row->role === 2 ? 'Admin' : 'Modarator' !!}</td>
+                <td class="text-center">{{ $row->getAssigned->count() }}</td>
                 <td>
 
                     <div class="containerSwitch">
@@ -412,7 +413,7 @@
 
                     </div>
                 </td>
-                <td>{{ $row->last_login ? $row->last_login->format('D m y h:i A') : 'not found' }}</td>
+                <td>{{ $row->last_login ? \Carbon\Carbon::parse($row->last_login)->diffForHumans() : 'not found' }}</td>
 
                 <td>
                     <div class="form-button-action">

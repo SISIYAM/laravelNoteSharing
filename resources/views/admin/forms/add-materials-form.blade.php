@@ -211,7 +211,7 @@
                         });
                     } else {
                         $('#semesterField').append(
-                            '<option value="">No departments added yet</option>');
+                            '<option value="">No semesters added yet</option>');
                     }
 
                 },
