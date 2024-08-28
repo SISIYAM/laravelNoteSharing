@@ -40,6 +40,10 @@ class AdminUpdateController extends Controller
 
     $pdf = Pdf::findOrFail($req->pdf_id);
 
+    // Check if 'author' is null and update it if necessary
+    if (is_null($pdf->author)) {
+        $pdf->author = $admin;
+    }
 
     if ($req->hasFile('pdf')) {
 
@@ -55,7 +59,8 @@ class AdminUpdateController extends Controller
             'pdf' => $path,
             'type' => 1,     // if type 1 then pdf
             'title' => $req->title,
-        ]);
+            'author' => $pdf->author
+        ]); 
     } else {
         if($req->drive != NULL){
             if (Storage::disk('public')->exists($pdf->pdf)) {
@@ -65,11 +70,13 @@ class AdminUpdateController extends Controller
                 'title' => $req->title,
                 'pdf' => $req->drive,
                 'type' => 2,     // if type 2 then google drive
+                'author' => $pdf->author,
             ]);
         }else{
             // Update title if no new file is uploaded
             $pdf->update([
                 'title' => $req->title,
+                'author' => $pdf->author,
             ]);
         }
 
@@ -98,10 +105,17 @@ class AdminUpdateController extends Controller
         ]);
 
         $material = Material::where(compact('slug'))->first();
+
+        // Check if 'author' is null and update it if necessary
+        if (is_null($material->author)) {
+            $material->author = $admin;
+        }
+
         $material->update([
             'title' => $req->title,
             'description' => $req->description,
             'status' => $req->status,
+            'author' => $material->author,
         ]);
 
         // Handle the file uploads
@@ -146,12 +160,23 @@ class AdminUpdateController extends Controller
 
     // method for update semester form using ajax
     public function updateSemesters(Request $req){
+
+       $admin = Auth::user()->id;
+
        $req->validate([
         'semester' => 'required|string',
        ]);
+
        $semester = Semister::findOrFail($req->id);
+
+       // Check if 'author' is null and update it if necessary
+        if (is_null($semester->author)) {
+            $semester->author = $admin;
+        }
+
        $semester->update([
         'semister_name' => $req->semester,
+        'author' => $semester->author,
        ]);
 
        return ['success' => $req->semester .' Updated Successfully!'];
@@ -208,13 +233,18 @@ class AdminUpdateController extends Controller
             $path = $university->image;
         }
 
+        // Check if 'author' is null and update it if necessary
+        if (is_null($university->author)) {
+            $university->author = $admin;
+        }
+
         $university->update([
             'name' => $req->name,
             'semester' => $semesterCount,
             'description' => $req->description,
             'status' => $req->status,
             'image' => $path,
-            'author' => $admin,
+            'author' => $university->author,
         ]);
 
         return redirect()->route('admin.form.update.university',$slug)->with('success',$req->name.' Updated Successfully!');
@@ -386,12 +416,23 @@ class AdminUpdateController extends Controller
 
     // method for update department
     public function updateDepartment(Request $req){
+
+        $admin = Auth::user()->id;
+
         $req->validate([
             'department' => 'required|string',
            ]);
+
            $department = Department::findOrFail($req->department_id);
+
+           // Check if 'author' is null and update it if necessary
+            if (is_null($department->author)) {
+                $department->author = $admin;
+            }
+
            $department->update([
             'department' => $req->department,
+            'author' => $department->author,
            ]);
     
            return ['success' => $req->department .' Updated Successfully!'];
@@ -423,6 +464,7 @@ class AdminUpdateController extends Controller
     // method for update department
     public function adminUpdateDepartment(Request $req, $slug){
         
+        $admin = Auth::user()->id;
         
         $req->validate([
             'department' => 'regex:/^[A-Za-z0-9\s\(\)\-_]+$/|required|min:2',
@@ -432,10 +474,16 @@ class AdminUpdateController extends Controller
 
         $findDept = Department::where(compact('slug'))->first();
 
+        // Check if 'author' is null and update it if necessary
+        if (is_null($findDept->author)) {
+            $findDept->author = $admin;
+        }
+
         $findDept->update([
             'university_id' => $req->university_id,
             'department' => $req->department,
             'status' => $req->status,
+            'author' => $findDept->author,
         ]);
 
         // After updating the department, update the materials and semesters table 
@@ -462,29 +510,39 @@ class AdminUpdateController extends Controller
     // method for update status
     public function updateStatus(Request $req){
         
-        // if university
-        if($req->key === 'university'){
-            $find = Universitie::findOrFail($req->id);
-            $find->update([
-                'status' => $req->status,
-            ]);
+        $admin = Auth::user()->id;
 
-            return response()->json(['success' => true, 'status' => $req->status]);
-        }elseif($req->key === 'department'){
-            $find = Department::findOrFail($req->id);
-            $find->update([
-                'status' => $req->status,
-            ]);
+        $find = null;
 
-            return response()->json(['success' => true, 'status' => $req->status]);
-        }elseif($req->key === 'material'){
-            $find = Material::findOrFail($req->id);
-            $find->update([
-                'status' => $req->status,
-            ]);
+        // Find the model based on the key
+        switch ($req->key) {
+            case 'university':
+                $find = Universitie::findOrFail($req->id);
+                break;
 
-            return response()->json(['success' => true, 'status' => $req->status]);
+            case 'department':
+                $find = Department::findOrFail($req->id);
+                break;
+
+            case 'material':
+                $find = Material::findOrFail($req->id);
+                break;
+
+            default:
+                return response()->json(['success' => false, 'message' => 'Invalid key'], 400);
         }
+
+        
+        if (is_null($find->author)) {
+            $find->author = $admin;
+        }
+
+        $find->update([
+            'status' => $req->status,
+            'author' => $find->author 
+        ]);
+
+        return response()->json(['success' => true, 'status' => $req->status]);
 
     }
 
@@ -525,20 +583,41 @@ class AdminUpdateController extends Controller
     // method for handle status update 
     public function updateListStatus(Request $req){
         
-        if($req->key === 'university'){
-            $search = Universitie::where('id',$req->id)->first();
-        }elseif($req->key === 'department'){
-            $search = Department::where('id',$req->id)->first();
-        }elseif($req->key === 'material'){
-            $search = Material::where('id',$req->id)->first();
-        }elseif($req->key === 'faculty'){
-            $search = Facultie::where('id',$req->id)->first();
-        }elseif($req->key === 'user'){
-            $search = User::where('id',$req->id)->first();
+        $admin = Auth::user()->id;
+
+
+        // Find the model based on the key
+        switch ($req->key) {
+            case 'university':
+                $search = Universitie::find($req->id);
+                break;
+            case 'department':
+                $search = Department::find($req->id);
+                break;
+            case 'material':
+                $search = Material::find($req->id);
+                break;
+            case 'faculty':
+                $search = Facultie::find($req->id);
+                break;
+            case 'user':
+                $search = User::find($req->id);
+                break;
+
+            default:
+            return response()->json(['success' => false, 'message' => 'Invalid key'], 400);
+            
+        }
+
+        
+
+        if (is_null($search->author)) {
+            $search->author = $admin;
         }
 
         $search->update([
-            'status' => $req->status 
+            'status' => $req->status, 
+            'author' => $search->author
         ]);
 
         return response()->json(['status' => $req->status]);

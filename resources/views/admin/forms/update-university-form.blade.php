@@ -18,9 +18,13 @@
                         </div>
                         <div class="form-group">
                             <label for="">Status</label>
-                            <div class="form-check form-switch">
-                                <input style="transform: scale(2);" class="form-check-input" type="checkbox" role="switch"
-                                    id="statusSwitch" {{ $data->status == 1 ? 'checked' : '' }}>
+                            <div class="flex">
+                                <label class="switch-label">
+                                    <input type="checkbox" class="switch-input" id="statusSwitch"
+                                        {{ $data->status == 1 ? 'checked' : '' }} />
+                                    <span class="switch-slider"></span>
+                                </label>
+
                             </div>
                             <input type="hidden" name="status" id="status"
                                 value="{{ $data->status == 1 ? '1' : '0' }}">
