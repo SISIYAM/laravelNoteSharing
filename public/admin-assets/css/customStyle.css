@@ -67,6 +67,7 @@
     color: white;
     text-align: center;
     vertical-align: middle;
+    transform: scale(0.5);
 }
 
 .badge-success {

@@ -41,30 +41,38 @@ class AuthController extends Controller
     // function for login
     public function adminLogin(Request $req){
 
-        // validate form input
         $req->validate([
             'email' => 'string|required|email',
-            'password' => 'string|required'
+            'password' => 'string|required',
         ]);
-
-        $credential = $req->only('email','password');
-        if(Auth::attempt($credential)){
+    
+        $credential = $req->only('email', 'password');
+    
+        if (Auth::attempt($credential)) {
             $user = Auth::user();
             
-            if(Auth::user()->role == 2 || Auth::user()->role == 1 ){
-                
-                // update last login time
-                $user->last_login = now();
-                $user->save();
-
-                return redirect()->route('admin.dashboard');
-            }else{
-                return redirect()->route('error.403');
+            // check if the user's status is active
+            if ($user->status == 1) {
+                // check if the user has the right role
+                if ($user->role == 2 || $user->role == 1) {
+                    // update last login time
+                    $user->last_login = now();
+                    $user->save();
+    
+                    return redirect()->route('admin.dashboard');
+                } else {
+                    return redirect()->route('error.403');
+                }
+            } else {
+                // if status is 0, log the user out and redirect with an error
+                Auth::logout();
+                return redirect()->route('admin.load.login')->with('error', 'Your account is deactivated. Please contact the administrator.');
             }
-        }else{
-            return redirect()->route('admin.load.login')->with('error','Email and password is incorrect');
+        } else {
+            return redirect()->route('admin.load.login')->with('error', 'Email and password are incorrect.');
         }
     }
+    
 
     // method for logout
     public function logout(Request $req){

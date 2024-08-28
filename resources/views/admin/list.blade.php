@@ -25,14 +25,16 @@
                                     data-key="university">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus"><i class="fa fa-circle-o"
+                                    aria-hidden="true"></i></span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
                                     data-key="university" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus"><i class="fa fa-circle"
+                                    aria-hidden="true"></i></span>
                         @endif
 
                     </div>
@@ -40,13 +42,13 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.form.update.university', $row->slug) }}">
-                            <button type="button" data-bs-toggle="tooltip" title=""
-                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="badge-secondary"
+                                data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </a>
                         <button type="button" data-bs-toggle="tooltip" title=""
-                            class="btn btn-link btn-danger deleteUniversityBtn" value="{{ $row->id }}"
+                            class="badge-danger deleteUniversityBtn mx-1" value="{{ $row->id }}"
                             data-original-title="Remove">
                             <i class="fa fa-times"></i>
                         </button>
@@ -110,14 +112,16 @@
                                     data-key="material">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus"><i class="fa fa-circle-o"
+                                    aria-hidden="true"></i></span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
                                     data-key="material" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus"><i class="fa fa-circle"
+                                    aria-hidden="true"></i></span>
                         @endif
 
                     </div>
@@ -125,12 +129,12 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.update.materials.form', $row->slug) }}"><button type="button"
-                                data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg"
+                                data-bs-toggle="tooltip" title="" class="badge-secondary"
                                 data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button></a>
                         <button type="button" data-bs-toggle="tooltip" title=""
-                            class="btn btn-link btn-danger MaterialDeleteBtn" value="{{ $row->id }}"
+                            class="badge-danger mx-1 MaterialDeleteBtn" value="{{ $row->id }}"
                             data-original-title="Remove">
                             <i class="fa fa-times"></i>
                         </button>
@@ -158,14 +162,16 @@
                                     data-key="faculty">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus"><i class="fa fa-circle-o"
+                                    aria-hidden="true"></i></span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
                                     data-key="faculty" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus"><i class="fa fa-circle"
+                                    aria-hidden="true"></i></span>
                         @endif
 
                     </div>
@@ -173,13 +179,13 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.form.update.faculties', $row->slug) }}"><button type="button"
-                                data-bs-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg"
+                                data-bs-toggle="tooltip" title="" class="badge-secondary"
                                 data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button></a>
                         <a href="{{ route('admin.delete.faculties', $row->slug) }}"
                             onclick="return confirm('Are you sure?')">
-                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
+                            <button type="button" data-bs-toggle="tooltip" title="" class="badge-danger mx-1"
                                 data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
@@ -208,9 +214,10 @@
 
                 <td>
                     <div class="form-button-action">
-                        <a href="{{ route('admin.delete.reviews', $row->id) }}" onclick="return confirm('Are you sure?')">
-                            <button type="button" data-bs-toggle="tooltip" title=""
-                                class="btn btn-link btn-danger" data-original-title="Remove">
+                        <a href="{{ route('admin.delete.reviews', $row->id) }}"
+                            onclick="return confirm('Are you sure?')">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="badge-danger"
+                                data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
                         </a>
@@ -249,8 +256,8 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.delete.pdfs', $row->id) }}" onclick="return confirm('Are you sure?')">
-                            <button type="button" data-bs-toggle="tooltip" title=""
-                                class="btn btn-link btn-danger" data-original-title="Remove">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="badge-danger"
+                                data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
                         </a>
@@ -290,7 +297,8 @@
                                     data-key="department">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus"><i class="fa fa-circle-o"
+                                    aria-hidden="true"></i></span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
@@ -298,7 +306,8 @@
                                 <span class="slider
                                     customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus"><i class="fa fa-circle"
+                                    aria-hidden="true"></i></span>
                         @endif
 
                     </div>
@@ -306,16 +315,16 @@
                 <td>
                     <div class="form-button-action">
                         <a href="{{ route('admin.manage.department.update', $row->slug) }}">
-                            <button type="button" data-bs-toggle="tooltip" title=""
-                                class="btn btn-link btn-primary btn-lg" data-original-title="Edit Task">
+                            <button type="button" data-bs-toggle="tooltip" title="" class="badge-secondary"
+                                data-original-title="Edit Task">
                                 <i class="fa fa-edit"></i>
                             </button>
                         </a>
                         @can('isAdmin')
                             <a href="{{ route('admin.delete.list.department', $row->id) }}"
                                 onclick="return confirm('Are you sure?')">
-                                <button type="button" data-bs-toggle="tooltip" title=""
-                                    class="btn btn-link btn-danger" data-original-title="Remove">
+                                <button type="button" data-bs-toggle="tooltip" title="" class="badge-danger mx-1"
+                                    data-original-title="Remove">
                                     <i class="fa fa-times"></i>
                                 </button>
                             </a>
@@ -386,7 +395,7 @@
                 @continue;
             @endif
             <tr>
-                <td>{{ $count + 1 }}</td>
+                <td>{{ $count }}</td>
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->email }}</td>
 
@@ -401,33 +410,40 @@
                                     data-key="user">
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-danger switchStatus">Deactivated</span>
+                            <span class="custmBadge badge-danger switchStatus"><i class="fa fa-circle-o"
+                                    aria-hidden="true"></i></span>
                         @else
                             <label class="custom-switch customSwitchLabel">
                                 <input type="checkbox" class="customSwitchInput" data-id="{{ $row->id }}"
                                     data-key="user" checked>
                                 <span class="slider customSwitchSlider"></span>
                             </label>
-                            <span class="custmBadge badge-success switchStatus">Active</span>
+                            <span class="custmBadge badge-success switchStatus"><i class="fa fa-circle"
+                                    aria-hidden="true"></i></span>
                         @endif
 
                     </div>
                 </td>
-                <td>{{ $row->last_login ? \Carbon\Carbon::parse($row->last_login)->diffForHumans() : 'not found' }}</td>
+                <td class="text-danger">
+                    {{ $row->last_login ? \Carbon\Carbon::parse($row->last_login)->diffForHumans() : 'not found' }}</td>
 
-                <td>
+                <td style="max-width: 1%">
                     <div class="form-button-action">
                         <button value="{{ $row->id }}" type="button" data-bs-toggle="tooltip" title=""
-                            class="btn btn-link btn-primary btn-lg showAssignDeptBtn" data-original-title="Edit Task">
-                            <span class="badge bg-primary">assign</span>
+                            class="badge-primary showAssignDeptBtn my-1" data-original-title="Edit Task">
+                            assign
                         </button>
                         @can('isAdmin')
-                            <button type="button" data-bs-toggle="tooltip" title="" class="btn btn-link btn-danger"
-                                data-original-title="Remove">
+                            <button type="button" value="{{ $row->id }}" data-bs-toggle="tooltip" title=""
+                                class="badge-secondary editUserBtn mx-1" data-original-title="Edit">
+                                <i class="fa fa-edit"></i>
+                            </button>
+                            <button type="button" value="{{ $row->id }}" data-bs-toggle="tooltip" title=""
+                                class="badge-danger removeUserBtn" data-original-title="Remove">
                                 <i class="fa fa-times"></i>
                             </button>
                         @endcan
-                    </div>
+
                 </td>
             </tr>
         @endforeach
@@ -466,6 +482,13 @@
 
 @push('script')
     <script>
+        // delete and update and add user code
+        $(document).on('click', '.removeUserBtn', function(e) {
+            e.preventDefault();
+
+        })
+
+
         // assign departments to users modal code
 
         // show assign department modal

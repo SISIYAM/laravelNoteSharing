@@ -131,12 +131,12 @@ $(document).ready(function () {
             $switchStatus
                 .removeClass("badge-danger")
                 .addClass("badge-success")
-                .text("Active");
+                .html(`<i class="fa fa-circle" aria-hidden="true"></i>`);
         } else {
             $switchStatus
                 .removeClass("badge-success")
                 .addClass("badge-danger")
-                .text("Deactivated");
+                .html(`<i class="fa fa-circle" aria-hidden="true"></i>`);
         }
     });
 

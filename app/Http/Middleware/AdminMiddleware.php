@@ -13,12 +13,25 @@ class AdminMiddleware
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
+    
     public function handle(Request $request, Closure $next): Response
     {
-        // role == 1 for modarator and role == 2 for admin
-        if (auth()->check() && (auth()->user()->role == 1 || auth()->user()->role == 2)) {
-            return $next($request);
+        // check if the user is authenticated
+        if (auth()->check()) {
+            $user = auth()->user();
+
+            // check if the user has the role of admin (role == 2) or moderator (role == 1)
+            if (($user->role == 1 || $user->role == 2) && $user->status == 1) {
+                return $next($request);
+            } 
+
+            // if the user's status is not active (status == 0), log them out and redirect to login
+            auth()->logout();
+            return redirect()->route('admin.load.login')->with('error', 'Your account is deactivated. Please contact the administrator.');
         }
+
+        // if the user is not authenticated, redirect to the login page
         return redirect()->route('admin.load.login');
     }
+
 }

@@ -27,7 +27,7 @@
             },
         });
     </script>
-
+    <link rel="stylesheet" href="https://sisiyam.github.io/siyam-custom-cdn/css/style.min.css">
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin-assets/css/plugins.min.css') }}" />
