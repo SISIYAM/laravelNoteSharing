@@ -39,60 +39,7 @@
 </head>
 
 <body>
-    <!-- assign modal -->
-    <div class="modal fade" id="assignModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Assign Departments</h5>
-                    <button type="button" id="" class="close hideAssignModal" data-dismiss="modal"
-                        aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="">
 
-                        <input type="hidden" value="" id="userId">
-                        <input type="hidden" value="" id="universityId">
-                        <div class="form-group">
-                            <label for="email">Assigned Departments</label>
-                            <div class="shadow-lg p-3 bg-body rounded"
-                                style="display: flex; flex-direction:column; max-height:20vh; overflow-y:auto"
-                                id="assignedOutput">
-
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="shadow-lg p-3 bg-body rounded">
-                                <label for="email">Filter University</label>
-                                <select name="" class="form-select" id="filterUniversity">
-                                    <option value="">Select University</option>
-                                </select>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Assign New Departments</label>
-                            <div class="field shadow-lg p-3 mb-5 bg-body rounded"
-                                style="max-height:30vh; overflow-y:auto">
-                                <div style="display:flex;flex-direction:column;padding:5px;font-size: 15px"
-                                    id="notAassignedOutput">
-
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger hideAssignModal" data-dismiss="modal">Close</button>
-                    <button type="button" id="submitAssignForm" class="btn btn-primary" disabled>Update</button>
-                </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- End assign  modal -->
     <div id="modal-md-ui" class="modal-md-ui">
         <div class="modal-md-ui-content">
             <div class="modal-md-ui-header" id="modalTitle"></div>
