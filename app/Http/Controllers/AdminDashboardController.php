@@ -12,6 +12,7 @@ use App\Models\AssignUser;
 use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
+use App\Models\MaterialRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -395,6 +396,18 @@ class AdminDashboardController extends Controller
         }
 
         return response()->json(['status' => true, 'departments' => $findDept]);
+    }
+
+    // method for load materials request
+    public function loadMaterialsRequest(){
+
+        $thead = ['No','Name','Department','Batch','Roll','Request','Time'];
+
+        $materialRequest = MaterialRequest::all();
+        // return $materialRequest;
+        return view('admin.list',['key' => 'materialRequest','thead' => $thead,'tableRow' => $materialRequest]);
+
+
     }
    
 

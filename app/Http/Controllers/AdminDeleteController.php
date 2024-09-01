@@ -12,6 +12,7 @@ use App\Models\AssignUser;
 use App\Models\Department;
 use App\Models\Universitie;
 use Illuminate\Http\Request;
+use App\Models\MaterialRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -275,8 +276,21 @@ class AdminDeleteController extends Controller
     $user->delete();
 
     return response()->json(['message' => 'User deleted successfully']);
-}
+    }
 
+    // method for delete material request
+    public function deleteMaterialRequest($id){
+        
+        $findRequest = MaterialRequest::find($id);
+
+        if($findRequest){
+            $findRequest->delete();
+            return redirect()->route('admin.material.request')->with(['delete' => 'Deleted successfully!']);
+        }else{
+            return ['success' => false, 'Message' => 'Something went wrong!'];
+        }
+        
+    }
     
 
 }

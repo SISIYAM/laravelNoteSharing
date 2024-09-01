@@ -196,6 +196,11 @@
                                             <span class="sub-item">Reviews</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('admin.material.request') }}">
+                                            <span class="sub-item">Material Request</span>
+                                        </a>
+                                    </li>
                                     @can('isAdmin')
                                         <li>
                                             <a href="{{ route('admin.users') }}">

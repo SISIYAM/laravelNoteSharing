@@ -62,6 +62,7 @@ Route::middleware([AdminMiddleware::class])->group(function(){
                                               ->middleware('can:isAdmin');
         Route::post('/admin/manage/users/load/filter/university','loadFilterUniversity')->name('admin.load.filter.university');
         Route::post('/admin/manage/users/filter/university/departments','filterUniversityDepartment')->name('admin.filter.university.department');
+        Route::get('/admin/manage/request/materials','loadMaterialsRequest')->name('admin.material.request');
     });
 
     // controller for update queries
@@ -97,5 +98,6 @@ Route::middleware([AdminMiddleware::class])->group(function(){
         Route::get('/admin/delete/department/list/{id?}','deleteListDepartment')->name('admin.delete.list.department');
         Route::post('/admin/remove/assigned/department','removeAssignedDepartment')->name('admin.remove.assigned.department');
         Route::post('/admin/delete/user/account', 'deleteUser')->name('admin.delete.user');
+        Route::get('/admin/delete/material/request/{id?}','deleteMaterialRequest')->name('admin.delete.list.material.request');
     });
 });

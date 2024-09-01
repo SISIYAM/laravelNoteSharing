@@ -32,6 +32,8 @@
                             <i class="fa fa-plus"></i>
                             Add
                         </a>
+                    @elseif ($key == 'materialRequest')
+                        <h4 class="card-title">Requests for materials</h4>
                     @endif
                 </div>
             </div>

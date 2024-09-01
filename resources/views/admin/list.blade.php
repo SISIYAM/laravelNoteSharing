@@ -394,6 +394,36 @@
             </tr>
         @endforeach
     @endsection
+@elseif ($key == 'materialRequest')
+    @section('table-row')
+        @foreach ($tableRow as $count => $row)
+            <tr>
+                <td>{{ $count + 1 }}</td>
+                <td>{{ $row->studentName }}</td>
+                <td>{{ $row->department }}</td>
+
+                <td>{{ $row->batch }}</td>
+                <td>{{ $row->roll }}</td>
+                <td>{{ $row->note }}</td>
+                <td>{{ $row->created_at->format('d M Y h:i A') }}</td>
+
+                <td>
+                    <div class="form-button-action">
+
+                        @can('isAdmin')
+                            <a href="{{ route('admin.delete.list.material.request', $row->id) }}"
+                                onclick="return confirm('Are you sure?')">
+                                <button type="button" data-bs-toggle="tooltip" title="" class="badge-danger mx-1"
+                                    data-original-title="Remove">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </a>
+                        @endcan
+                    </div>
+                </td>
+            </tr>
+        @endforeach
+    @endsection
 @endif
 
 @if (Session::has('success'))
