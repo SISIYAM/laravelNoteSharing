@@ -418,8 +418,7 @@ class AdminDashboardController extends Controller
     public function addUniversity(Request $req){
         $req->validate([
             'name' => 'alpha|required|min:2',
-            'semester' => 'required|numeric|min:1|max_digits:2',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
             'image' => 'mimes:png,jpg,jpeg,webp|max:3000',
         ]);
 

@@ -19,16 +19,7 @@
                             <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
                         @enderror
                     </div>
-                    <div class="form-group @error('semester')
-        has-error
-        @enderror  has-feedback">
-                        <label for="email">Total Semesters</label>
-                        <input type="text" name="semester" id="errorInput" value="{{ old('semester') }}"
-                            class="form-control" placeholder="Enter semesters number (e.g- 8)" />
-                        @error('semester')
-                            <small id="emailHelp" class="form-text text-danger text-muted">{{ $message }}</small>
-                        @enderror
-                    </div>
+
                     <div class="form-group  @error('description')
                   has-error
                 @enderror">
