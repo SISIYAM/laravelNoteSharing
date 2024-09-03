@@ -403,7 +403,7 @@ class AdminDashboardController extends Controller
 
         $thead = ['No','Name','Department','Batch','Roll','Request','Time'];
 
-        $materialRequest = MaterialRequest::all();
+        $materialRequest = MaterialRequest::orderBy('id', 'desc')->get();
         // return $materialRequest;
         return view('admin.list',['key' => 'materialRequest','thead' => $thead,'tableRow' => $materialRequest]);
 
