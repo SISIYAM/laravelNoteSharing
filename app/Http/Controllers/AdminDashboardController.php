@@ -411,7 +411,6 @@ class AdminDashboardController extends Controller
     }
    
 
-
     // methods for query
 
     // add university
