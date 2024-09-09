@@ -345,7 +345,7 @@
                 <td>{{ $row->name }}</td>
                 <td>{{ $row->email }}</td>
 
-                <td>{!! $row->role === 2 ? 'Admin' : 'Modarator' !!}</td>
+                <td>{!! $row->role == 2 ? 'Admin' : 'Modarator' !!}</td>
                 <td class="text-center">{{ $row->getAssigned->count() }}</td>
                 <td>
 
@@ -375,10 +375,12 @@
 
                 <td style="max-width: 1%">
                     <div class="form-button-action">
-                        <button value="{{ $row->id }}" type="button" data-bs-toggle="tooltip" title=""
-                            class="badge-primary showAssignDeptBtn my-1" data-original-title="Edit Task">
-                            assign
-                        </button>
+                        @if ($row->role == 1)
+                            <button value="{{ $row->id }}" type="button" data-bs-toggle="tooltip" title=""
+                                class="badge-primary showAssignDeptBtn my-1" data-original-title="Edit Task">
+                                assign
+                            </button>
+                        @endif
                         @can('isAdmin')
                             <button type="button" value="{{ $row->id }}" data-bs-toggle="tooltip" title=""
                                 class="badge-secondary editUserBtn mx-1" data-original-title="Edit">
