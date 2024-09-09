@@ -480,17 +480,29 @@ class AdminDashboardController extends Controller
             'nullable',
             'url',
             function ($attribute, $value, $fail) {
-                if (!preg_match('/^(https:\/\/)?(drive\.google\.com\/)/', $value)) {
-                    $fail('The '.$attribute.' must be a valid Google Drive link.');
+                // Pattern for Google Drive file or folder links
+                if (!preg_match('/^(https:\/\/)?(drive\.google\.com\/(file\/d\/|drive\/folders\/|open\?id=))/', $value)) {
+                    $fail('The ' . $attribute . ' must be a valid Google Drive link.');
                 }
-            },
-        ],
+               },
+             ],
+
 
         ]);
 
+        // Check material allocation 
+        $allocate = 0;
+        $universityId = "";
+        $semesterID = "";
+        if($req->semester_id != NULL && $req->university_id != NULL){
+            $allocate = 1;
+            $universityId = $req->university_id;
+            $semesterID = $req->semester_id;
+        }
+
         $insert = Material::create([
-            'university_id' => $req->university_id,
-            'semester_id' => $req->semester_id,
+            'university_id' => $universityId,
+            'semester_id' => $semesterID,
             'title' => $req->title,
             'description' => $req->description,
             'status' => 1,
