@@ -492,8 +492,8 @@ class AdminDashboardController extends Controller
 
         // Check material allocation 
         $allocate = 0;
-        $universityId = "";
-        $semesterID = "";
+        $universityId = NULL;
+        $semesterID = NULL;
         if($req->semester_id != NULL && $req->university_id != NULL){
             $allocate = 1;
             $universityId = $req->university_id;
