@@ -27,7 +27,7 @@
             },
         });
     </script>
-    <link rel="stylesheet" href="https://sisiyam.github.io/siyam-custom-cdn/css/style.min.css">
+    <link rel="stylesheet" href="https://sisiyam.github.io/siyam-custom-cdn/src/css/style.css">
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ asset('admin-assets/css/bootstrap.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('admin-assets/css/plugins.min.css') }}" />
@@ -642,7 +642,7 @@
     <script src="{{ asset('admin-assets/js/setting-demo.js') }}"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/super-build/ckeditor.js"></script>
     <script src="{{ asset('admin-assets/js/ckeEditor.js') }}"></script>
-    <script src="https://sisiyam.github.io/siyam-custom-cdn/js/script.min.js"></script>
+    <script src="https://sisiyam.github.io/siyam-custom-cdn/src/js/script.js"></script>
     <script>
         $(document).ready(function() {
 
